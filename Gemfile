@@ -52,6 +52,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "i18n-tasks", "~> 1.0.15"
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end

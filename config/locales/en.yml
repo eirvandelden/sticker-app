@@ -1,31 +1,40 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
+---
 en:
-  hello: "Hello world"
+  child:
+    dashboard:
+      completed:
+        one: "You’ve completed 1 card so far 🎁"
+        other: "You’ve completed %{count} cards so far 🎁"
+      earned: You've earned %{current} out of %{total} stickers.
+      new_stickers:
+        one: "🎉 You got 1 new sticker since last time!"
+        other: "🎉 You got %{count} new stickers since last time!"
+      no_card: You don't have a sticker card yet.
+      title: Your Sticker Card
+  common:
+    logout: "Logout 🐿️"
+  flash:
+    parent:
+      penalties:
+        created: Penalty added ❌
+      rewards:
+        failure: Card is not yet complete.
+        success: "🎁 Reward marked as given!"
+      stickers:
+        created: Sticker added ✅
+    sessions:
+      invalid: Invalid email or password
+      logged_out: "Logged out 🐿️"
+  parent:
+    dashboard:
+      add_penalty: "❌ Add Penalty"
+      add_sticker: "✅ Add Sticker"
+      emoji_mode_label: Sticker emoji
+      mark_rewarded: "🎁 Mark as Rewarded"
+      progress: 'Progress: %{current} / %{total} stickers'
+      title: Parent Dashboard
+  sessions:
+    email: Email
+    login_button: Login
+    login_title: Login
+    password: Password
