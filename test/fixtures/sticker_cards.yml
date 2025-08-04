@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  child_profile: one
+  reward_given: false
+  completed: false
+
+two:
+  child_profile: two
+  reward_given: false
+  completed: false
