@@ -1,10 +1,20 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  root "sessions#new"
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resource :session, only: [ :new, :create, :destroy ]
+
+  namespace :parent do
+    resources :children, only: [ :index, :show ] do
+      resource :sticker, only: [ :create ]
+      resource :penalty, only: [ :create ]
+      resource :reward, only: [ :create ]
+      get "history", to: "stickers#index"
+    end
+  end
+
+  namespace :child do
+    get "/", to: "dashboard#show", as: :dashboard
+  end
 end

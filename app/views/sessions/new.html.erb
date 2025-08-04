@@ -1,0 +1,11 @@
+<h1><%= t("sessions.login_title") %></h1>
+
+<%= form_with url: session_path, method: :post do |f| %>
+  <label><%= t("sessions.email") %></label>
+  <%= f.email_field :email %>
+
+  <label><%= t("sessions.password") %></label>
+  <%= f.password_field :password %>
+
+  <%= f.submit t("sessions.login_button") %>
+<% end %>

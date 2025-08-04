@@ -1,0 +1,39 @@
+<h1><%= t("parent.dashboard.title") %></h1>
+
+<% @children.each do |child| %>
+  <section>
+    <h2><%= child.user.email %></h2>
+
+    <% card = child.sticker_cards.order(created_at: :desc).first %>
+    <% total_stickers = card.positive_count %>
+    <% needed = card.required_stickers %>
+
+    <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
+
+    <% if card.completed? && !card.reward_given? %>
+      <%= button_to t("parent.dashboard.mark_rewarded"), parent_child_reward_path(child), method: :post %>
+    <% else %>
+      <%= form_with url: parent_child_sticker_path(child), method: :post, local: true, data: { controller: "emoji-picker" } do |f| %>
+        <label><%= t("parent.dashboard.emoji_mode_label") %></label>
+        <%= select_tag :emoji_mode, options_for_select([["🎲 Random", "random"], ["🎨 Choose one", "choose"]]), data: { action: "emoji-picker#toggle" } %>
+
+        <div data-emoji-picker-target="select" hidden>
+          <%= select_tag :emoji, Sticker::EMOJI_POOL.map { |e| [e, e] } %>
+        </div>
+
+        <%= label_tag :note, "Note (optional)" %>
+        <%= text_field_tag :note %>
+
+        <%= f.submit t("parent.dashboard.add_sticker") %>
+      <% end %>
+
+      <%= form_with url: parent_child_penalty_path(child), method: :post, local: true do %>
+        <%= label_tag :note, "Note (optional)" %>
+        <%= text_field_tag :note %>
+        <%= submit_tag t("parent.dashboard.add_penalty") %>
+      <% end %>
+    <% end %>
+  </section>
+<% end %>
+
+<%= button_to t("common.logout"), session_path, method: :delete %>

@@ -1,0 +1,26 @@
+<h1><%= @child.user.email %> – Sticker History</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Emoji</th>
+      <th>Note</th>
+      <th>Giver</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stickers.each do |s| %>
+      <tr>
+        <td><%= s.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= s.kind == "positive" ? "✅" : "❌" %></td>
+        <td><%= s.emoji %></td>
+        <td><%= s.note.presence || "—" %></td>
+        <td><%= s.giver&.email || "—" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "⬅ Back", parent_children_path %>

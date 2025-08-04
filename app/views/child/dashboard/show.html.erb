@@ -1,0 +1,40 @@
+<h1><%= t("child.dashboard.title") %></h1>
+
+<% @recent_stickers.each do |s| %>
+  <div class="<%= s.positive? ? 'notice' : 'alert' %>" data-controller="fade-out">
+    <%= s.positive? ? "✅" : "❌" %>
+    <%= s.giver&.email || "Someone" %> gave you
+    <%= s.emoji %>
+    <% if s.note.present? %>— <%= s.note %><% end %>
+  </div>
+<% end %>
+
+<% if @card %>
+  <% earned = @card.positive_count %>
+  <% required = @card.required_stickers %>
+  <% new_stickers = @card.stickers.positive.where("created_at > ?", @last_viewed).count if @last_viewed %>
+
+  <p><%= t("child.dashboard.earned", current: earned, total: required) %></p>
+
+  <% if new_stickers.to_i > 0 %>
+    <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
+  <% end %>
+
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <% @card.stickers.positive.each do |s| %>
+      <span style="font-size: 2rem;"><%= s.emoji %></span>
+    <% end %>
+
+    <% (@card.required_stickers - @card.positive_count).times do %>
+      <span style="font-size: 2rem; opacity: 0.3;">⭐</span>
+    <% end %>
+  </div>
+<% else %>
+  <p><%= t("child.dashboard.no_card") %></p>
+<% end %>
+
+<hr>
+
+<p><%= t("child.dashboard.completed", count: @completed_count) %></p>
+
+<%= button_to t("common.logout"), session_path, method: :delete %>
