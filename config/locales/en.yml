@@ -1,18 +1,28 @@
 ---
 en:
+  app:
+    title: "Sticker App"
   child:
     dashboard:
       completed:
-        one: "You’ve completed 1 card so far 🎁"
-        other: "You’ve completed %{count} cards so far 🎁"
+        one: "You've completed 1 card so far 🎁"
+        other: "You've completed %{count} cards so far 🎁"
       earned: You've earned %{current} out of %{total} stickers.
       new_stickers:
         one: "🎉 You got 1 new sticker since last time!"
         other: "🎉 You got %{count} new stickers since last time!"
       no_card: You don't have a sticker card yet.
+      someone: "Someone"
       title: Your Sticker Card
   common:
     logout: "Logout 🐿️"
+    back: "← Back"
+  errors:
+    authentication_required: "Please log in"
+    admin_required: "Admin access required"
+    parent_required: "Parent access required"
+    child_required: "Child access required"
+    child_profile_required: "Child profile not found"
   flash:
     parent:
       penalties:
@@ -25,16 +35,47 @@ en:
     sessions:
       invalid: Invalid email or password
       logged_out: "Logged out 🐿️"
+    preferences:
+      updated: "Preferences updated successfully"
   parent:
+    actions:
+      give_sticker: "🎉 Give Sticker"
+      give_penalty: "❌ Give Penalty"
+      mark_rewarded: "🎁 Mark Rewarded"
+      view_history: "📊 History"
     dashboard:
-      add_penalty: "❌ Add Penalty"
-      add_sticker: "✅ Add Sticker"
-      emoji_mode_label: Sticker emoji
-      mark_rewarded: "🎁 Mark as Rewarded"
+      open_cards:
+        one: "%{count} card ready to reward!"
+        other: "%{count} cards ready to reward!"
       progress: 'Progress: %{current} / %{total} stickers'
       title: Parent Dashboard
+    history:
+      title: "Sticker History"
+      back: "← Back"
+      stickers:
+        one: "%{count} sticker"
+        other: "%{count} stickers"
+      penalties:
+        one: "%{count} penalty"
+        other: "%{count} penalties"
+      no_stickers: "No stickers yet"
   sessions:
     email: Email
     login_button: Login
     login_title: Login
     password: Password
+  preferences:
+    title: "Preferences"
+    language_label: "Language"
+    theme_label: "Theme"
+    color_scheme:
+      system: "System"
+      light: "Light"
+      dark: "Dark"
+    light_theme:
+      white: "White"
+      selenized_light: "Selenized Light"
+    dark_theme:
+      black: "Black"
+      selenized_dark: "Selenized Dark"
+    save: "Save Preferences"

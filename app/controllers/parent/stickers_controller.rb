@@ -1,7 +1,6 @@
 module Parent
   class StickersController < ApplicationController
-    before_action :authenticate_user!
-    before_action :ensure_parent!
+    before_action :ensure_parent
 
     def create
       child = ChildProfile.find(params[:child_id])
@@ -26,12 +25,8 @@ module Parent
                         .flat_map(&:stickers)
                         .sort_by(&:created_at)
                         .reverse
-    end
-
-    private
-
-    def ensure_parent!
-      redirect_to root_path, alert: "Access denied" unless Current.user.parent?
+                        .take(100)
+      @stickers_by_date = @stickers.group_by { |s| s.created_at.to_date }
     end
   end
 end

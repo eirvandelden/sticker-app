@@ -2,8 +2,12 @@ class StickerCard < ApplicationRecord
   belongs_to :child_profile
   has_many :stickers, dependent: :destroy
 
+  scope :open, -> { where.not(completed_at: nil).where(reward_given: [nil, false]) }
+
   validate :only_complete_cards_can_be_rewarded
+  before_save :mark_completion_time
   after_save :create_new_card_if_just_completed
+  after_save :broadcast_completion
 
   # TODO: refactor away
   def positive_count
@@ -36,6 +40,21 @@ class StickerCard < ApplicationRecord
        completed? &&
        child_profile.sticker_cards.where("created_at > ?", created_at).none?
       child_profile.sticker_cards.create!
+    end
+  end
+
+  def mark_completion_time
+    if completed? && completed_at.nil?
+      self.completed_at = Time.current
+    end
+  end
+
+  def broadcast_completion
+    if saved_change_to_completed_at? && completed?
+      ChildProfileChannel.broadcast_to(
+        child_profile,
+        { action: "card_completed", card_id: id }
+      )
     end
   end
 end

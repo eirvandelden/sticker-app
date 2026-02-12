@@ -1,26 +1,40 @@
-<h1><%= @child.user.email %> – Sticker History</h1>
+<main>
+  <h1><%= @child.user.email %> – <%= t("parent.history.title") %></h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Type</th>
-      <th>Emoji</th>
-      <th>Note</th>
-      <th>Giver</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stickers.each do |s| %>
-      <tr>
-        <td><%= s.created_at.strftime("%Y-%m-%d %H:%M") %></td>
-        <td><%= s.kind == "positive" ? "✅" : "❌" %></td>
-        <td><%= s.emoji %></td>
-        <td><%= s.note.presence || "—" %></td>
-        <td><%= s.giver&.email || "—" %></td>
-      </tr>
+  <%= link_to t("parent.history.back"), parent_children_path %>
+
+  <% if @stickers_by_date.any? %>
+    <% @stickers_by_date.each do |date, stickers| %>
+      <article data-controller="history-groups">
+        <h2 data-action="click->history-groups#toggle">
+          <%= l(date, format: :long) %>
+          <span class="toggle-icon">▼</span>
+        </h2>
+
+        <div data-history-groups-target="content" class="stickers-group">
+          <p>
+            <%= t("parent.history.stickers", count: stickers.select(&:positive?).count) %>
+            <% if stickers.select(&:negative?).count > 0 %>
+              | <%= t("parent.history.penalties", count: stickers.select(&:negative?).count) %>
+            <% end %>
+          </p>
+
+          <ul>
+            <% stickers.each do |sticker| %>
+              <li>
+                <%= sticker.positive? ? "✅" : "❌" %>
+                <%= sticker.emoji %>
+                <% if sticker.note %>— <%= sticker.note %><% end %>
+                <span class="meta">(<%= l(sticker.created_at, format: :short) %>)</span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </article>
     <% end %>
-  </tbody>
-</table>
+  <% else %>
+    <p><%= t("parent.history.no_stickers") %></p>
+  <% end %>
 
-<%= link_to "⬅ Back", parent_children_path %>
+  <%= link_to t("parent.history.back"), parent_children_path %>
+</main>

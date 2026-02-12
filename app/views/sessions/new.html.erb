@@ -1,11 +1,21 @@
-<h1><%= t("sessions.login_title") %></h1>
+<main>
+  <h1><%= t("sessions.login_title") %></h1>
 
-<%= form_with url: session_path, method: :post do |f| %>
-  <label><%= t("sessions.email") %></label>
-  <%= f.email_field :email %>
+  <%= form_with url: session_path, method: :post do |f| %>
+    <fieldset>
+      <legend><%= t("sessions.login_title") %></legend>
 
-  <label><%= t("sessions.password") %></label>
-  <%= f.password_field :password %>
+      <div>
+        <%= f.label :email %>
+        <%= f.email_field :email, required: true %>
+      </div>
 
-  <%= f.submit t("sessions.login_button") %>
-<% end %>
+      <div>
+        <%= f.label :password %>
+        <%= f.password_field :password, required: true %>
+      </div>
+
+      <%= f.submit t("sessions.login_button") %>
+    </fieldset>
+  <% end %>
+</main>
