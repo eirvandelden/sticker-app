@@ -1,40 +1,57 @@
-<h1><%= t("child.dashboard.title") %></h1>
+<main data-controller="child-dashboard-subscription confetti"
+      data-child-dashboard-subscription-child-profile-id-value="<%= @child_profile.id if @card %>">
+  <h1><%= t("child.dashboard.title") %></h1>
 
-<% @recent_stickers.each do |s| %>
-  <div class="<%= s.positive? ? 'notice' : 'alert' %>" data-controller="fade-out">
-    <%= s.positive? ? "✅" : "❌" %>
-    <%= s.giver&.email || "Someone" %> gave you
-    <%= s.emoji %>
-    <% if s.note.present? %>— <%= s.note %><% end %>
-  </div>
-<% end %>
-
-<% if @card %>
-  <% earned = @card.positive_count %>
-  <% required = @card.required_stickers %>
-  <% new_stickers = @card.stickers.positive.where("created_at > ?", @last_viewed).count if @last_viewed %>
-
-  <p><%= t("child.dashboard.earned", current: earned, total: required) %></p>
-
-  <% if new_stickers.to_i > 0 %>
-    <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
+  <% @recent_stickers.each do |s| %>
+    <article class="<%= s.positive? ? 'notice' : 'alert' %>" data-controller="fade-out">
+      <%= s.positive? ? "✅" : "❌" %>
+      <%= s.giver&.email || t("child.dashboard.someone") %> gave you
+      <%= s.emoji %>
+      <% if s.note.present? %>— <%= s.note %><% end %>
+    </article>
   <% end %>
 
-  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-    <% @card.stickers.positive.each do |s| %>
-      <span style="font-size: 2rem;"><%= s.emoji %></span>
+  <% if @card %>
+    <% earned = @card.positive_count %>
+    <% required = @card.required_stickers %>
+    <% new_stickers = @card.stickers.positive.where("created_at > ?", @last_viewed).count if @last_viewed %>
+
+    <p>
+      <%= earned %>/<%= required %>
+      <% if @card.negative_count > 0 %>
+        <span class="penalty-count">+<%= @card.negative_count %></span>
+      <% end %>
+    </p>
+
+    <% if new_stickers.to_i > 0 %>
+      <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
     <% end %>
 
-    <% (@card.required_stickers - @card.positive_count).times do %>
-      <span style="font-size: 2rem; opacity: 0.3;">⭐</span>
-    <% end %>
-  </div>
-<% else %>
-  <p><%= t("child.dashboard.no_card") %></p>
-<% end %>
+    <article class="stickers">
+      <% all_stickers = [] %>
+      <% @card.stickers.positive.each do |s| %>
+        <% all_stickers << { emoji: s.emoji, type: 'positive', created_at: s.created_at } %>
+      <% end %>
+      <% @card.stickers.negative.each do |s| %>
+        <% all_stickers << { emoji: '❌', type: 'negative', created_at: s.created_at } %>
+      <% end %>
+      <% all_stickers.sort_by! { |s| s[:created_at] } %>
 
-<hr>
+      <% all_stickers.each do |sticker| %>
+        <section class="<%= sticker[:type] %>">
+          <%= sticker[:emoji] %>
+        </section>
+      <% end %>
 
-<p><%= t("child.dashboard.completed", count: @completed_count) %></p>
+      <% (required - all_stickers.length).times do %>
+        <section class="empty">⭐</section>
+      <% end %>
+    </article>
 
-<%= button_to t("common.logout"), session_path, method: :delete %>
+    <p><%= t("child.dashboard.completed", count: @completed_count) %></p>
+  <% else %>
+    <p><%= t("child.dashboard.no_card") %></p>
+  <% end %>
+
+  <%= button_to t("common.logout"), session_path, method: :delete %>
+</main>

@@ -1,7 +1,6 @@
 module Parent
   class RewardsController < ApplicationController
-    before_action :authenticate_user!
-    before_action :ensure_parent!
+    before_action :ensure_parent
 
     def create
       child = ChildProfile.find(params[:child_id])
@@ -12,12 +11,6 @@ module Parent
       else
         redirect_to parent_children_path, alert: t("flash.parent.rewards.failure")
       end
-    end
-
-    private
-
-    def ensure_parent!
-      redirect_to root_path, alert: "Access denied" unless Current.user.parent?
     end
   end
 end

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root "sessions#new"
 
   resource :session, only: [ :new, :create, :destroy ]
+  resource :preferences, only: [ :edit, :update ]
 
   namespace :parent do
     resources :children, only: [ :index, :show ] do
@@ -17,4 +18,6 @@ Rails.application.routes.draw do
   namespace :child do
     get "/", to: "dashboard#show", as: :dashboard
   end
+
+  mount ActionCable.server => "/cable"
 end

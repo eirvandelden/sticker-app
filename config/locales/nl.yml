@@ -1,5 +1,7 @@
 ---
 nl:
+  app:
+    title: "Sticker App"
   child:
     dashboard:
       completed:
@@ -10,9 +12,16 @@ nl:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
+      someone: "Iemand"
       title: Jouw sticker kaart
   common:
     logout: "Uitloggen 🐿️"
+    back: "← Terug"
+  errors:
+    authentication_required: "Gelieve in te loggen"
+    admin_required: "Admin toegang vereist"
+    parent_required: "Parent toegang vereist"
+    child_required: "Child toegang vereist"
   flash:
     parent:
       penalties:
@@ -25,16 +34,47 @@ nl:
     sessions:
       invalid: Ongeldig e-mail of wachtwoord
       logged_out: "Uitgelogd 🐿️"
+    preferences:
+      updated: "Voorkeuren bijgewerkt"
   parent:
+    actions:
+      give_sticker: "🎉 Geef Sticker"
+      give_penalty: "❌ Geef Straf"
+      mark_rewarded: "🎁 Markeer Beloond"
+      view_history: "📊 Geschiedenis"
     dashboard:
-      add_penalty: "❌ Voeg straf sticker"
-      add_sticker: "✅ Geef sticker"
-      emoji_mode_label: Sticker emoji
-      mark_rewarded: "🎁 Markeer als gegeven"
+      open_cards:
+        one: "%{count} kaart klaar voor beloning!"
+        other: "%{count} kaarten klaar voor beloning!"
       progress: 'Voortgang: %{current} / %{total} stickers'
       title: Ouder Dashboard
+    history:
+      title: "Sticker Geschiedenis"
+      back: "← Terug"
+      stickers:
+        one: "%{count} sticker"
+        other: "%{count} stickers"
+      penalties:
+        one: "%{count} straf"
+        other: "%{count} straffen"
+      no_stickers: "Nog geen stickers"
   sessions:
     email: E-mail
     login_button: Log in
     login_title: Log in
     password: Wachtwoord
+  preferences:
+    title: "Voorkeuren"
+    language_label: "Taal"
+    theme_label: "Thema"
+    color_scheme:
+      system: "Systeem"
+      light: "Licht"
+      dark: "Donker"
+    light_theme:
+      white: "Wit"
+      selenized_light: "Selenized Licht"
+    dark_theme:
+      black: "Zwart"
+      selenized_dark: "Selenized Donker"
+    save: "Voorkeuren Opslaan"

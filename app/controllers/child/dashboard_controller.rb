@@ -1,7 +1,6 @@
 module Child
   class DashboardController < ApplicationController
-    before_action :authenticate_user!
-    before_action :ensure_child!
+    before_action :ensure_child
 
     def show
       @child_profile = Current.user.child_profile
@@ -16,12 +15,6 @@ module Child
       else
         []
       end
-    end
-
-    private
-
-    def ensure_child!
-      redirect_to root_path, alert: "Access denied" unless Current.user.child?
     end
   end
 end

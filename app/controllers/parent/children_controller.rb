@@ -1,7 +1,7 @@
 module Parent
   class ChildrenController < ApplicationController
-    before_action :authenticate_user!
-    before_action :ensure_parent!
+    before_action :ensure_parent
+    before_action :set_open_cards_count, only: :index
 
     def index
       @children = ChildProfile.includes(:user, :sticker_cards)
@@ -9,8 +9,8 @@ module Parent
 
     private
 
-    def ensure_parent!
-      redirect_to root_path, alert: "Access denied" unless Current.user.parent?
+    def set_open_cards_count
+      @open_cards_count = StickerCard.open.count
     end
   end
 end
