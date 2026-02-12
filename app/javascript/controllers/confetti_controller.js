@@ -2,11 +2,12 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    window.addEventListener("celebrate", this.celebrate.bind(this))
+    this.boundCelebrate = this.celebrate.bind(this)
+    window.addEventListener("celebrate", this.boundCelebrate)
   }
 
   disconnect() {
-    window.removeEventListener("celebrate", this.celebrate.bind(this))
+    window.removeEventListener("celebrate", this.boundCelebrate)
   }
 
   celebrate() {

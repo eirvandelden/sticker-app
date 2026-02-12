@@ -13,17 +13,17 @@
 
       <div>
         <%= f.label :color_scheme %>
-        <%= f.select :color_scheme, @user.color_schemes.keys.map { |k| [t("preferences.color_scheme.#{k}"), k] }, {}, { class: "form-control" } %>
+        <%= f.select :color_scheme, User.color_schemes.keys.map { |k| [t("preferences.color_scheme.#{k}"), k] }, {}, { class: "form-control" } %>
       </div>
 
       <div>
         <%= f.label :light_theme %>
-        <%= f.select :light_theme, @user.light_themes.keys.map { |k| [t("preferences.light_theme.#{k}"), k] }, {}, { class: "form-control" } %>
+        <%= f.select :light_theme, User.light_themes.keys.map { |k| [t("preferences.light_theme.#{k}"), k] }, {}, { class: "form-control" } %>
       </div>
 
       <div>
         <%= f.label :dark_theme %>
-        <%= f.select :dark_theme, @user.dark_themes.keys.map { |k| [t("preferences.dark_theme.#{k}"), k] }, {}, { class: "form-control" } %>
+        <%= f.select :dark_theme, User.dark_themes.keys.map { |k| [t("preferences.dark_theme.#{k}"), k] }, {}, { class: "form-control" } %>
       </div>
     </fieldset>
 

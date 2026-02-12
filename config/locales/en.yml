@@ -22,6 +22,7 @@ en:
     admin_required: "Admin access required"
     parent_required: "Parent access required"
     child_required: "Child access required"
+    child_profile_required: "Child profile not found"
   flash:
     parent:
       penalties:

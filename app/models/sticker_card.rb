@@ -5,8 +5,8 @@ class StickerCard < ApplicationRecord
   scope :open, -> { where.not(completed_at: nil).where(reward_given: [nil, false]) }
 
   validate :only_complete_cards_can_be_rewarded
+  before_save :mark_completion_time
   after_save :create_new_card_if_just_completed
-  after_save :mark_completion_time
   after_save :broadcast_completion
 
   # TODO: refactor away
@@ -45,7 +45,7 @@ class StickerCard < ApplicationRecord
 
   def mark_completion_time
     if completed? && completed_at.nil?
-      update_column(:completed_at, Time.current)
+      self.completed_at = Time.current
     end
   end
 

@@ -22,6 +22,7 @@ nl:
     admin_required: "Admin toegang vereist"
     parent_required: "Parent toegang vereist"
     child_required: "Child toegang vereist"
+    child_profile_required: "Kind profiel niet gevonden"
   flash:
     parent:
       penalties:

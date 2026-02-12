@@ -29,13 +29,15 @@ module Authentication
     Current.session = session_record
     Current.user = user
 
-    cookies.signed[:session_token] = {
+    cookie_options = {
       value: session_record.token,
       httponly: true,
       secure: Rails.env.production?,
-      same_site: :lax,
-      expires: 1.year.from_now if user.child?
+      same_site: :lax
     }
+    cookie_options[:expires] = 1.year.from_now if user.child?
+
+    cookies.signed[:session_token] = cookie_options
   end
 
   def terminate_session
