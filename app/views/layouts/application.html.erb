@@ -17,8 +17,9 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :all, "data-turbo-track": "reload" %>
+    <%# Load MVPA.css framework and local app-specific styles %>
+    <%= stylesheet_link_tag "mvpa/mvpa", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "local", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 

@@ -1,5 +1,5 @@
 <% flash.each do |type, message| %>
-  <div class="<%= type %>" data-controller="fade-out">
+  <div role="<%= type == 'notice' ? 'status' : 'alert' %>" data-controller="fade-out">
     <%= message %>
   </div>
 <% end %>
