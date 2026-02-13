@@ -26,6 +26,17 @@ class StickerCard < ApplicationRecord
     positive_count >= required_stickers
   end
 
+  def check_and_create_next_card_if_completed
+    return unless completed?
+    return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
+
+    # Mark completion if not already marked
+    update_column(:completed_at, Time.current) if completed_at.nil?
+
+    # Create next card
+    child_profile.sticker_cards.create!
+  end
+
   private
 
   def only_complete_cards_can_be_rewarded

@@ -11,7 +11,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     log_in_as(@child)
     assert_response :success
     assert_match "Your Sticker Card", response.body
-    assert_match "You've earned", response.body
+    assert_match /You&#39;ve completed|You've completed/, response.body
     assert_match "⭐", response.body
   end
 
