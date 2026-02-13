@@ -3,7 +3,7 @@
   <h1><%= t("child.dashboard.title") %></h1>
 
   <% @recent_stickers.each do |s| %>
-    <article class="<%= s.positive? ? 'notice' : 'alert' %>" data-controller="fade-out">
+    <article role="<%= s.positive? ? 'status' : 'alert' %>" data-controller="fade-out">
       <%= s.positive? ? "✅" : "❌" %>
       <%= s.giver&.email || t("child.dashboard.someone") %> gave you
       <%= s.emoji %>

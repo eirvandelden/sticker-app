@@ -44,7 +44,7 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     post parent_child_sticker_path(@profile)
     assert_redirected_to root_path
     follow_redirect!
-    assert_match "Access denied", response.body
+    assert_match "Parent access required", response.body
   end
 
   private

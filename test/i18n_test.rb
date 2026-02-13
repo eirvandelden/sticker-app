@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class I18nTest < ActiveSupport::TestCase
   # i18n-tasks gem removed due to Ruby 4.0 compatibility issues
   # Tests skipped - consider re-enabling when gem is updated or use manual verification
 
   def test_locales_are_present
-    assert File.exist?(Rails.root.join('config/locales/en.yml'))
-    assert File.exist?(Rails.root.join('config/locales/nl.yml'))
+    assert File.exist?(Rails.root.join("config/locales/en.yml"))
+    assert File.exist?(Rails.root.join("config/locales/nl.yml"))
   end
 
   def test_default_locale_is_english

@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_one :child_profile, dependent: :destroy
   has_many :sessions, dependent: :destroy
 
-  normalizes :email, with: -> email { email.strip.downcase }
+  normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl] }

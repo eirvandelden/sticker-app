@@ -2,7 +2,7 @@ class StickerCard < ApplicationRecord
   belongs_to :child_profile
   has_many :stickers, dependent: :destroy
 
-  scope :open, -> { where.not(completed_at: nil).where(reward_given: [nil, false]) }
+  scope :open, -> { where.not(completed_at: nil).where(reward_given: [ nil, false ]) }
 
   validate :only_complete_cards_can_be_rewarded
   before_save :mark_completion_time
@@ -24,6 +24,17 @@ class StickerCard < ApplicationRecord
 
   def completed?
     positive_count >= required_stickers
+  end
+
+  def check_and_create_next_card_if_completed
+    return unless completed?
+    return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
+
+    # Mark completion if not already marked
+    update_column(:completed_at, Time.current) if completed_at.nil?
+
+    # Create next card
+    child_profile.sticker_cards.create!
   end
 
   private

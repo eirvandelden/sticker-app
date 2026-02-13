@@ -2,7 +2,7 @@
   <h1><%= t("parent.dashboard.title") %></h1>
 
   <% if @open_cards_count.to_i > 0 %>
-    <article class="alert">
+    <article role="alert">
       <p><strong><%= t("parent.dashboard.open_cards", count: @open_cards_count) %></strong></p>
     </article>
   <% end %>

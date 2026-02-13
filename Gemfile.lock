@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/eirvandelden/mvpa.css.git
+  revision: 988ea6c75e23e5959758b7d71a9791f02f3605f1
+  specs:
+    mvpa-css (0.1.0.pre.git.ad5752d)
+      railties (>= 6.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -155,8 +162,7 @@ GEM
     matrix (0.4.3)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.1)
-      prism (~> 1.5)
+    minitest (5.27.0)
     msgpack (1.8.0)
     net-imap (0.5.9)
       date
@@ -380,6 +386,8 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  minitest (~> 5.0)
+  mvpa-css!
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.2)
