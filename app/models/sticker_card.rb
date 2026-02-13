@@ -2,7 +2,7 @@ class StickerCard < ApplicationRecord
   belongs_to :child_profile
   has_many :stickers, dependent: :destroy
 
-  scope :open, -> { where.not(completed_at: nil).where(reward_given: [nil, false]) }
+  scope :open, -> { where.not(completed_at: nil).where(reward_given: [ nil, false ]) }
 
   validate :only_complete_cards_can_be_rewarded
   before_save :mark_completion_time
