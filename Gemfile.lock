@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/dlt/faultline.git
+  revision: bf52ad4b7cba6ba059d7cb54e4131060a31c6831
+  specs:
+    faultline (0.1.0)
+      rails (>= 8.0)
+
+GIT
   remote: https://github.com/eirvandelden/mvpa.css.git
   revision: 534bcaab37e1f1be7a98ec862a283a69a6b4cb46
   specs:
@@ -380,6 +387,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  faultline!
   importmap-rails
   jbuilder
   kamal
