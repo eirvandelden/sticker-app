@@ -12,5 +12,5 @@ class User < ApplicationRecord
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, presence: true, uniqueness: true
-  validates :locale, inclusion: { in: %w[en nl] }
+  validates :locale, inclusion: { in: %w[en nl it] }
 end
