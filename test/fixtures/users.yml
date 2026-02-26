@@ -3,6 +3,11 @@ user:
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 0
 
+user_two:
+  email: user-two@example.com
+  password_digest: <%= BCrypt::Password.create("password") %>
+  role: 0
+
 admin:
   email: admin@example.com
   password_digest: <%= BCrypt::Password.create("password") %>
