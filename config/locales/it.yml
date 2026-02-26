@@ -1,0 +1,140 @@
+---
+it:
+  app:
+    title: "Sticker App"
+  child:
+    dashboard:
+      completed:
+        one: "Hai completato 1 scheda finora 🎁"
+        other: "Hai completato %{count} schede finora 🎁"
+      earned: "Hai guadagnato %{current} su %{total} adesivi."
+      new_stickers:
+        one: "🎉 Hai ricevuto 1 nuovo adesivo dall'ultima volta!"
+        other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
+      no_card: "Non hai ancora una scheda adesivi."
+      someone: "Qualcuno"
+      title: "La tua scheda adesivi"
+  common:
+    logout: "Esci 🐿️"
+    back: "← Indietro"
+  errors:
+    authentication_required: "Effettua il login"
+    admin_required: "Accesso admin richiesto"
+    parent_required: "Accesso genitore richiesto"
+    child_required: "Accesso bambino richiesto"
+    child_profile_required: "Profilo bambino non trovato"
+  flash:
+    parent:
+      penalties:
+        created: "Penalita aggiunta ❌"
+      rewards:
+        failure: "La scheda non e ancora completa."
+        success: "🎁 Premio segnato come consegnato!"
+      stickers:
+        created: "Adesivo aggiunto ✅"
+    sessions:
+      invalid: "Email o password non validi"
+      logged_out: "Disconnesso 🐿️"
+    preferences:
+      updated: "Preferenze aggiornate con successo"
+  parent:
+    actions:
+      give_sticker: "🎉 Dai adesivo"
+      give_penalty: "❌ Dai penalita"
+      mark_rewarded: "🎁 Segna premiato"
+      view_history: "📊 Cronologia"
+    dashboard:
+      open_cards:
+        one: "%{count} scheda pronta per il premio!"
+        other: "%{count} schede pronte per il premio!"
+      progress: "Progresso: %{current} / %{total} adesivi"
+      title: "Dashboard Genitore"
+    history:
+      title: "Cronologia Adesivi"
+      back: "← Indietro"
+      stickers:
+        one: "%{count} adesivo"
+        other: "%{count} adesivi"
+      penalties:
+        one: "%{count} penalita"
+        other: "%{count} penalita"
+      no_stickers: "Ancora nessun adesivo"
+  sessions:
+    email: "Email"
+    login_button: "Accedi"
+    login_title: "Accedi"
+    password: "Password"
+  preferences:
+    title: "Preferenze"
+    language_label: "Lingua"
+    theme_label: "Tema"
+    color_scheme:
+      system: "Sistema"
+      light: "Chiaro"
+      dark: "Scuro"
+    light_theme:
+      white: "Bianco"
+      selenized_light: "Selenized Chiaro"
+    dark_theme:
+      black: "Nero"
+      selenized_dark: "Selenized Scuro"
+    save: "Salva Preferenze"
+  admin:
+    title: "Admin"
+    nav:
+      dashboard: "Dashboard"
+      users: "Utenti"
+      faultline: "Faultline"
+      back_to_site: "Torna al sito"
+    dashboard:
+      index:
+        title: "Dashboard"
+        summary: "Riepilogo"
+        total_users: "Utenti Totali"
+        admin_users: "Utenti Admin"
+        recent_signups: "Iscrizioni Recenti"
+        email: "Email"
+        role: "Ruolo"
+        created_at: "Creato"
+        actions: "Azioni"
+        view: "Visualizza"
+        edit: "Modifica"
+    users:
+      index:
+        title: "Gestione Utenti"
+        new_user: "Nuovo Utente"
+        email: "Email"
+        role: "Ruolo"
+        created_at: "Creato"
+        actions: "Azioni"
+        view: "Visualizza"
+        edit: "Modifica"
+        delete: "Elimina"
+        confirm_delete: "Sei sicuro di voler eliminare questo utente?"
+      show:
+        title: "Dettagli Utente"
+        email: "Email"
+        role: "Ruolo"
+        created_at: "Creato"
+        active_sessions: "Sessioni Attive"
+        edit: "Modifica"
+        back: "Indietro"
+      new:
+        title: "Nuovo Utente"
+        submit: "Crea Utente"
+      form:
+        email: "Email"
+        role: "Ruolo"
+        password: "Password"
+        password_confirmation: "Conferma Password"
+        cancel: "Annulla"
+      create:
+        success: "Utente creato con successo"
+      edit:
+        title: "Modifica Utente"
+        submit: "Aggiorna Utente"
+      update:
+        success: "Utente aggiornato con successo"
+      destroy:
+        success: "Utente eliminato con successo"
+        cannot_delete_self: "Non puoi eliminare te stesso"

@@ -9,6 +9,7 @@ class I18nTest < ActiveSupport::TestCase
   def test_locales_are_present
     assert File.exist?(Rails.root.join("config/locales/en.yml"))
     assert File.exist?(Rails.root.join("config/locales/nl.yml"))
+    assert File.exist?(Rails.root.join("config/locales/it.yml"))
   end
 
   def test_default_locale_is_english
@@ -18,5 +19,6 @@ class I18nTest < ActiveSupport::TestCase
   def test_available_locales
     assert_includes I18n.available_locales, :en
     assert_includes I18n.available_locales, :nl
+    assert_includes I18n.available_locales, :it
   end
 end
