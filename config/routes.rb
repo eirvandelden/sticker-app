@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
   mount Faultline::Engine, at: "/faultline"
+
+  namespace :admin do
+    root "dashboard#index"
+    resources :users
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "sessions#new"
