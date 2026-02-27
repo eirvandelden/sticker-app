@@ -14,6 +14,7 @@ class Admin::UsersController < Admin::BaseController
 
   def create
     @user = User.new(user_params)
+    assign_role(@user)
 
     if @user.save
       redirect_to admin_user_path(@user), notice: t(".success")
@@ -26,7 +27,10 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    if @user.update(user_params)
+    @user.assign_attributes(user_params)
+    assign_role(@user)
+
+    if @user.save
       redirect_to admin_user_path(@user), notice: t(".success")
     else
       render :edit, status: :unprocessable_entity
@@ -49,6 +53,14 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:email, :role, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def assign_role(user)
+    role = params.dig(:user, :role).to_s
+    return if role.blank?
+    return unless User.roles.key?(role)
+
+    user.role = role
   end
 end
