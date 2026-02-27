@@ -8,7 +8,7 @@ class PreferencesController < ApplicationController
 
     if @user.update(preferences_params)
       set_locale
-      redirect_to preferences_path, notice: t("flash.preferences.updated")
+      redirect_to edit_preferences_path, notice: t("flash.preferences.updated")
     else
       render :edit, status: :unprocessable_entity
     end
