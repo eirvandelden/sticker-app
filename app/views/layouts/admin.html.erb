@@ -13,7 +13,7 @@
 
   <body>
     <header>
-      <nav data-controller="nav">
+      <nav data-controller="nav" data-action="click->nav#click">
         <h2><%= t("admin.nav.title", default: "Admin") %></h2>
         <ul>
           <li><%= link_to t("admin.nav.dashboard"), admin_root_path, "aria-current": (current_page?(admin_root_path) ? "page" : nil) %></li>
