@@ -7,9 +7,9 @@ GIT
 
 GIT
   remote: https://github.com/eirvandelden/mvpa.css.git
-  revision: 534bcaab37e1f1be7a98ec862a283a69a6b4cb46
+  revision: 32574971a330e602e4ff10a70b5e333b9523aa96
   specs:
-    mvpa-css (0.1.0.pre.git.988ea6c)
+    mvpa-css (0.1.0.pre.git.3257497)
       railties (>= 6.0)
 
 GEM

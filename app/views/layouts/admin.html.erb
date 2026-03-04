@@ -7,17 +7,20 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "mvpa/mvpa", "local", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
     <header>
-      <nav>
-        <%= link_to t("admin.nav.dashboard"), admin_root_path %>
-        <%= link_to t("admin.nav.users"), admin_users_path %>
-        <%= link_to t("admin.nav.faultline"), faultline.root_path %>
-        <%= link_to t("admin.nav.back_to_site"), root_path %>
+      <nav data-controller="nav" data-action="click->nav#click">
+        <h2><%= t("admin.nav.title", default: "Admin") %></h2>
+        <ul>
+          <li><%= link_to t("admin.nav.dashboard"), admin_root_path, "aria-current": (current_page?(admin_root_path) ? "page" : nil) %></li>
+          <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
+          <li><%= link_to t("admin.nav.faultline"), faultline.root_path %></li>
+          <li><%= link_to t("admin.nav.back_to_site"), root_path %></li>
+        </ul>
       </nav>
     </header>
 
