@@ -1,6 +1,11 @@
 <main data-controller="child-dashboard-subscription confetti"
       data-child-dashboard-subscription-child-profile-id-value="<%= @child_profile.id if @card %>">
-  <h1><%= t("child.dashboard.title") %></h1>
+  <header>
+    <h1><%= t("child.dashboard.title") %></h1>
+    <nav>
+      <%= button_to t("common.logout"), session_path, method: :delete %>
+    </nav>
+  </header>
 
   <% @recent_stickers.each do |s| %>
     <article role="<%= s.positive? ? 'status' : 'alert' %>" data-controller="fade-out">
@@ -53,5 +58,4 @@
     <p><%= t("child.dashboard.no_card") %></p>
   <% end %>
 
-  <%= button_to t("common.logout"), session_path, method: :delete %>
 </main>

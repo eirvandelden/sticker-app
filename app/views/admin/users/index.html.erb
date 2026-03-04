@@ -1,6 +1,9 @@
-<h1><%= t(".title") %></h1>
-
-<p><%= link_to t(".new_user"), new_admin_user_path %></p>
+<header>
+  <h1><%= t(".title") %></h1>
+  <nav>
+    <%= link_to t(".new_user"), new_admin_user_path %>
+  </nav>
+</header>
 
 <table>
   <thead>

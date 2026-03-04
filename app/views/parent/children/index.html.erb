@@ -1,5 +1,10 @@
 <main>
-  <h1><%= t("parent.dashboard.title") %></h1>
+  <header>
+    <h1><%= t("parent.dashboard.title") %></h1>
+    <nav>
+      <%= button_to t("common.logout"), session_path, method: :delete %>
+    </nav>
+  </header>
 
   <% if @open_cards_count.to_i > 0 %>
     <article role="alert">
@@ -18,19 +23,20 @@
       <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
 
       <% if card.completed? && !card.reward_given? %>
-        <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child), method: :post %>
+        <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child), method: :post, class: "button-success" %>
       <% else %>
         <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
                       method: :post,
-                      params: { emoji_mode: "random" } %>
+                      params: { emoji_mode: "random" },
+                      class: "button-success" %>
 
         <%= button_to t("parent.actions.give_penalty"), parent_child_penalty_path(child),
-                      method: :post %>
+                      method: :post,
+                      class: "button-danger" %>
 
         <%= link_to t("parent.actions.view_history"), parent_child_history_path(child) %>
       <% end %>
     </article>
   <% end %>
 
-  <%= button_to t("common.logout"), session_path, method: :delete %>
 </main>

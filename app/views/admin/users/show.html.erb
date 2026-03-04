@@ -1,4 +1,10 @@
-<h1><%= t(".title") %></h1>
+<header>
+  <h1><%= t(".title") %></h1>
+  <nav>
+    <%= link_to t(".edit"), edit_admin_user_path(@user) %>
+    <%= link_to t(".back"), admin_users_path %>
+  </nav>
+</header>
 
 <dl>
   <dt><%= t(".email") %></dt>
@@ -13,8 +19,3 @@
   <dt><%= t(".active_sessions") %></dt>
   <dd><%= @user.sessions.count %></dd>
 </dl>
-
-<nav>
-  <%= link_to t(".edit"), edit_admin_user_path(@user) %>
-  <%= link_to t(".back"), admin_users_path %>
-</nav>

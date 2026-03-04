@@ -1,7 +1,10 @@
 <main>
-  <h1><%= @child.user.email %> – <%= t("parent.history.title") %></h1>
-
-  <%= link_to t("parent.history.back"), parent_children_path %>
+  <header>
+    <h1><%= @child.user.email %> – <%= t("parent.history.title") %></h1>
+    <nav>
+      <%= link_to t("parent.history.back"), parent_children_path %>
+    </nav>
+  </header>
 
   <% if @stickers_by_date.any? %>
     <% @stickers_by_date.each do |date, stickers| %>
@@ -36,5 +39,4 @@
     <p><%= t("parent.history.no_stickers") %></p>
   <% end %>
 
-  <%= link_to t("parent.history.back"), parent_children_path %>
 </main>
