@@ -7,9 +7,9 @@ GIT
 
 GIT
   remote: https://github.com/eirvandelden/mvpa.css.git
-  revision: 32574971a330e602e4ff10a70b5e333b9523aa96
+  revision: bc9d982b8d62c6817928633758fe40d0a561f57e
   specs:
-    mvpa-css (0.1.0.pre.git.3257497)
+    mvpa-css (0.1.0.pre.git.bc9d982)
       railties (>= 6.0)
 
 GEM
@@ -145,7 +145,7 @@ GEM
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.18.1)
+    json (2.19.1)
     kamal (2.10.1)
       activesupport (>= 7.0)
       base64 (~> 0.2)
