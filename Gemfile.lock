@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/dlt/faultline.git
-  revision: bf52ad4b7cba6ba059d7cb54e4131060a31c6831
+  revision: 4df5913e2779aa30ad792b2ebe242cc2d48c850d
   specs:
     faultline (0.1.0)
       rails (>= 8.0)
@@ -15,7 +15,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    action_text-trix (2.1.16)
+    action_text-trix (2.1.17)
       railties
     actioncable (8.1.2)
       actionpack (= 8.1.2)
@@ -349,7 +349,7 @@ GEM
     thruster (0.1.19-aarch64-linux)
     thruster (0.1.19-arm64-darwin)
     thruster (0.1.19-x86_64-linux)
-    timeout (0.6.0)
+    timeout (0.6.1)
     tsort (0.2.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
