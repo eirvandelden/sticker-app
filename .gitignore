@@ -32,3 +32,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Personal agent docs (symlinks to dotfiles)
+/AGENTS.md
+/CLAUDE.md
