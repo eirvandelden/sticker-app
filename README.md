@@ -27,9 +27,11 @@ Sticker App is a behaviour-tracking app for parents and children. Parents award 
 ## Local setup
 
 ```sh
-bin/setup        # runs bundle install and db:prepare
-bin/dev          # starts the server at http://localhost:3000
+bin/setup        # installs dependencies, prepares the database, and starts the server
 ```
+
+Use `bin/setup --skip-server` when you only want to install dependencies and prepare the database.
+Use `bin/dev` to start the server later at http://localhost:3000.
 
 `config/master.key` must be obtained out-of-band (1Password or shared secure storage). Without it Rails cannot decrypt `config/credentials.yml.enc` and will not boot.
 
