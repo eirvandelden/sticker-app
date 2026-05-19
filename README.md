@@ -2,7 +2,7 @@
 
 ## About
 
-Sticker App is a behaviour-tracking app for parents and children. Parents award emoji stickers for positive behaviour and penalties for negative behaviour against a configurable goal; children see their progress toward completing a "sticker card" in real time. When a card is filled, the parent marks it as rewarded (a virtual gift) and a fresh card starts automatically. It supports multiple children, optional notes per sticker, multilingual UI (en/nl/it), and live updates via ActionCable.
+Sticker App is a behaviour-tracking app for parents and children. Parents award emoji stickers for positive behaviour and penalties for negative behaviour against a configurable goal; children see their progress toward completing a "sticker card" in real time. When a card is filled, a fresh card starts automatically and the parent can still mark the completed card as rewarded (a virtual gift). It supports multiple children, optional notes per sticker, multilingual UI (en/nl/it), and live updates via ActionCable.
 
 ## What it does
 
@@ -10,7 +10,7 @@ Sticker App is a behaviour-tracking app for parents and children. Parents award 
 
 **Sticker cards**: Each child has a configurable goal (e.g. 10 stickers). Parents award positive stickers (random from an emoji pool — ⭐ 🌈 🐿️ 💎 🦄 🚀 — or manually chosen) with an optional note. Penalties (negative stickers) do not count toward the goal but raise the target: two penalties on a 10-card means 12 positives are needed to complete it.
 
-**Completion & reward loop**: When the adjusted goal is met the card auto-completes and broadcasts a completion notification. The parent sees a "Mark Rewarded" button; on confirm a new card starts automatically. Full sticker history is viewable per child.
+**Completion & reward loop**: When the adjusted goal is met the card auto-completes, broadcasts a completion notification, and starts a fresh card. The parent still sees a "Mark Rewarded" button for completed cards that have not been rewarded yet. Full sticker history is viewable per child.
 
 **Real-time**: ActionCable broadcasts new stickers and card completions so the child's view updates without a page refresh.
 
@@ -33,7 +33,7 @@ bin/setup        # installs dependencies, prepares the database, and starts the 
 Use `bin/setup --skip-server` when you only want to install dependencies and prepare the database.
 Use `bin/dev` to start the server later at http://localhost:3000.
 
-`config/master.key` must be obtained out-of-band (1Password or shared secure storage). Without it Rails cannot decrypt `config/credentials.yml.enc` and will not boot.
+Production deploys and credentials editing need `config/master.key` or `RAILS_MASTER_KEY`, obtained out-of-band (1Password or shared secure storage).
 
 ## Tests
 
