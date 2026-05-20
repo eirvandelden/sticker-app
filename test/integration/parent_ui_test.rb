@@ -15,6 +15,16 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?]", parent_child_penalty_path(@profile)
   end
 
+  test "parent sees reward button after completed card starts next card" do
+    completed_card = @profile.sticker_cards.last
+    2.times { completed_card.stickers.create!(kind: :positive) }
+
+    log_in_as(@parent)
+
+    assert_equal 2, @profile.sticker_cards.count
+    assert_select "form[action=?]", parent_child_reward_path(@profile)
+  end
+
   private
 
   def log_in_as(user)
