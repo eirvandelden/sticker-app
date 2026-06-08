@@ -1,27 +1,30 @@
 class SessionsController < ApplicationController
-  allow_unauthenticated_access only: [ :new, :create ]
+  allow_unauthenticated_access only: %i[ new create ]
+  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { render_rejection :too_many_requests }
 
   def new
   end
 
   def create
-    user = User.find_by(email: params[:email]&.strip&.downcase)
-    if user&.authenticate(params[:password])
-      start_new_session_for(user)
-      redirect_to after_login_path_for(user)
+    if user = User.active.authenticate_by(email_address: params[:email_address], password: params[:password])
+      start_new_session_for user
+      redirect_to post_authenticating_url
     else
-      flash.now[:alert] = t("flash.sessions.invalid")
-      render :new, status: :unprocessable_entity
+      render_rejection :unauthorized
     end
   end
 
   def destroy
-    terminate_session
+    reset_authentication
+
     redirect_to root_path, notice: t("flash.sessions.logged_out")
   end
 
   private
-
+    def render_rejection(status)
+      flash[:alert] = "Too many requests or unauthorized."
+      render :new, status: status
+    end
   def after_login_path_for(user)
     user.parent? ? parent_children_path : child_dashboard_path
   end

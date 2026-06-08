@@ -10,39 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_19_095214) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_095214) do
   create_table "child_profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "sticker_goal"
     t.datetime "created_at", null: false
+    t.integer "sticker_goal"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index [ "user_id" ], name: "index_child_profiles_on_user_id"
   end
 
   create_table "faultline_error_contexts", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.integer "error_occurrence_id", null: false
     t.string "key", null: false
-    t.text "value"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "value"
     t.index [ "error_occurrence_id", "key" ], name: "index_faultline_error_contexts_on_error_occurrence_id_and_key"
     t.index [ "error_occurrence_id" ], name: "index_faultline_error_contexts_on_error_occurrence_id"
   end
 
   create_table "faultline_error_groups", force: :cascade do |t|
-    t.string "fingerprint", null: false
+    t.datetime "created_at", null: false
     t.string "exception_class", null: false
-    t.text "sanitized_message", null: false
     t.string "file_path"
+    t.string "fingerprint", null: false
+    t.datetime "first_seen_at"
+    t.datetime "last_notified_at"
+    t.datetime "last_seen_at"
     t.integer "line_number"
     t.string "method_name"
     t.integer "occurrences_count", default: 0
-    t.datetime "first_seen_at"
-    t.datetime "last_seen_at"
-    t.string "status", default: "unresolved"
     t.datetime "resolved_at"
-    t.datetime "last_notified_at"
-    t.datetime "created_at", null: false
+    t.text "sanitized_message", null: false
+    t.string "status", default: "unresolved"
     t.datetime "updated_at", null: false
     t.index [ "exception_class" ], name: "index_faultline_error_groups_on_exception_class"
     t.index [ "fingerprint" ], name: "index_faultline_error_groups_on_fingerprint", unique: true
@@ -51,25 +51,25 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_095214) do
   end
 
   create_table "faultline_error_occurrences", force: :cascade do |t|
+    t.text "backtrace"
+    t.datetime "created_at", null: false
+    t.string "environment"
     t.integer "error_group_id", null: false
     t.string "exception_class", null: false
-    t.text "message", null: false
-    t.text "backtrace"
-    t.string "request_method"
-    t.string "request_url"
-    t.text "request_params"
-    t.text "request_headers"
-    t.string "user_agent"
+    t.string "hostname"
     t.string "ip_address"
+    t.json "local_variables"
+    t.text "message", null: false
+    t.string "process_id"
+    t.text "request_headers"
+    t.string "request_method"
+    t.text "request_params"
+    t.string "request_url"
+    t.string "session_id"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
     t.bigint "user_id"
     t.string "user_type"
-    t.string "session_id"
-    t.string "environment"
-    t.string "hostname"
-    t.string "process_id"
-    t.json "local_variables"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index [ "created_at" ], name: "index_faultline_error_occurrences_on_created_at"
     t.index [ "error_group_id", "created_at" ], name: "idx_on_error_group_id_created_at_98b32c40ac"
     t.index [ "error_group_id" ], name: "index_faultline_error_occurrences_on_error_group_id"
@@ -77,75 +77,75 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_095214) do
   end
 
   create_table "faultline_request_profiles", force: :cascade do |t|
-    t.integer "request_trace_id", null: false
-    t.text "profile_data", null: false
-    t.string "mode", default: "cpu"
-    t.integer "samples", default: 0
-    t.float "interval_ms"
     t.datetime "created_at", null: false
+    t.float "interval_ms"
+    t.string "mode", default: "cpu"
+    t.text "profile_data", null: false
+    t.integer "request_trace_id", null: false
+    t.integer "samples", default: 0
     t.index [ "request_trace_id" ], name: "index_faultline_request_profiles_on_request_trace_id"
   end
 
   create_table "faultline_request_traces", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "db_query_count", default: 0
+    t.float "db_runtime_ms"
+    t.float "duration_ms"
     t.string "endpoint", null: false
+    t.boolean "has_profile", default: false
     t.string "http_method", null: false
     t.string "path"
-    t.integer "status"
-    t.float "duration_ms"
-    t.float "db_runtime_ms"
-    t.float "view_runtime_ms"
-    t.integer "db_query_count", default: 0
-    t.datetime "created_at", null: false
     t.json "spans"
-    t.boolean "has_profile", default: false
+    t.integer "status"
+    t.float "view_runtime_ms"
     t.index [ "created_at" ], name: "index_faultline_request_traces_on_created_at"
     t.index [ "endpoint", "created_at" ], name: "index_faultline_request_traces_on_endpoint_and_created_at"
     t.index [ "endpoint" ], name: "index_faultline_request_traces_on_endpoint"
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "token", null: false
-    t.string "ip_address"
-    t.string "user_agent"
     t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.string "token", null: false
     t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
     t.index [ "token" ], name: "index_sessions_on_token", unique: true
     t.index [ "user_id" ], name: "index_sessions_on_user_id"
   end
 
   create_table "sticker_cards", force: :cascade do |t|
     t.integer "child_profile_id", null: false
-    t.boolean "reward_given"
     t.boolean "completed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.boolean "reward_given"
+    t.datetime "updated_at", null: false
     t.index [ "child_profile_id" ], name: "index_sticker_cards_on_child_profile_id"
     t.index [ "completed_at" ], name: "index_sticker_cards_on_completed_at"
   end
 
   create_table "stickers", force: :cascade do |t|
-    t.integer "sticker_card_id", null: false
-    t.integer "kind"
-    t.string "emoji"
-    t.string "note"
-    t.integer "giver_id"
     t.datetime "created_at", null: false
+    t.string "emoji"
+    t.integer "giver_id"
+    t.integer "kind"
+    t.string "note"
+    t.integer "sticker_card_id", null: false
     t.datetime "updated_at", null: false
     t.index [ "sticker_card_id" ], name: "index_stickers_on_sticker_card_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.integer "color_scheme", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.integer "dark_theme", default: 1, null: false
     t.string "email"
+    t.integer "light_theme", default: 1, null: false
+    t.string "locale", default: "en", null: false
     t.string "password_digest"
     t.integer "role"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "locale", default: "en", null: false
-    t.integer "color_scheme", default: 0, null: false
-    t.integer "light_theme", default: 1, null: false
-    t.integer "dark_theme", default: 1, null: false
   end
 
   add_foreign_key "child_profiles", "users"
