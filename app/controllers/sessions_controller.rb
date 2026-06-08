@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.active.authenticate_by(email_address: params[:email_address], password: params[:password])
+    if user = User.active.authenticate_by(email: params[:email_address], password: params[:password])
       start_new_session_for user
       redirect_to post_authenticating_url
     else
@@ -26,6 +26,12 @@ class SessionsController < ApplicationController
       render :new, status: status
     end
   def after_login_path_for(user)
-    user.parent? ? parent_children_path : child_dashboard_path
+    if user.parent?
+      parent_children_path
+    elsif user.admin?
+      admin_root_path
+    else
+      child_dashboard_path
+    end
   end
 end
