@@ -22,16 +22,17 @@ class SessionsController < ApplicationController
 
   private
     def render_rejection(status)
-      flash[:alert] = "Too many requests or unauthorized."
+      flash[:alert] = status == :too_many_requests ? t("flash.sessions.too_many_requests") : t("flash.sessions.unauthorized")
       render :new, status: status
     end
-  def after_login_path_for(user)
-    if user.parent?
-      parent_children_path
-    elsif user.admin?
-      admin_root_path
-    else
-      child_dashboard_path
+
+    def after_login_path_for(user)
+      if user.parent?
+        parent_children_path
+      elsif user.admin?
+        admin_root_path
+      else
+        child_dashboard_path
+      end
     end
-  end
 end

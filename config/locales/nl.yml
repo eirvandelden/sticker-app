@@ -35,6 +35,8 @@ nl:
     sessions:
       invalid: Ongeldig e-mail of wachtwoord
       logged_out: "Uitgelogd 🐿️"
+      unauthorized: "Ongeldig e-mailadres of wachtwoord."
+      too_many_requests: "Te veel inlogpogingen. Probeer het later opnieuw."
     preferences:
       updated: "Voorkeuren bijgewerkt"
   parent:
