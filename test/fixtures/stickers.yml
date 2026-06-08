@@ -21,3 +21,9 @@ three_pos_2:
   kind: 0
   emoji: "⭐"
   giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
+
+completed_pos_1:
+  sticker_card: completed_unrewarded
+  kind: 0
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
