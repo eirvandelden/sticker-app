@@ -1,5 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   child_profile: one
   reward_given: false
@@ -9,3 +7,14 @@ two:
   child_profile: two
   reward_given: false
   completed: false
+
+three:
+  child_profile: three
+  reward_given: false
+  completed: false
+
+completed_unrewarded:
+  child_profile: two
+  reward_given: false
+  completed: true
+  completed_at: <%= 1.day.ago %>
