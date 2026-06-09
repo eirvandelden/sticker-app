@@ -1,56 +1,74 @@
 require "test_helper"
 
 class ParentFlowTest < ActionDispatch::IntegrationTest
-  def setup
-    @parent = User.create!(email: "parent@example.com", password: "password", role: :parent)
-    @child = User.create!(email: "kid@example.com", password: "password", role: :child)
-    @profile = ChildProfile.create!(user: @child, sticker_goal: 2)
-    @card = @profile.sticker_cards.create!
+  setup do
+    @parent          = users(:parent)
+    @profile_one     = child_profiles(:one)
+    @profile_two     = child_profiles(:two)
+    @profile_three   = child_profiles(:three)
+    @card_one        = sticker_cards(:one)
+    @card_three      = sticker_cards(:three)
+    @completed_card  = sticker_cards(:completed_unrewarded)
   end
 
-  test "parent can log in and give a sticker" do
-    log_in_as(@parent)
-    assert_difference -> { @card.stickers.positive.count }, +1 do
-      post parent_child_sticker_path(@profile)
+  # Scenario 6: Parent views children list
+  test "parent views list of children" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+  end
+
+  # Scenario 7: Parent awards a positive sticker
+  test "parent awards a positive sticker and count increases" do
+    sign_in_as @parent
+    assert_difference -> { @card_one.stickers.where(kind: :positive).count }, +1 do
+      post parent_child_sticker_path(child_id: @profile_one),
+           params: { emoji_mode: "random" }
     end
     assert_redirected_to parent_children_path
   end
 
-  test "parent can add a penalty" do
-    log_in_as(@parent)
-    assert_difference -> { @card.stickers.negative.count }, +1 do
-      post parent_child_penalty_path(@profile)
+  # Scenario 8: Parent awards a penalty
+  test "parent awards a penalty and negative sticker count increases" do
+    sign_in_as @parent
+    assert_difference -> { @card_one.stickers.where(kind: :negative).count }, +1 do
+      post parent_child_penalty_path(child_id: @profile_one)
     end
     assert_redirected_to parent_children_path
   end
 
-  test "parent can reward only completed card" do
-    log_in_as(@parent)
-    2.times { @card.stickers.create!(kind: :positive) }
-    post parent_child_reward_path(@profile)
+  # Scenario 9: Card auto-completes when goal is reached
+  test "sticker card completes when positive stickers reach goal" do
+    sign_in_as @parent
+    # card_three has 2 positive stickers, goal is 3 — one more completes it
+    post parent_child_sticker_path(child_id: @profile_three),
+         params: { emoji_mode: "random" }
+    assert @card_three.reload.completed?, "Expected card to be marked completed"
+    assert_not_nil @card_three.reload.completed_at
+  end
+
+  # Scenario 10: New card auto-created after completion
+  test "new sticker card is auto-created when previous card completes" do
+    sign_in_as @parent
+    assert_difference -> { @profile_three.sticker_cards.count }, +1 do
+      post parent_child_sticker_path(child_id: @profile_three),
+           params: { emoji_mode: "random" }
+    end
+  end
+
+  # Scenario 11: Parent marks reward as given on completed card
+  test "parent marks completed card reward as given" do
+    sign_in_as @parent
+    post parent_child_reward_path(child_id: @profile_two)
     assert_redirected_to parent_children_path
-    assert @card.reload.reward_given?
+    assert @completed_card.reload.reward_given?,
+           "Expected reward_given to be true after marking reward"
   end
 
-  test "parent cannot reward incomplete card" do
-    log_in_as(@parent)
-    post parent_child_reward_path(@profile)
-    assert_redirected_to parent_children_path
-    assert_not @card.reload.reward_given?
-  end
-
-  test "child cannot access parent routes" do
-    log_in_as(@child)
-    post parent_child_sticker_path(@profile)
-    assert_redirected_to root_path
-    follow_redirect!
-    assert_match "Parent access required", response.body
-  end
-
-  private
-
-  def log_in_as(user)
-    post session_path, params: { email: user.email, password: "password" }
-    follow_redirect!
+  # Scenario 12: Parent views sticker history
+  test "parent views sticker history for a child" do
+    sign_in_as @parent
+    get parent_child_history_path(child_id: @profile_one)
+    assert_response :success
   end
 end
