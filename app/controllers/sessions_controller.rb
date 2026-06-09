@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    reset_authentication
+    terminate_session
 
     redirect_to root_path, notice: t("flash.sessions.logged_out")
   end
