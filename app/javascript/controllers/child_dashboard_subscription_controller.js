@@ -12,6 +12,7 @@ export default class extends Controller {
       this.subscription = this.consumer.subscriptions.create(
         { channel: "ChildProfileChannel", child_profile_id: this.childProfileIdValue },
         {
+          connected: () => { this.element.dataset.cableConnected = "true" },
           received: this.handleMessage.bind(this)
         }
       )
