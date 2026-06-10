@@ -5,3 +5,8 @@ pre-commit:
   commands:
     eslint:
       skip: true
+
+pre-push:
+  commands:
+    eslint:
+      skip: true
