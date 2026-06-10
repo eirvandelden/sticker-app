@@ -34,10 +34,9 @@ export default class extends Controller {
   }
 
   handleStickerAdded(data) {
-    // Dispatch a custom event to trigger updates
-    window.dispatchEvent(
-      new CustomEvent("sticker-added", { detail: data })
-    )
+    const count = parseInt(this.element.dataset.stickerEventCount || "0", 10)
+    this.element.dataset.stickerEventCount = String(count + 1)
+    window.dispatchEvent(new CustomEvent("sticker-added", { detail: data }))
   }
 
   handleCardCompleted(data) {
