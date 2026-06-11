@@ -14,6 +14,6 @@ class SessionsTest < ApplicationSystemTestCase
     fill_in "Email", with: users(:parent).email
     fill_in "Password", with: "wrong"
     click_button "Login"
-    assert_current_path session_path
+    assert_current_path new_session_path
   end
 end
