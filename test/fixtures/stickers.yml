@@ -1,15 +1,29 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   sticker_card: one
   kind: 1
-  emoji: MyString
-  note: MyString
-  giver_id: 1
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
 
 two:
   sticker_card: two
   kind: 1
-  emoji: MyString
-  note: MyString
-  giver_id: 1
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
+
+three_pos_1:
+  sticker_card: three
+  kind: 0
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
+
+three_pos_2:
+  sticker_card: three
+  kind: 0
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>
+
+completed_pos_1:
+  sticker_card: completed_unrewarded
+  kind: 0
+  emoji: "⭐"
+  giver_id: <%= ActiveRecord::FixtureSet.identify(:parent) %>

@@ -12,6 +12,7 @@ export default class extends Controller {
       this.subscription = this.consumer.subscriptions.create(
         { channel: "ChildProfileChannel", child_profile_id: this.childProfileIdValue },
         {
+          connected: () => { this.element.dataset.cableConnected = "true" },
           received: this.handleMessage.bind(this)
         }
       )
@@ -33,10 +34,9 @@ export default class extends Controller {
   }
 
   handleStickerAdded(data) {
-    // Dispatch a custom event to trigger updates
-    window.dispatchEvent(
-      new CustomEvent("sticker-added", { detail: data })
-    )
+    const count = parseInt(this.element.dataset.stickerEventCount || "0", 10)
+    this.element.dataset.stickerEventCount = String(count + 1)
+    window.dispatchEvent(new CustomEvent("sticker-added", { detail: data }))
   }
 
   handleCardCompleted(data) {

@@ -1,5 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   user: user
   sticker_goal: 1
@@ -7,3 +5,7 @@ one:
 two:
   user: user_two
   sticker_goal: 1
+
+three:
+  user: user_three
+  sticker_goal: 3

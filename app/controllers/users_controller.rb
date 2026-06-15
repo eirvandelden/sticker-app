@@ -1,10 +1,6 @@
 class UsersController < ApplicationController
-  require_unauthenticated_access only: %i[ new create ]
-
-  before_action :verify_join_code, only: %i[ new create ]
-  before_action :ensure_can_administer, only: %i[ update destroy ]
+  before_action :ensure_can_administer, only: %i[ new create update destroy ]
   before_action :set_user, only: %i[ update destroy ]
-
 
   def index
     @users = User.active
@@ -43,9 +39,5 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email_address, :password)
-    end
-
-    def verify_join_code
-      head :not_found if Current.account.join_code != params[:join_code]
     end
 end

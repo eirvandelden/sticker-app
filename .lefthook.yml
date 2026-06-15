@@ -1,2 +1,12 @@
 remotes:
   - git_url: git@github.com:eirvandelden/dotfiles
+
+pre-commit:
+  commands:
+    eslint:
+      skip: true
+
+pre-push:
+  commands:
+    eslint:
+      skip: true

@@ -8,6 +8,16 @@ user_two:
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 0
 
+user_three:
+  email: user-three@example.com
+  password_digest: <%= BCrypt::Password.create("password") %>
+  role: 0
+
+parent:
+  email: parent@example.com
+  password_digest: <%= BCrypt::Password.create("password") %>
+  role: 1
+
 admin:
   email: admin@example.com
   password_digest: <%= BCrypt::Password.create("password") %>

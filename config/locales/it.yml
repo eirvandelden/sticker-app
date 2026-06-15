@@ -35,6 +35,8 @@ it:
     sessions:
       invalid: "Email o password non validi"
       logged_out: "Disconnesso 🐿️"
+      unauthorized: "Email o password non validi."
+      too_many_requests: "Troppi tentativi di accesso. Riprova più tardi."
     preferences:
       updated: "Preferenze aggiornate con successo"
   parent:

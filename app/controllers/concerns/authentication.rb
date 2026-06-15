@@ -55,4 +55,12 @@ module Authentication
     resume_session if Current.user.nil?
     redirect_to new_session_path, alert: t("errors.authentication_required") unless Current.user
   end
+
+  def post_authenticating_url
+    after_login_path_for(Current.user)
+  end
+
+  def after_login_path_for(user)
+    root_path
+  end
 end

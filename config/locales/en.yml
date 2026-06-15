@@ -35,6 +35,8 @@ en:
     sessions:
       invalid: Invalid email or password
       logged_out: "Logged out 🐿️"
+      unauthorized: "Invalid email or password."
+      too_many_requests: "Too many login attempts. Please try again later."
     preferences:
       updated: "Preferences updated successfully"
   parent:
