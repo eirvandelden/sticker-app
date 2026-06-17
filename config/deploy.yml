@@ -42,7 +42,7 @@ builder:
   context: "."
   # Pass in additional build args needed for your Dockerfile.
   args:
-    RUBY_VERSION: <%= File.read('.ruby-version').strip %>
+    RUBY_VERSION: <%= File.read('.ruby-version').strip.delete_prefix('ruby-') %>
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
@@ -61,7 +61,7 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
-  apps: server exec docker exec kamal-proxy kamal-proxy list"
+  apps: server exec docker exec kamal-proxy kamal-proxy list
 
 # Use a persistent storage volume for sqlite database files and local Active Storage files.
 volumes:
