@@ -14,12 +14,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   test "child dashboard establishes ActionCable subscription on load" do
     child = users(:user_three)
 
-    visit root_path
-    fill_in "Email", with: child.email
-    fill_in "Password", with: "password"
-    click_button "Login"
-    sleep 0.5
-    visit child_dashboard_path
+    sign_in_child child
 
     assert_text "Your Sticker Card"
     assert_selector "[data-child-dashboard-subscription-child-profile-id-value]"
@@ -30,12 +25,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   test "child dashboard increments sticker counter when sticker-added message arrives" do
     child = users(:user_three)
 
-    visit root_path
-    fill_in "Email", with: child.email
-    fill_in "Password", with: "password"
-    click_button "Login"
-    sleep 0.5
-    visit child_dashboard_path
+    sign_in_child child
     assert_selector "[data-cable-connected='true']", wait: 5
 
     # Simulate the message the ChildProfileChannel sends on sticker creation
@@ -56,4 +46,11 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
     assert_selector "[data-sticker-event-count='1']", wait: 3
   end
+
+  private
+    def sign_in_child(child)
+      visit session_transfer_path(child.transfer_id)
+
+      assert_current_path child_dashboard_path
+    end
 end

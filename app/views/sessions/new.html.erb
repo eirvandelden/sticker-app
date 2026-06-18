@@ -4,7 +4,7 @@
 <main>
   <h1><%= t("sessions.login_title") %></h1>
 
-  <%= form_with url: session_path, method: :post do |f| %>
+  <%= form_with url: session_path, method: :post, data: { turbo: false } do |f| %>
     <fieldset>
       <legend><%= t("sessions.login_title") %></legend>
 
