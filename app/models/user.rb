@@ -2,7 +2,6 @@ class User < ApplicationRecord
   include Role, Transferable
 
   has_many :sessions, dependent: :destroy
-  has_secure_password validations: false
 
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:name) }
@@ -26,7 +25,6 @@ class User < ApplicationRecord
   enum :dark_theme, { black: 0, selenized_dark: 1 }, default: :selenized_dark
 
   has_one :child_profile, dependent: :destroy
-  has_many :sessions, dependent: :destroy
 
   after_create :provision_child_profile, if: :child?
 

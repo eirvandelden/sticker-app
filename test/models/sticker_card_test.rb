@@ -47,7 +47,7 @@ class StickerCardTest < ActiveSupport::TestCase
   private
 
   def create_child(goal:)
-    user = User.create!(email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :parent)
-    ChildProfile.create!(user: user, sticker_goal: goal)
+    user = User.create!(email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
+    user.child_profile.tap { |p| p.update!(sticker_goal: goal) }
   end
 end
