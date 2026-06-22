@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   root "sessions#new"
 
+  get "session/transfer/:id", to: "sessions/transfers#show", as: :session_transfer
+  put "session/transfer/:id", to: "sessions/transfers#update"
   resource :session, only: [ :new, :create, :destroy ]
   resource :preferences, only: [ :edit, :update ]
 
