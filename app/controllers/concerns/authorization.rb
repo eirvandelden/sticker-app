@@ -8,7 +8,7 @@ module Authorization
   end
 
   def ensure_parent
-    redirect_to root_path, alert: t("errors.parent_required") unless Current.user&.parent?
+    redirect_to root_path, alert: t("errors.parent_required") unless Current.user&.parent? || Current.user&.admin?
   end
 
   def ensure_child

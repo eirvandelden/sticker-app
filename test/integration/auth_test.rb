@@ -21,9 +21,9 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "admin logs in with valid credentials and is redirected to admin root" do
+  test "admin logs in with valid credentials and is redirected to parent children" do
     post session_path, params: { email_address: users(:admin).email, password: "password" }
-    assert_redirected_to admin_root_path
+    assert_redirected_to parent_children_path
   end
 
   test "session transfer page renders auto submit form" do

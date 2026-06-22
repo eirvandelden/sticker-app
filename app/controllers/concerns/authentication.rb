@@ -61,12 +61,8 @@ module Authentication
   end
 
   def after_login_path_for(user)
-    if user.parent?
-      parent_children_path
-    elsif user.admin?
-      admin_root_path
-    else
-      child_dashboard_path
-    end
+    return child_dashboard_path if user.child?
+
+    parent_children_path
   end
 end
