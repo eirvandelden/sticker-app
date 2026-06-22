@@ -27,7 +27,7 @@ class StickerCardTest < ActiveSupport::TestCase
 
   test "new card is created automatically when goal is reached" do
     child = create_child(goal: 1)
-    card = child.sticker_cards.create!
+    card = child.active_sticker_card
 
     card.stickers.create!(kind: :positive)
 
@@ -47,7 +47,7 @@ class StickerCardTest < ActiveSupport::TestCase
   private
 
   def create_child(goal:)
-    user = User.create!(email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
+    user = User.create!(email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :parent)
     ChildProfile.create!(user: user, sticker_goal: goal)
   end
 end

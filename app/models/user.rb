@@ -18,10 +18,6 @@ class User < ApplicationRecord
     end
   end
 
-  private
-    def deactivated_email_address
-      email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
-    end
   has_secure_password
 
   enum :role, { child: 0, parent: 1, admin: 2 }, default: :parent
@@ -32,8 +28,19 @@ class User < ApplicationRecord
   has_one :child_profile, dependent: :destroy
   has_many :sessions, dependent: :destroy
 
+  after_create :provision_child_profile, if: :child?
+
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl it] }
+
+  private
+    def deactivated_email_address
+      email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+    end
+
+    def provision_child_profile
+      create_child_profile!
+    end
 end
