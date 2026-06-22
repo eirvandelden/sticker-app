@@ -26,7 +26,7 @@ class User < ApplicationRecord
 
   has_one :child_profile, dependent: :destroy
 
-  after_create :provision_child_profile, if: :child?
+  after_create :create_child_profile!, if: :child?
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
@@ -34,11 +34,8 @@ class User < ApplicationRecord
   validates :locale, inclusion: { in: %w[en nl it] }
 
   private
-    def deactivated_email_address
-      email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
-    end
 
-    def provision_child_profile
-      create_child_profile!
-    end
+  def deactivated_email_address
+    email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+  end
 end
