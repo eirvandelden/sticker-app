@@ -26,4 +26,18 @@ class ChildProfileTest < ActiveSupport::TestCase
     assert_not profile.valid?
     assert_includes profile.errors[:sticker_goal], "can't be blank"
   end
+
+  test "lowering sticker goal runs card completion workflow" do
+    user = User.create!(email: "goal-change@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    profile.update!(sticker_goal: 3)
+    card = profile.active_sticker_card
+    2.times { card.stickers.create!(kind: :positive) }
+
+    assert_difference -> { profile.sticker_cards.count }, +1 do
+      profile.update!(sticker_goal: 2)
+    end
+
+    assert_not_nil card.reload.completed_at
+  end
 end
