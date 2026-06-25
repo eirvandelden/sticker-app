@@ -20,9 +20,16 @@ export default class extends Controller {
 
   #applyTheme() {
     const html = document.documentElement
-    const colorScheme = this.hasColorSchemeTarget ? this.colorSchemeTarget.value : html.dataset.colorScheme
-    const lightTheme = this.hasLightThemeTarget ? this.lightThemeTarget.value : html.dataset.lightTheme
-    const darkTheme = this.hasDarkThemeTarget ? this.darkThemeTarget.value : html.dataset.darkTheme
+    const colorScheme =
+      (this.hasColorSchemeTarget ? this.colorSchemeTarget.value : html.dataset.colorScheme) || "system"
+    const lightTheme =
+      (this.hasLightThemeTarget ? this.lightThemeTarget.value : html.dataset.lightTheme) || "selenized_light"
+    const darkTheme =
+      (this.hasDarkThemeTarget ? this.darkThemeTarget.value : html.dataset.darkTheme) || "selenized_dark"
+
+    html.dataset.colorScheme = colorScheme
+    html.dataset.lightTheme = lightTheme
+    html.dataset.darkTheme = darkTheme
 
     this.#removeMediaListener()
 
