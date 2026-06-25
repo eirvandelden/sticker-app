@@ -17,7 +17,7 @@
 
   <% @children.each do |child| %>
     <article>
-      <h2><%= child.user.email %></h2>
+      <h2><%= link_to child.user.email, edit_parent_child_child_profile_path(child) %></h2>
 
       <% card = child.active_sticker_card %>
       <% rewardable_card = child.rewardable_sticker_card %>
