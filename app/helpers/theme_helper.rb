@@ -1,4 +1,11 @@
 module ThemeHelper
+  CSS_THEME_MAP = {
+    "selenized_light" => "solunized-light",
+    "white" => "solunized-white",
+    "selenized_dark" => "solunized-dark",
+    "black" => "solunized-black"
+  }.freeze
+
   def theme_attributes
     return {} unless Current.user
 
@@ -14,9 +21,9 @@ module ThemeHelper
 
     case color_scheme
     when "light"
-      attrs["class"] = "light-#{light}"
+      attrs[:"data-theme"] = CSS_THEME_MAP[light]
     when "dark"
-      attrs["class"] = "dark-#{dark}"
+      attrs[:"data-theme"] = CSS_THEME_MAP[dark]
     end
 
     attrs

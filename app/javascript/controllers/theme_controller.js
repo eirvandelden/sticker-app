@@ -3,38 +3,66 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["colorScheme", "lightTheme", "darkTheme"]
 
+  #mediaQuery = null
+  #mediaListener = null
+
   connect() {
-    this.updateTheme()
+    this.#applyTheme()
   }
 
-  updateColorScheme() {
-    this.updateTheme()
+  disconnect() {
+    this.#removeMediaListener()
   }
 
-  updateLightTheme() {
-    this.updateTheme()
+  update() {
+    this.#applyTheme()
   }
 
-  updateDarkTheme() {
-    this.updateTheme()
-  }
-
-  updateTheme() {
+  #applyTheme() {
     const html = document.documentElement
-    const colorScheme = this.colorSchemeTarget?.value || "system"
-    const lightTheme = this.lightThemeTarget?.value || "selenized_light"
-    const darkTheme = this.darkThemeTarget?.value || "selenized_dark"
+    const colorScheme = this.hasColorSchemeTarget ? this.colorSchemeTarget.value : html.dataset.colorScheme
+    const lightTheme = this.hasLightThemeTarget ? this.lightThemeTarget.value : html.dataset.lightTheme
+    const darkTheme = this.hasDarkThemeTarget ? this.darkThemeTarget.value : html.dataset.darkTheme
 
-    html.dataset.colorScheme = colorScheme
-    html.dataset.lightTheme = lightTheme
-    html.dataset.darkTheme = darkTheme
+    this.#removeMediaListener()
 
     if (colorScheme === "light") {
-      html.className = `light-${lightTheme}`
+      html.dataset.theme = this.#mapToCSS(lightTheme)
     } else if (colorScheme === "dark") {
-      html.className = `dark-${darkTheme}`
+      html.dataset.theme = this.#mapToCSS(darkTheme)
     } else {
-      html.className = ""
+      this.#applySystemTheme(lightTheme, darkTheme)
     }
+  }
+
+  #applySystemTheme(lightTheme, darkTheme) {
+    const html = document.documentElement
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const listener = (e) => {
+      html.dataset.theme = this.#mapToCSS(e.matches ? darkTheme : lightTheme)
+    }
+
+    listener(mediaQuery)
+    mediaQuery.addEventListener("change", listener)
+    this.#mediaQuery = mediaQuery
+    this.#mediaListener = listener
+  }
+
+  #removeMediaListener() {
+    if (this.#mediaQuery) {
+      this.#mediaQuery.removeEventListener("change", this.#mediaListener)
+      this.#mediaQuery = null
+      this.#mediaListener = null
+    }
+  }
+
+  #mapToCSS(value) {
+    const map = {
+      selenized_light: "solunized-light",
+      white: "solunized-white",
+      selenized_dark: "solunized-dark",
+      black: "solunized-black"
+    }
+    return map[value] || value
   }
 }
