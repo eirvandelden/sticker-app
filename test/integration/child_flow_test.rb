@@ -14,4 +14,11 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "body"
   end
+
+  test "child dashboard renders a link to preferences" do
+    sign_in_as @child
+    get child_dashboard_path
+    assert_response :success
+    assert_select "a[href='#{edit_preferences_path}']"
+  end
 end
