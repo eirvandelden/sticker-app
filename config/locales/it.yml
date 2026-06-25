@@ -25,6 +25,8 @@ it:
     child_profile_required: "Profilo bambino non trovato"
   flash:
     parent:
+      child_profiles:
+        updated: "Impostazioni salvate"
       penalties:
         created: "Penalita aggiunta ❌"
       rewards:
@@ -51,6 +53,12 @@ it:
         other: "%{count} schede pronte per il premio!"
       progress: "Progresso: %{current} / %{total} adesivi"
       title: "Dashboard Genitore"
+    child_profile:
+      edit:
+        title: "Impostazioni bambino"
+        sticker_goal_label: "Obiettivo adesivi"
+        save: "Salva"
+        cancel: "Annulla"
     history:
       title: "Cronologia Adesivi"
       back: "← Indietro"

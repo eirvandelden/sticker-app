@@ -25,6 +25,8 @@ nl:
     child_profile_required: "Kind profiel niet gevonden"
   flash:
     parent:
+      child_profiles:
+        updated: "Instellingen opgeslagen"
       penalties:
         created: Straf toegevoegd ❌
       rewards:
@@ -51,6 +53,12 @@ nl:
         other: "%{count} kaarten klaar voor beloning!"
       progress: 'Voortgang: %{current} / %{total} stickers'
       title: Ouder Dashboard
+    child_profile:
+      edit:
+        title: "Kind-instellingen"
+        sticker_goal_label: "Stickerdoel"
+        save: "Opslaan"
+        cancel: "Annuleren"
     history:
       title: "Sticker Geschiedenis"
       back: "← Terug"
