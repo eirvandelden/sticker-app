@@ -3,6 +3,25 @@
 
   <%= form_with model: @user, url: preferences_path, method: :patch, local: true do |f| %>
     <fieldset>
+      <legend><%= t("preferences.account_label") %></legend>
+
+      <div>
+        <%= f.label :email, t("preferences.email") %>
+        <%= f.email_field :email %>
+      </div>
+
+      <div>
+        <%= f.label :password, t("preferences.password") %>
+        <%= f.password_field :password, placeholder: t("preferences.password_placeholder") %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, t("preferences.password_confirmation") %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+    </fieldset>
+
+    <fieldset>
       <legend><%= t("preferences.language_label") %></legend>
       <%= f.label :locale %>
       <%= f.select :locale, [["English", "en"], ["Nederlands", "nl"], ["Italiano", "it"]], {}, { class: "form-control" } %>
