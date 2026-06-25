@@ -23,6 +23,6 @@ class SessionsController < ApplicationController
   private
     def render_rejection(status)
       flash[:alert] = status == :too_many_requests ? t("flash.sessions.too_many_requests") : t("flash.sessions.unauthorized")
-      render :new, status: status
+      redirect_to new_session_path
     end
 end

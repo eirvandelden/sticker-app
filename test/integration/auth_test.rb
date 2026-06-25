@@ -6,9 +6,9 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to parent_children_path
   end
 
-  test "parent login fails with wrong password and re-renders login" do
+  test "parent login fails with wrong password and redirects to login" do
     post session_path, params: { email_address: users(:parent).email, password: "wrong" }
-    assert_response :unauthorized
+    assert_redirected_to new_session_path
   end
 
   test "child logs in with valid credentials and is redirected to dashboard" do
@@ -16,9 +16,9 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to child_dashboard_path
   end
 
-  test "child login fails with wrong password and re-renders login" do
+  test "child login fails with wrong password and redirects to login" do
     post session_path, params: { email_address: users(:user).email, password: "wrong" }
-    assert_response :unauthorized
+    assert_redirected_to new_session_path
   end
 
   test "admin logs in with valid credentials and is redirected to parent children" do

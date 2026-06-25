@@ -66,6 +66,6 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
 
     delete session_path  # log out admin
     post session_path, params: { email_address: target_email, password: "password" }
-    assert_response :unauthorized
+    assert_redirected_to new_session_path
   end
 end
