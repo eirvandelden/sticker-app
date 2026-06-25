@@ -140,3 +140,5 @@ it:
       destroy:
         success: "Utente eliminato con successo"
         cannot_delete_self: "Non puoi eliminare te stesso"
+  navigation:
+    admin: "Admin"

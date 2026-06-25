@@ -2,7 +2,6 @@ class User < ApplicationRecord
   include Role, Transferable
 
   has_many :sessions, dependent: :destroy
-  has_secure_password validations: false
 
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:name) }
@@ -18,10 +17,6 @@ class User < ApplicationRecord
     end
   end
 
-  private
-    def deactivated_email_address
-      email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
-    end
   has_secure_password
 
   enum :role, { child: 0, parent: 1, admin: 2 }, default: :parent
@@ -30,10 +25,23 @@ class User < ApplicationRecord
   enum :dark_theme, { black: 0, selenized_dark: 1 }, default: :selenized_dark
 
   has_one :child_profile, dependent: :destroy
-  has_many :sessions, dependent: :destroy
+
+  after_create :ensure_child_profile, if: :child?
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl it] }
+
+  def ensure_child_profile
+    return child_profile if child_profile.present?
+
+    create_child_profile!
+  end
+
+  private
+
+  def deactivated_email_address
+    email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+  end
 end

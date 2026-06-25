@@ -2,6 +2,9 @@
   <header>
     <h1><%= t("parent.dashboard.title") %></h1>
     <nav>
+      <% if Current.user.admin? %>
+        <%= link_to t("navigation.admin"), admin_root_path %>
+      <% end %>
       <%= button_to t("common.logout"), session_path, method: :delete %>
     </nav>
   </header>

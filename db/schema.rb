@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_08_203755) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_22_184428) do
   create_table "child_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "sticker_goal"
+    t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index [ "user_id" ], name: "index_child_profiles_on_user_id"

@@ -72,3 +72,74 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 end
+
+class AdminNavTest < ActionDispatch::IntegrationTest
+  setup do
+    @admin = users(:admin)
+    @parent = users(:parent)
+  end
+
+  test "admin sees admin navigation link on parent dashboard" do
+    sign_in_as @admin
+    get parent_children_path
+    assert_response :success
+    assert_select "a[href='#{admin_root_path}']"
+  end
+
+  test "parent does not see admin navigation link" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+    assert_select "a[href='#{admin_root_path}']", count: 0
+  end
+end
+
+class ParentHappyFlowTest < ActionDispatch::IntegrationTest
+  setup do
+    @parent   = users(:parent)
+    @profile  = child_profiles(:one)
+    @card     = sticker_cards(:one)
+  end
+
+  test "parent logs in, sees children, gives sticker and penalty" do
+    sign_in_as @parent
+    assert_response :success
+
+    assert_select "article h2", minimum: 1
+
+    assert_difference -> { @card.stickers.where(kind: :positive).count }, +1 do
+      post parent_child_sticker_path(@profile), params: { emoji_mode: "random" }
+    end
+    assert_redirected_to parent_children_path
+
+    assert_difference -> { @card.stickers.where(kind: :negative).count }, +1 do
+      post parent_child_penalty_path(@profile)
+    end
+    assert_redirected_to parent_children_path
+  end
+end
+
+class AdminParentFlowTest < ActionDispatch::IntegrationTest
+  setup do
+    @admin   = users(:admin)
+    @profile = child_profiles(:one)
+    @card    = sticker_cards(:one)
+  end
+
+  test "admin logs in, sees parent dashboard, gives sticker and penalty" do
+    sign_in_as @admin
+    assert_response :success
+    assert_select "a[href='#{admin_root_path}']"
+    assert_select "article h2", minimum: 1
+
+    assert_difference -> { @card.stickers.where(kind: :positive).count }, +1 do
+      post parent_child_sticker_path(@profile), params: { emoji_mode: "random" }
+    end
+    assert_redirected_to parent_children_path
+
+    assert_difference -> { @card.stickers.where(kind: :negative).count }, +1 do
+      post parent_child_penalty_path(@profile)
+    end
+    assert_redirected_to parent_children_path
+  end
+end
