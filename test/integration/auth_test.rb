@@ -11,6 +11,15 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
   end
 
+  test "rate limit rejection returns too many requests" do
+    controller = build_sessions_controller
+
+    controller.send(:render_rejection, :too_many_requests)
+
+    assert_equal 429, controller.response.status
+    assert_nil controller.response.redirect_url
+  end
+
   test "child logs in with valid credentials and is redirected to dashboard" do
     post session_path, params: { email_address: users(:user).email, password: "password" }
     assert_redirected_to child_dashboard_path
@@ -46,5 +55,16 @@ class AuthTest < ActionDispatch::IntegrationTest
     put session_transfer_path("invalid")
 
     assert_response :bad_request
+  end
+
+  private
+
+  def build_sessions_controller
+    SessionsController.new.tap do |controller|
+      request = ActionDispatch::TestRequest.create
+      request.env["action_dispatch.request.path_parameters"] = { controller: "sessions", action: "create" }
+      controller.set_request!(request)
+      controller.set_response!(ActionDispatch::TestResponse.new)
+    end
   end
 end
