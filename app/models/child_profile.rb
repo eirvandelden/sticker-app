@@ -4,8 +4,10 @@ class ChildProfile < ApplicationRecord
 
   after_create :provision_initial_sticker_card
 
+  validates :sticker_goal, presence: true, numericality: { only_integer: true, greater_than: 0 }
+
   def active_sticker_card
-    sticker_cards.order(created_at: :desc).first
+    sticker_cards.order(created_at: :desc).first || provision_initial_sticker_card
   end
 
   def rewardable_sticker_card

@@ -15,4 +15,16 @@ class UserTest < ActiveSupport::TestCase
     user = User.create!(email: "newparent@example.com", password: "password", role: :parent)
     assert_nil user.child_profile
   end
+
+  test "child user provisions missing child profile" do
+    user = User.create!(email: "legacychild@example.com", password: "password", role: :child)
+    user.child_profile.destroy!
+    user.reload
+
+    assert_difference -> { ChildProfile.count }, +1 do
+      assert user.ensure_child_profile.persisted?
+    end
+
+    assert user.child_profile.sticker_cards.any?
+  end
 end

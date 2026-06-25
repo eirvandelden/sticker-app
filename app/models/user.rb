@@ -26,12 +26,18 @@ class User < ApplicationRecord
 
   has_one :child_profile, dependent: :destroy
 
-  after_create :create_child_profile!, if: :child?
+  after_create :ensure_child_profile, if: :child?
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl it] }
+
+  def ensure_child_profile
+    return child_profile if child_profile.present?
+
+    create_child_profile!
+  end
 
   private
 
