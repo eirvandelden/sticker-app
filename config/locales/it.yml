@@ -68,6 +68,11 @@ it:
     password: "Password"
   preferences:
     title: "Preferenze"
+    account_label: "Account"
+    email: "Email"
+    password: "Password"
+    password_placeholder: "Lascia vuoto per mantenere la password attuale"
+    password_confirmation: "Conferma Password"
     language_label: "Lingua"
     theme_label: "Tema"
     color_scheme:
@@ -129,6 +134,7 @@ it:
         role: "Ruolo"
         password: "Password"
         password_confirmation: "Conferma Password"
+        locale: "Lingua"
         cancel: "Annulla"
       create:
         success: "Utente creato con successo"
@@ -142,3 +148,4 @@ it:
         cannot_delete_self: "Non puoi eliminare te stesso"
   navigation:
     admin: "Admin"
+    preferences: "Preferenze"
