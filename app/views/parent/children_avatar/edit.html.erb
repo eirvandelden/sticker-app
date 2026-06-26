@@ -1,0 +1,24 @@
+<main>
+  <header>
+    <h1><%= t(".title") %></h1>
+  </header>
+
+  <%= form_with url: parent_child_avatar_path(@child), method: :patch, multipart: true do |form| %>
+    <% if @child.user.avatar.attached? %>
+      <figure>
+        <figcaption><%= t(".current_avatar") %></figcaption>
+        <%= image_tag @child.user.avatar, size: "80x80", alt: @child.user.name %>
+      </figure>
+    <% end %>
+
+    <fieldset>
+      <label for="user_avatar"><%= t(".upload_label") %></label>
+      <%= form.file_field :avatar, name: "user[avatar]", accept: "image/*", required: true %>
+    </fieldset>
+
+    <nav>
+      <%= form.submit t(".save") %>
+      <%= link_to t(".cancel"), parent_children_path %>
+    </nav>
+  <% end %>
+</main>
