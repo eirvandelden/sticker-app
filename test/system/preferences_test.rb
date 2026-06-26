@@ -4,10 +4,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
   test "saved color scheme updates root theme data" do
     parent = users(:parent)
 
-    visit new_session_path
-    fill_in "Email", with: parent.email
-    fill_in "Password", with: "password"
-    click_button "Login"
+    sign_in parent
 
     click_link "Preferences"
     select "Dark", from: "user_color_scheme"
@@ -16,7 +13,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     assert_field "user_color_scheme", with: "dark"
     page.execute_script("document.querySelector('form').requestSubmit()")
-    assert_text I18n.t("flash.preferences.updated")
+    assert_text I18n.t("flash.preferences.updated", locale: :en)
 
     assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")
     assert_equal "solunized-dark", page.evaluate_script("document.documentElement.dataset.theme")
@@ -25,10 +22,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
   test "unsaved color scheme is discarded on browser back" do
     parent = users(:parent)
 
-    visit new_session_path
-    fill_in "Email", with: parent.email
-    fill_in "Password", with: "password"
-    click_button "Login"
+    sign_in parent
 
     click_link "Preferences"
     select "Dark", from: "user_color_scheme"
@@ -42,10 +36,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     parent = users(:parent)
     parent.update!(color_scheme: :light)
 
-    visit new_session_path
-    fill_in "Email", with: parent.email
-    fill_in "Password", with: "password"
-    click_button "Login"
+    sign_in parent
 
     click_link "Preferences"
 
@@ -57,4 +48,36 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     )
     assert_equal html_background, body_background
   end
+
+  test "system color scheme follows browser appearance changes" do
+    parent = users(:parent)
+
+    emulate_color_scheme "dark"
+    sign_in parent
+
+    click_link "Preferences"
+    assert_selector 'html[data-theme="solunized-dark"]', visible: :all
+
+    emulate_color_scheme "light"
+    assert_selector 'html[data-theme="solunized-light"]', visible: :all
+  ensure
+    emulate_color_scheme "no-preference"
+  end
+
+  private
+    def sign_in(user)
+      visit session_transfer_path(user.transfer_id)
+    end
+
+    def emulate_color_scheme(value)
+      page.driver.browser.execute_cdp(
+        "Emulation.setEmulatedMedia",
+        features: [
+          {
+            name: "prefers-color-scheme",
+            value: value
+          }
+        ]
+      )
+    end
 end

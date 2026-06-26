@@ -2,15 +2,19 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
+    this.systemThemeQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    this.applySystemThemeChange = this.applySystemThemeChange.bind(this)
+    this.systemThemeQuery.addEventListener("change", this.applySystemThemeChange)
     this.applyTheme()
+  }
+
+  disconnect() {
+    this.systemThemeQuery.removeEventListener("change", this.applySystemThemeChange)
   }
 
   applyTheme() {
     const html = document.documentElement
-    const source = this.element.dataset
-    const colorScheme = source.colorScheme || "system"
-    const lightTheme = source.lightTheme || "selenized_light"
-    const darkTheme = source.darkTheme || "selenized_dark"
+    const { colorScheme, lightTheme, darkTheme } = this.themeSettings()
 
     html.dataset.colorScheme = colorScheme
     html.dataset.lightTheme = lightTheme
@@ -25,11 +29,26 @@ export default class extends Controller {
     }
   }
 
+  applySystemThemeChange() {
+    const { colorScheme, lightTheme, darkTheme } = this.themeSettings()
+
+    if (colorScheme === "system") this.applySystemTheme(lightTheme, darkTheme)
+  }
+
   applySystemTheme(lightTheme, darkTheme) {
     const html = document.documentElement
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
 
-    html.dataset.theme = this.mapToCSS(prefersDark ? darkTheme : lightTheme)
+    html.dataset.theme = this.mapToCSS(this.systemThemeQuery.matches ? darkTheme : lightTheme)
+  }
+
+  themeSettings() {
+    const source = this.element.dataset
+
+    return {
+      colorScheme: source.colorScheme || "system",
+      lightTheme: source.lightTheme || "selenized_light",
+      darkTheme: source.darkTheme || "selenized_dark"
+    }
   }
 
   mapToCSS(value) {
