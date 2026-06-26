@@ -15,6 +15,23 @@ class StickerCardTest < ActiveSupport::TestCase
     assert card.completed?
   end
 
+  test "card stores child profile goal when created" do
+    child = create_child(goal: 4)
+    card = child.sticker_cards.create!
+
+    assert_equal 4, card.sticker_goal
+  end
+
+  test "completed card remains rewardable when child profile goal increases" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+
+    child.update!(sticker_goal: 2)
+
+    assert card.reload.update(reward_given: true), card.errors.full_messages.to_sentence
+  end
+
   test "negative stickers increase requirement" do
     child = create_child(goal: 2)
     card = child.sticker_cards.create!

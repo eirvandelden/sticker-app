@@ -2,8 +2,10 @@ class StickerCard < ApplicationRecord
   belongs_to :child_profile
   has_many :stickers, dependent: :destroy
 
+  before_validation :assign_sticker_goal, on: :create
   scope :open, -> { where.not(completed_at: nil).where(reward_given: [ nil, false ]) }
 
+  validates :sticker_goal, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :only_complete_cards_can_be_rewarded
   before_save :mark_completion_time
   after_save :create_new_card_if_just_completed
@@ -19,7 +21,7 @@ class StickerCard < ApplicationRecord
   end
 
   def required_stickers
-    child_profile.sticker_goal + negative_count
+    sticker_goal + negative_count
   end
 
   def completed?
@@ -38,6 +40,10 @@ class StickerCard < ApplicationRecord
   end
 
   private
+
+  def assign_sticker_goal
+    self.sticker_goal = child_profile.sticker_goal
+  end
 
   def only_complete_cards_can_be_rewarded
     if reward_given? && !completed?

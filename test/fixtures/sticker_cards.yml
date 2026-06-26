@@ -1,20 +1,24 @@
 one:
   child_profile: one
+  sticker_goal: 1
   reward_given: false
   completed: false
 
 two:
   child_profile: two
+  sticker_goal: 1
   reward_given: false
   completed: false
 
 three:
   child_profile: three
+  sticker_goal: 3
   reward_given: false
   completed: false
 
 completed_unrewarded:
   child_profile: two
+  sticker_goal: 1
   reward_given: false
   completed: true
   completed_at: <%= 1.day.ago %>
