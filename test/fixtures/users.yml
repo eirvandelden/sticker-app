@@ -30,6 +30,7 @@ admin:
 
 dutch_admin:
   email: dutch-admin@example.com
+  name: Dutch Admin
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 2
   locale: nl
