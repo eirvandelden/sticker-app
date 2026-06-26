@@ -17,6 +17,10 @@ it:
   common:
     logout: "Esci 🐿️"
     back: "← Indietro"
+  locale_names:
+    en: "Inglese"
+    nl: "Olandese"
+    it: "Italiano"
   errors:
     authentication_required: "Effettua il login"
     admin_required: "Accesso admin richiesto"

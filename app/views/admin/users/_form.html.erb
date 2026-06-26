@@ -24,7 +24,7 @@
     <%= form.password_field :password_confirmation, required: user.new_record? %>
 
     <label for="user_locale"><%= t(".locale") %></label>
-    <%= form.select :locale, [["English", "en"], ["Nederlands", "nl"], ["Italiano", "it"]] %>
+    <%= form.select :locale, %w[en nl it].map { |locale| [t("locale_names.#{locale}"), locale] } %>
   </fieldset>
 
   <nav>

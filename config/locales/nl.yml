@@ -17,6 +17,10 @@ nl:
   common:
     logout: "Uitloggen 🐿️"
     back: "← Terug"
+  locale_names:
+    en: "Engels"
+    nl: "Nederlands"
+    it: "Italiaans"
   errors:
     authentication_required: "Gelieve in te loggen"
     admin_required: "Admin toegang vereist"

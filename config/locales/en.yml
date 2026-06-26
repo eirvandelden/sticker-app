@@ -17,6 +17,10 @@ en:
   common:
     logout: "Logout 🐿️"
     back: "← Back"
+  locale_names:
+    en: "English"
+    nl: "Dutch"
+    it: "Italian"
   errors:
     authentication_required: "Please log in"
     admin_required: "Admin access required"
