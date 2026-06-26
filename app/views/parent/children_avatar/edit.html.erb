@@ -4,6 +4,16 @@
   </header>
 
   <%= form_with url: parent_child_avatar_path(@child), method: :patch, multipart: true do |form| %>
+    <% if @child.user.errors.any? %>
+      <aside role="alert">
+        <ul>
+          <% @child.user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </aside>
+    <% end %>
+
     <% if @child.user.avatar_displayable? %>
       <figure>
         <figcaption><%= t(".current_avatar") %></figcaption>

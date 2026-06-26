@@ -5,7 +5,7 @@ module Parent
     before_action :set_open_cards_count, only: :index
 
     def index
-      @children = ChildProfile.includes(:user, :sticker_cards)
+      @children = ChildProfile.includes(:sticker_cards, user: { avatar_attachment: :blob })
     end
 
     def edit

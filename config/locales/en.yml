@@ -58,18 +58,18 @@ en:
         cancel: "Cancel"
       update:
         success: "Child updated successfully"
-      avatar:
-        edit:
-          title: "Edit Avatar"
-          current_avatar: "Current avatar"
-          upload_label: "Choose a new avatar"
-          save: "Save"
-          cancel: "Cancel"
-        update:
-          success: "Avatar updated successfully"
       index:
         edit_name: "Edit name"
         edit_avatar: "Edit avatar"
+    children_avatar:
+      edit:
+        title: "Edit Avatar"
+        current_avatar: "Current avatar"
+        upload_label: "Choose a new avatar"
+        save: "Save"
+        cancel: "Cancel"
+      update:
+        success: "Avatar updated successfully"
     actions:
       give_sticker: "🎉 Give Sticker"
       give_penalty: "❌ Give Penalty"

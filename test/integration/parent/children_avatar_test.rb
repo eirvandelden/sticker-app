@@ -12,6 +12,7 @@ class Parent::ChildrenAvatarTest < ActionDispatch::IntegrationTest
     get edit_parent_child_avatar_path(@child)
 
     assert_response :success
+    assert_select "h1", text: "Edit Avatar"
     assert_select "form"
   end
 
@@ -21,7 +22,17 @@ class Parent::ChildrenAvatarTest < ActionDispatch::IntegrationTest
     patch parent_child_avatar_path(@child), params: { user: { avatar: avatar } }
 
     assert_redirected_to parent_children_path
+    assert_equal "Avatar updated successfully", flash[:notice]
     assert_predicate @child.user.reload.avatar, :attached?
+  end
+
+  test "parent sees avatar validation errors" do
+    sign_in_as @parent
+    avatar = fixture_file_upload("avatar.txt", "text/plain")
+    patch parent_child_avatar_path(@child), params: { user: { avatar: avatar } }
+
+    assert_response :unprocessable_entity
+    assert_select "[role=alert]", text: /PNG, JPEG, GIF, or WebP/
   end
 
   test "admin can also upload child avatar" do

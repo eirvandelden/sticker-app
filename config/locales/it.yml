@@ -58,18 +58,18 @@ it:
         cancel: "Annulla"
       update:
         success: "Bambino aggiornato con successo"
-      avatar:
-        edit:
-          title: "Modifica avatar"
-          current_avatar: "Avatar attuale"
-          upload_label: "Scegli un nuovo avatar"
-          save: "Salva"
-          cancel: "Annulla"
-        update:
-          success: "Avatar aggiornato con successo"
       index:
         edit_name: "Modifica nome"
         edit_avatar: "Modifica avatar"
+    children_avatar:
+      edit:
+        title: "Modifica avatar"
+        current_avatar: "Avatar attuale"
+        upload_label: "Scegli un nuovo avatar"
+        save: "Salva"
+        cancel: "Annulla"
+      update:
+        success: "Avatar aggiornato con successo"
     actions:
       give_sticker: "🎉 Dai adesivo"
       give_penalty: "❌ Dai penalita"

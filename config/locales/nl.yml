@@ -58,18 +58,18 @@ nl:
         cancel: "Annuleren"
       update:
         success: "Kind succesvol bijgewerkt"
-      avatar:
-        edit:
-          title: "Avatar bewerken"
-          current_avatar: "Huidige avatar"
-          upload_label: "Kies een nieuwe avatar"
-          save: "Opslaan"
-          cancel: "Annuleren"
-        update:
-          success: "Avatar succesvol bijgewerkt"
       index:
         edit_name: "Naam bewerken"
         edit_avatar: "Avatar bewerken"
+    children_avatar:
+      edit:
+        title: "Avatar bewerken"
+        current_avatar: "Huidige avatar"
+        upload_label: "Kies een nieuwe avatar"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Avatar succesvol bijgewerkt"
     actions:
       give_sticker: "🎉 Geef Sticker"
       give_penalty: "❌ Geef Straf"
