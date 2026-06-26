@@ -1,25 +1,30 @@
 user:
   email: user@example.com
+  name: Alice
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 0
 
 user_two:
   email: user-two@example.com
+  name: Bob
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 0
 
 user_three:
   email: user-three@example.com
+  name: Charlie
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 0
 
 parent:
   email: parent@example.com
+  name: Parent User
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 1
 
 admin:
   email: admin@example.com
+  name: Admin User
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 2
 

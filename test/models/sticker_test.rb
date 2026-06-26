@@ -14,7 +14,7 @@ class StickerTest < ActiveSupport::TestCase
   end
 
   test "sticker has giver" do
-    parent = User.create!(email: "mom@example.com", password: "password", role: :parent)
+    parent = User.create!(name: "Mom", email: "mom@example.com", password: "password", role: :parent)
     card = create_card
     sticker = card.stickers.create!(kind: :positive, giver: parent)
     assert_equal parent, sticker.giver
@@ -23,7 +23,7 @@ class StickerTest < ActiveSupport::TestCase
   private
 
   def create_card
-    child = User.create!(email: "emoji_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
+    child = User.create!(name: "Emoji Child", email: "emoji_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
     profile = ChildProfile.create!(user: child, sticker_goal: 1)
     profile.sticker_cards.create!
   end

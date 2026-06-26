@@ -25,6 +25,9 @@ class User < ApplicationRecord
   enum :dark_theme, { black: 0, selenized_dark: 1 }, default: :selenized_dark
 
   has_one :child_profile, dependent: :destroy
+  has_one_attached :avatar
+
+  validates :name, presence: true
 
   after_create :ensure_child_profile, if: :child?
 
