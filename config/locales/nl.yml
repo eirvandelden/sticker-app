@@ -12,6 +12,7 @@ nl:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
+      profile_link: "Mijn profiel"
       someone: "Iemand"
       title: Jouw sticker kaart
   common:
@@ -46,6 +47,26 @@ nl:
     preferences:
       updated: "Voorkeuren bijgewerkt"
   parent:
+    children:
+      edit:
+        title: "Kind bewerken"
+        name_label: "Naam"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Kind succesvol bijgewerkt"
+      avatar:
+        edit:
+          title: "Avatar bewerken"
+          current_avatar: "Huidige avatar"
+          upload_label: "Kies een nieuwe avatar"
+          save: "Opslaan"
+          cancel: "Annuleren"
+        update:
+          success: "Avatar succesvol bijgewerkt"
+      index:
+        edit_name: "Naam bewerken"
+        edit_avatar: "Avatar bewerken"
     actions:
       give_sticker: "🎉 Geef Sticker"
       give_penalty: "❌ Geef Straf"
@@ -143,10 +164,13 @@ nl:
         submit: "Gebruiker aanmaken"
       form:
         email: "E-mail"
+        name: "Naam"
         role: "Rol"
         password: "Wachtwoord"
         password_confirmation: "Bevestig wachtwoord"
         locale: "Taal"
+        avatar: "Avatar"
+        current_avatar: "Huidige avatar"
         cancel: "Annuleren"
       create:
         success: "Gebruiker succesvol aangemaakt"
@@ -161,3 +185,22 @@ nl:
   navigation:
     admin: "Beheer"
     preferences: "Voorkeuren"
+  users:
+    profiles:
+      show:
+        title: "Mijn profiel"
+        name: "Naam"
+        email: "E-mail"
+        avatar: "Avatar"
+        edit: "Profiel bewerken"
+      edit:
+        title: "Profiel bewerken"
+        name_label: "Naam"
+        avatar_label: "Avatar"
+        current_avatar: "Huidige avatar"
+        email_label: "E-mail"
+        password_label: "Wachtwoord wijzigen"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Profiel succesvol bijgewerkt"
