@@ -27,6 +27,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     get parent_children_path
     assert_response :success
     assert_select "article progress", minimum: 1
+    assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: 2)
   end
 
   test "parent dashboard wraps sticker and penalty buttons in semantic footer" do

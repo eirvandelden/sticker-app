@@ -33,7 +33,8 @@
       <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
     <% end %>
 
-    <progress value="<%= earned %>" max="<%= required %>"></progress>
+    <progress value="<%= earned %>" max="<%= required %>"
+              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
 
     <article class="stickers">
       <% all_stickers = [] %>

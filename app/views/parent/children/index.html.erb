@@ -25,7 +25,8 @@
       <% total_stickers = card.positive_count %>
       <% needed = card.required_stickers %>
 
-      <progress value="<%= total_stickers %>" max="<%= needed %>"></progress>
+      <progress value="<%= total_stickers %>" max="<%= needed %>"
+                aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
       <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
 
       <% if rewardable_card %>

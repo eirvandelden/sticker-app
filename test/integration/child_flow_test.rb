@@ -13,6 +13,6 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     get child_dashboard_path
     assert_response :success
     assert_select "article.stickers"
-    assert_select "progress"
+    assert_select "progress[aria-label=?]", I18n.t("child.dashboard.earned", current: 0, total: 2)
   end
 end
