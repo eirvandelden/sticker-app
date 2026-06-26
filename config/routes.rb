@@ -15,12 +15,17 @@ Rails.application.routes.draw do
   resource :session, only: [ :new, :create, :destroy ]
   resource :preferences, only: [ :edit, :update ]
 
+  resources :users, only: [] do
+    resource :profile, only: [ :show, :edit, :update ], controller: "users/profiles"
+  end
+
   namespace :parent do
-    resources :children, only: [ :index, :show ] do
+    resources :children, only: [ :index, :show, :edit, :update ] do
       resource :sticker, only: [ :create ]
       resource :penalty, only: [ :create ]
       resource :reward, only: [ :create ]
       resource :child_profile, only: [ :edit, :update ]
+      resource :avatar, only: [ :edit, :update ], controller: "children_avatar"
       get "history", to: "stickers#index"
     end
   end
