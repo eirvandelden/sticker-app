@@ -13,7 +13,7 @@ class User < ApplicationRecord
   def deactivate
     transaction do
       sessions.delete_all
-      update! active: false, email_address: deactivated_email_address
+      update! active: false, email: deactivated_email
     end
   end
 
@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   private
 
-  def deactivated_email_address
-    email_address&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
+  def deactivated_email
+    email&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
   end
 end

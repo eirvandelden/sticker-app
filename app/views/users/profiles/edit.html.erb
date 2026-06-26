@@ -31,9 +31,9 @@
       </label>
     </div>
     <div class="flex align-center gap">
-      <%= translation_button(:email_address) %>
+      <%= translation_button(:email) %>
       <label class="flex align-center gap input input--actor">
-        <%= form.email_field :email_address, class: "input full-width", autocomplete: "username", placeholder: "Email address", required: true %>
+        <%= form.email_field :email, class: "input full-width", autocomplete: "username", placeholder: "Email address", required: true %>
         <%= image_tag "email.svg", aria: { hidden: "true" }, size: 30, class: "colorize--black" %>
       </label>
     </div>

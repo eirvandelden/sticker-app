@@ -22,7 +22,7 @@
 
 <div class="panel margin-block-double shadow center">
   <h2 class="margin-none-block-end"><%= @user.name %></h2>
-  <p class="margin-none-block-start"><%= mail_to @user.email_address %></p>
+  <p class="margin-none-block-start"><%= mail_to @user.email %></p>
 
   <% if Current.user.can_administer? %>
     <hr class="full-width margin-block-double" aria-hidden="true">

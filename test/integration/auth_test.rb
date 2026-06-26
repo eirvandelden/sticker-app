@@ -2,12 +2,12 @@ require "test_helper"
 
 class AuthTest < ActionDispatch::IntegrationTest
   test "parent logs in with valid credentials and is redirected to children dashboard" do
-    post session_path, params: { email_address: users(:parent).email, password: "password" }
+    post session_path, params: { email: users(:parent).email, password: "password" }
     assert_redirected_to parent_children_path
   end
 
   test "parent login fails with wrong password and redirects to login" do
-    post session_path, params: { email_address: users(:parent).email, password: "wrong" }
+    post session_path, params: { email: users(:parent).email, password: "wrong" }
     assert_redirected_to new_session_path
   end
 
@@ -21,17 +21,17 @@ class AuthTest < ActionDispatch::IntegrationTest
   end
 
   test "child logs in with valid credentials and is redirected to dashboard" do
-    post session_path, params: { email_address: users(:user).email, password: "password" }
+    post session_path, params: { email: users(:user).email, password: "password" }
     assert_redirected_to child_dashboard_path
   end
 
   test "child login fails with wrong password and redirects to login" do
-    post session_path, params: { email_address: users(:user).email, password: "wrong" }
+    post session_path, params: { email: users(:user).email, password: "wrong" }
     assert_redirected_to new_session_path
   end
 
   test "admin logs in with valid credentials and is redirected to parent children" do
-    post session_path, params: { email_address: users(:admin).email, password: "password" }
+    post session_path, params: { email: users(:admin).email, password: "password" }
     assert_redirected_to parent_children_path
   end
 
