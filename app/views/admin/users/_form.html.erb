@@ -29,7 +29,7 @@
     <label for="user_locale"><%= t(".locale") %></label>
     <%= form.select :locale, %w[en nl it].map { |locale| [t("locale_names.#{locale}"), locale] } %>
 
-    <% if user.avatar.attached? %>
+    <% if user.avatar_displayable? %>
       <p><%= t(".current_avatar") %></p>
       <%= image_tag user.avatar, size: "80x80", alt: user.name %>
     <% end %>

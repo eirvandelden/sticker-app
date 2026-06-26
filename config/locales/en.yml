@@ -28,6 +28,9 @@ en:
     parent_required: "Parent access required"
     child_required: "Child access required"
     child_profile_required: "Child profile not found"
+    messages:
+      invalid_content_type: "must be PNG, JPEG, GIF, or WebP"
+      file_size_too_large: "must be smaller than 5 MB"
   flash:
     parent:
       child_profiles:

@@ -4,7 +4,7 @@
   </header>
 
   <%= form_with url: parent_child_avatar_path(@child), method: :patch, multipart: true do |form| %>
-    <% if @child.user.avatar.attached? %>
+    <% if @child.user.avatar_displayable? %>
       <figure>
         <figcaption><%= t(".current_avatar") %></figcaption>
         <%= image_tag @child.user.avatar, size: "80x80", alt: @child.user.name %>

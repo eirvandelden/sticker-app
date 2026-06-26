@@ -13,6 +13,13 @@ class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "child cannot view another user's profile" do
+    sign_in_as @child
+    get user_profile_path(@parent)
+
+    assert_redirected_to root_path
+  end
+
   test "child can reach profile edit page" do
     sign_in_as @child
     get edit_user_profile_path(@child)
@@ -45,6 +52,15 @@ class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to user_profile_path(@parent)
     assert_predicate @parent.reload.avatar, :attached?
+  end
+
+  test "parent cannot upload a non-image avatar" do
+    sign_in_as @parent
+    avatar = fixture_file_upload("avatar.txt", "text/plain")
+    patch user_profile_path(@parent), params: { user: { avatar: avatar } }
+
+    assert_response :unprocessable_entity
+    assert_not_predicate @parent.reload.avatar, :attached?
   end
 
   test "child cannot edit another user's profile" do
