@@ -74,4 +74,6 @@ group :test do
   gem "minitest", "~> 6.0"
 end
 
-gem "i18n-tasks", "~> 1.1"
+group :development, :test do
+  gem "i18n-tasks", "~> 1.1"
+end
