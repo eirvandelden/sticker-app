@@ -1,4 +1,4 @@
-<%= form_with model: user, url: url do |form| %>
+<%= form_with model: user, url: url, multipart: true do |form| %>
   <% if user.errors.any? %>
     <aside role="alert">
       <h2><%= t("errors.template.header", count: user.errors.count) %></h2>
@@ -11,6 +11,9 @@
   <% end %>
 
   <fieldset>
+    <label for="user_name"><%= t(".name") %></label>
+    <%= form.text_field :name, required: true %>
+
     <label for="user_email"><%= t(".email") %></label>
     <%= form.email_field :email, required: true %>
 
@@ -25,6 +28,13 @@
 
     <label for="user_locale"><%= t(".locale") %></label>
     <%= form.select :locale, %w[en nl it].map { |locale| [t("locale_names.#{locale}"), locale] } %>
+
+    <% if user.avatar.attached? %>
+      <p><%= t(".current_avatar") %></p>
+      <%= image_tag user.avatar, size: "80x80", alt: user.name %>
+    <% end %>
+    <label for="user_avatar"><%= t(".avatar") %></label>
+    <%= form.file_field :avatar, accept: "image/*" %>
   </fieldset>
 
   <nav>
