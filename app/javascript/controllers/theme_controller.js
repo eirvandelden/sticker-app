@@ -1,18 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  #mediaQuery = null
-  #mediaListener = null
-
   connect() {
-    this.#applyTheme()
+    this.applyTheme()
   }
 
-  disconnect() {
-    this.#removeMediaListener()
-  }
-
-  #applyTheme() {
+  applyTheme() {
     const html = document.documentElement
     const source = this.element.dataset
     const colorScheme = source.colorScheme || "system"
@@ -23,39 +16,23 @@ export default class extends Controller {
     html.dataset.lightTheme = lightTheme
     html.dataset.darkTheme = darkTheme
 
-    this.#removeMediaListener()
-
     if (colorScheme === "light") {
-      html.dataset.theme = this.#mapToCSS(lightTheme)
+      html.dataset.theme = this.mapToCSS(lightTheme)
     } else if (colorScheme === "dark") {
-      html.dataset.theme = this.#mapToCSS(darkTheme)
+      html.dataset.theme = this.mapToCSS(darkTheme)
     } else {
-      this.#applySystemTheme(lightTheme, darkTheme)
+      this.applySystemTheme(lightTheme, darkTheme)
     }
   }
 
-  #applySystemTheme(lightTheme, darkTheme) {
+  applySystemTheme(lightTheme, darkTheme) {
     const html = document.documentElement
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    const listener = (e) => {
-      html.dataset.theme = this.#mapToCSS(e.matches ? darkTheme : lightTheme)
-    }
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
 
-    listener(mediaQuery)
-    mediaQuery.addEventListener("change", listener)
-    this.#mediaQuery = mediaQuery
-    this.#mediaListener = listener
+    html.dataset.theme = this.mapToCSS(prefersDark ? darkTheme : lightTheme)
   }
 
-  #removeMediaListener() {
-    if (this.#mediaQuery) {
-      this.#mediaQuery.removeEventListener("change", this.#mediaListener)
-      this.#mediaQuery = null
-      this.#mediaListener = null
-    }
-  }
-
-  #mapToCSS(value) {
+  mapToCSS(value) {
     const map = {
       selenized_light: "solunized-light",
       white: "solunized-white",
