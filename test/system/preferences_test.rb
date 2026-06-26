@@ -16,4 +16,20 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")
     assert_equal "solunized-dark", page.evaluate_script("document.documentElement.dataset.theme")
   end
+
+  test "unsaved color scheme preview is discarded on browser back" do
+    parent = users(:parent)
+
+    visit new_session_path
+    fill_in "Email", with: parent.email
+    fill_in "Password", with: "password"
+    click_button "Login"
+
+    click_link "Preferences"
+    select "Dark", from: "user_color_scheme"
+    go_back
+
+    assert_equal "system", parent.reload.color_scheme
+    assert_selector 'html[data-color-scheme="system"]', visible: :all
+  end
 end
