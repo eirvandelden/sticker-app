@@ -28,4 +28,8 @@ module ThemeHelper
 
     attrs
   end
+
+  def saved_theme_attributes
+    theme_attributes.except(:"data-theme")
+  end
 end

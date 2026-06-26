@@ -32,4 +32,25 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     assert_equal "system", parent.reload.color_scheme
     assert_selector 'html[data-color-scheme="system"]', visible: :all
   end
+
+  test "preview replaces saved body theme variables" do
+    parent = users(:parent)
+    parent.update!(color_scheme: :light)
+
+    visit new_session_path
+    fill_in "Email", with: parent.email
+    fill_in "Password", with: "password"
+    click_button "Login"
+
+    click_link "Preferences"
+    select "Dark", from: "user_color_scheme"
+
+    html_background = page.evaluate_script(
+      "getComputedStyle(document.documentElement).getPropertyValue('--color-bg-0')"
+    )
+    body_background = page.evaluate_script(
+      "getComputedStyle(document.body).getPropertyValue('--color-bg-0')"
+    )
+    assert_equal html_background, body_background
+  end
 end
