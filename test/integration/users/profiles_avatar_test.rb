@@ -1,0 +1,56 @@
+require "test_helper"
+
+class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
+  setup do
+    @child  = users(:user)
+    @parent = users(:parent)
+  end
+
+  test "child can view their own profile" do
+    sign_in_as @child
+    get user_profile_path(@child)
+
+    assert_response :success
+  end
+
+  test "child can reach profile edit page" do
+    sign_in_as @child
+    get edit_user_profile_path(@child)
+
+    assert_response :success
+    assert_select "form"
+  end
+
+  test "child can upload their own avatar" do
+    sign_in_as @child
+    avatar = fixture_file_upload("avatar.png", "image/png")
+    patch user_profile_path(@child), params: { user: { avatar: avatar } }
+
+    assert_redirected_to user_profile_path(@child)
+    assert_predicate @child.reload.avatar, :attached?
+  end
+
+  test "child cannot change their name via profile" do
+    sign_in_as @child
+    original_name = @child.name
+    patch user_profile_path(@child), params: { user: { name: "Hacked Name", avatar: fixture_file_upload("avatar.png", "image/png") } }
+
+    assert_equal original_name, @child.reload.name
+  end
+
+  test "parent can upload their own avatar" do
+    sign_in_as @parent
+    avatar = fixture_file_upload("avatar.png", "image/png")
+    patch user_profile_path(@parent), params: { user: { avatar: avatar } }
+
+    assert_redirected_to user_profile_path(@parent)
+    assert_predicate @parent.reload.avatar, :attached?
+  end
+
+  test "child cannot edit another user's profile" do
+    sign_in_as @child
+    get edit_user_profile_path(@parent)
+
+    assert_redirected_to root_path
+  end
+end
