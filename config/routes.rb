@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resource :sticker, only: [ :create ]
       resource :penalty, only: [ :create ]
       resource :reward, only: [ :create ]
+      resource :child_profile, only: [ :edit, :update ]
       get "history", to: "stickers#index"
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_22_184428) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_25_120000) do
   create_table "child_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "sticker_goal", default: 10, null: false
@@ -120,6 +120,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_22_184428) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.boolean "reward_given"
+    t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false
     t.index [ "child_profile_id" ], name: "index_sticker_cards_on_child_profile_id"
     t.index [ "completed_at" ], name: "index_sticker_cards_on_completed_at"

@@ -25,6 +25,8 @@ en:
     child_profile_required: "Child profile not found"
   flash:
     parent:
+      child_profiles:
+        updated: "Settings saved"
       penalties:
         created: Penalty added ❌
       rewards:
@@ -51,6 +53,12 @@ en:
         other: "%{count} cards ready to reward!"
       progress: 'Progress: %{current} / %{total} stickers'
       title: Parent Dashboard
+    child_profile:
+      edit:
+        title: "Child Settings"
+        sticker_goal_label: "Sticker goal"
+        save: "Save"
+        cancel: "Cancel"
     history:
       title: "Sticker History"
       back: "← Back"
