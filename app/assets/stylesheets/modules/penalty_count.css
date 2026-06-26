@@ -1,0 +1,4 @@
+.penalty-count {
+  color: var(--error-color, #dc2626);
+  font-weight: bold;
+}

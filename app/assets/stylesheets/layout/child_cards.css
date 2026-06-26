@@ -1,0 +1,21 @@
+.child-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+main > article {
+  padding-inline: clamp(0.75rem, 3vw, 1.25rem);
+}
+
+button,
+input[type="submit"],
+.child-actions a {
+  min-height: 2.75rem;
+}
+
+[data-controller="history-groups"] h2 {
+  padding-block: 0.75rem;
+  cursor: pointer;
+}

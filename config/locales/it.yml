@@ -13,6 +13,7 @@ it:
         other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
       no_card: "Non hai ancora una scheda adesivi."
       someone: "Qualcuno"
+      gave_you: "ti ha dato"
       title: "La tua scheda adesivi"
   common:
     logout: "Esci 🐿️"

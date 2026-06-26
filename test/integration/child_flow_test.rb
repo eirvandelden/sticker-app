@@ -12,7 +12,17 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
     assert_response :success
-    assert_select "body"
+    assert_select "article.stickers"
+    assert_select "progress"
+  end
+end
+
+class ChildDashboardI18nTest < ActionDispatch::IntegrationTest
+  test "gave_you key is present in all supported locales" do
+    %i[en nl it].each do |locale|
+      assert I18n.exists?("child.dashboard.gave_you", locale: locale),
+             "child.dashboard.gave_you is missing in #{locale}"
+    end
   end
 
   test "child dashboard renders a link to preferences" do

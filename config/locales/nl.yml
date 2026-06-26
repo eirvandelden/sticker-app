@@ -13,6 +13,7 @@ nl:
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
       someone: "Iemand"
+      gave_you: "gaf je"
       title: Jouw sticker kaart
   common:
     logout: "Uitloggen 🐿️"

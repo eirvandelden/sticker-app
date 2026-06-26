@@ -1,7 +1,6 @@
-/*
- * This file is intentionally minimal. Stylesheets are loaded explicitly in the layout:
- * - mvpa/mvpa.css (framework styles from the mvpa-css gem)
- * - local.css (app-specific styles)
- *
- * With Propshaft, we don't need a manifest file for asset compilation.
- */
+/* MVPA.css framework - provides base styles, components, themes */
+@import url("mvpa/mvpa.css");
+
+/* App-specific overrides (SMACSS structure) */
+@import url("layout/index.css");
+@import url("modules/index.css");
