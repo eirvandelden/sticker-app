@@ -1,8 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["colorScheme", "lightTheme", "darkTheme"]
-
   #mediaQuery = null
   #mediaListener = null
 
@@ -14,19 +12,12 @@ export default class extends Controller {
     this.#removeMediaListener()
   }
 
-  update() {
-    this.#applyTheme()
-  }
-
   #applyTheme() {
     const html = document.documentElement
     const source = this.element.dataset
-    const colorScheme =
-      (this.hasColorSchemeTarget ? this.colorSchemeTarget.value : source.colorScheme) || "system"
-    const lightTheme =
-      (this.hasLightThemeTarget ? this.lightThemeTarget.value : source.lightTheme) || "selenized_light"
-    const darkTheme =
-      (this.hasDarkThemeTarget ? this.darkThemeTarget.value : source.darkTheme) || "selenized_dark"
+    const colorScheme = source.colorScheme || "system"
+    const lightTheme = source.lightTheme || "selenized_light"
+    const darkTheme = source.darkTheme || "selenized_dark"
 
     html.dataset.colorScheme = colorScheme
     html.dataset.lightTheme = lightTheme

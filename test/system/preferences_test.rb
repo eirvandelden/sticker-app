@@ -11,13 +11,17 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     click_link "Preferences"
     select "Dark", from: "user_color_scheme"
+
+    assert_equal "system", page.evaluate_script("document.documentElement.dataset.colorScheme")
+
     click_button "Save Preferences"
+    assert_text I18n.t("flash.preferences.updated")
 
     assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")
     assert_equal "solunized-dark", page.evaluate_script("document.documentElement.dataset.theme")
   end
 
-  test "unsaved color scheme preview is discarded on browser back" do
+  test "unsaved color scheme is discarded on browser back" do
     parent = users(:parent)
 
     visit new_session_path
@@ -33,7 +37,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     assert_selector 'html[data-color-scheme="system"]', visible: :all
   end
 
-  test "preview replaces saved body theme variables" do
+  test "saved body theme variables replace root theme variables" do
     parent = users(:parent)
     parent.update!(color_scheme: :light)
 
@@ -43,7 +47,6 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     click_button "Login"
 
     click_link "Preferences"
-    select "Dark", from: "user_color_scheme"
 
     html_background = page.evaluate_script(
       "getComputedStyle(document.documentElement).getPropertyValue('--color-bg-0')"
