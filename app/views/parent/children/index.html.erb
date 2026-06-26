@@ -18,7 +18,17 @@
 
   <% @children.each do |child| %>
     <article>
-      <h2><%= link_to child.user.email, edit_parent_child_child_profile_path(child) %></h2>
+      <header>
+        <% if child.user.avatar.attached? %>
+          <%= image_tag child.user.avatar, size: "40x40", alt: child.user.name %>
+        <% end %>
+        <h2><%= child.user.name %></h2>
+        <nav>
+          <%= link_to t("parent.children.index.edit_name"), edit_parent_child_path(child) %>
+          <%= link_to t("parent.children.index.edit_avatar"), edit_parent_child_avatar_path(child) %>
+          <%= link_to t("parent.child_profile.edit.title"), edit_parent_child_child_profile_path(child) %>
+        </nav>
+      </header>
 
       <% card = child.active_sticker_card %>
       <% rewardable_card = child.rewardable_sticker_card %>
