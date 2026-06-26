@@ -28,7 +28,7 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "lowering sticker goal runs card completion workflow" do
-    user = User.create!(email: "goal-change@example.com", password: "password", role: :child)
+    user = User.create!(name: "Goal Change Child", email: "goal-change@example.com", password: "password", role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 3)
     card = profile.active_sticker_card
@@ -42,7 +42,7 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "changing sticker goal updates only the active unfinished card" do
-    user = User.create!(email: "active-goal-change@example.com", password: "password", role: :child)
+    user = User.create!(name: "Active Goal Change", email: "active-goal-change@example.com", password: "password", role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
 
