@@ -1,2 +1,10 @@
-@import url("layout/index.css");
-@import url("modules/index.css");
+/*
+ * This file is intentionally minimal. Stylesheets are loaded explicitly in the layout:
+ * - mvpa/mvpa.css (framework styles from the mvpa-css gem)
+ * - application.css (app-specific styles)
+ *
+ * With Propshaft, we don't need a manifest file for asset compilation.
+ */
+
+@import url("2_layout/index.css");
+@import url("3_modules/index.css");

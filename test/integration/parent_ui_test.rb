@@ -29,12 +29,13 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_select "article progress", minimum: 1
   end
 
-  test "parent dashboard wraps sticker and penalty buttons in child-actions" do
+  test "parent dashboard wraps sticker and penalty buttons in semantic footer" do
     sign_in_as @parent
     get parent_children_path
     assert_response :success
-    assert_select "div.child-actions" do
+    assert_select "article > footer" do
       assert_select "form", minimum: 2
     end
+    assert_select ".child-actions", count: 0
   end
 end
