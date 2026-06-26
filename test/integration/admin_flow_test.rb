@@ -53,6 +53,13 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
   # There is no deactivate route — `user_params` does not permit `active`.
   # Destroy is the only admin removal path. After deletion the user record is
   # gone, so `User.active.authenticate_by` returns nil → :unauthorized.
+  test "admin layout nav renders a link to preferences" do
+    sign_in_as @admin
+    get admin_root_path
+    assert_response :success
+    assert_select "a[href='#{edit_preferences_path}']"
+  end
+
   test "admin destroys a user and the user can no longer log in" do
     target = users(:user_two)
     target_email = target.email

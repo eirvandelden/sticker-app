@@ -17,6 +17,10 @@ en:
   common:
     logout: "Logout 🐿️"
     back: "← Back"
+  locale_names:
+    en: "English"
+    nl: "Dutch"
+    it: "Italian"
   errors:
     authentication_required: "Please log in"
     admin_required: "Admin access required"
@@ -76,6 +80,11 @@ en:
     password: Password
   preferences:
     title: "Preferences"
+    account_label: "Account"
+    email: "Email"
+    password: "Password"
+    password_placeholder: "Leave blank to keep current password"
+    password_confirmation: "Confirm Password"
     language_label: "Language"
     theme_label: "Theme"
     color_scheme:
@@ -137,6 +146,7 @@ en:
         role: "Role"
         password: "Password"
         password_confirmation: "Confirm Password"
+        locale: "Language"
         cancel: "Cancel"
       create:
         success: "User created successfully"
@@ -150,3 +160,4 @@ en:
         cannot_delete_self: "You cannot delete yourself"
   navigation:
     admin: "Admin"
+    preferences: "Preferences"

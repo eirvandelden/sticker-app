@@ -92,6 +92,13 @@ class AdminNavTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "a[href='#{admin_root_path}']", count: 0
   end
+
+  test "parent dashboard renders a link to preferences" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+    assert_select "a[href='#{edit_preferences_path}']"
+  end
 end
 
 class ParentHappyFlowTest < ActionDispatch::IntegrationTest

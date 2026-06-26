@@ -56,6 +56,16 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     assert_select "form"
   end
 
+  test "admin user form localizes locale options" do
+    sign_in_as(users(:dutch_admin))
+    get edit_admin_user_path(@user)
+
+    assert_response :success
+    assert_select "option", text: I18n.t("locale_names.en", locale: :nl)
+    assert_select "option", text: I18n.t("locale_names.nl", locale: :nl)
+    assert_select "option", text: I18n.t("locale_names.it", locale: :nl)
+  end
+
   test "admin can update a user" do
     sign_in_as(@admin)
     patch admin_user_path(@user), params: { user: { role: "admin" } }

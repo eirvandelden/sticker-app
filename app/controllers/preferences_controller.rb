@@ -17,6 +17,10 @@ class PreferencesController < ApplicationController
   private
 
   def preferences_params
-    params.require(:user).permit(:locale, :color_scheme, :light_theme, :dark_theme)
+    permitted = params.require(:user).permit(
+      :email, :password, :password_confirmation,
+      :locale, :color_scheme, :light_theme, :dark_theme
+    )
+    permitted[:password].blank? ? permitted.except(:password, :password_confirmation) : permitted
   end
 end

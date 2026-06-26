@@ -22,3 +22,9 @@ admin:
   email: admin@example.com
   password_digest: <%= BCrypt::Password.create("password") %>
   role: 2
+
+dutch_admin:
+  email: dutch-admin@example.com
+  password_digest: <%= BCrypt::Password.create("password") %>
+  role: 2
+  locale: nl
