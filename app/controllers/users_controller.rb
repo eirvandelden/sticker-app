@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     start_new_session_for @user
     redirect_to root_url
   rescue ActiveRecord::RecordNotUnique
-    redirect_to new_session_url(email_address: user_params[:email_address])
+    redirect_to new_session_url(email: user_params[:email])
   end
 
   def update
@@ -38,6 +38,6 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:name, :email_address, :password)
+      params.require(:user).permit(:name, :email, :password)
     end
 end
