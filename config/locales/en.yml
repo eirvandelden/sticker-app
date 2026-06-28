@@ -53,6 +53,7 @@ en:
       mark_rewarded: "🎁 Mark Rewarded"
       view_history: "📊 History"
     dashboard:
+      card_completed: "Card completed — awaiting reward"
       open_cards:
         one: "%{count} card ready to reward!"
         other: "%{count} cards ready to reward!"
