@@ -3,6 +3,7 @@ require "test_helper"
 class PreferencesTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:user)
+    @parent = users(:parent)
   end
 
   test "user can update locale to italian" do
@@ -90,6 +91,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
       sign_in_as(@parent)
       get edit_preferences_path
       assert_response :success
+      assert_select "h1", text: I18n.t("preferences.title")
     end
 
     test "parent can update locale via preferences" do
@@ -99,6 +101,19 @@ class PreferencesTest < ActionDispatch::IntegrationTest
 
       assert_redirected_to edit_preferences_path
       assert_equal "nl", @parent.reload.locale
+    end
+
+    test "parent can update color scheme" do
+      sign_in_as(@parent)
+
+      patch preferences_path, params: {
+        user: {
+          color_scheme: "dark"
+        }
+      }
+
+      assert_redirected_to edit_preferences_path
+      assert_equal "dark", @parent.reload.color_scheme
     end
   end
 

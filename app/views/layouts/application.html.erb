@@ -23,7 +23,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <%= render "shared/flash" %>
     <%= yield %>
   </body>
