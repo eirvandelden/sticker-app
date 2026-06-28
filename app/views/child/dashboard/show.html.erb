@@ -11,7 +11,7 @@
   <% @recent_stickers.each do |s| %>
     <article role="<%= s.positive? ? 'status' : 'alert' %>" data-controller="fade-out">
       <%= s.positive? ? "✅" : "❌" %>
-      <%= s.giver&.email || t("child.dashboard.someone") %> gave you
+      <%= s.giver&.email || t("child.dashboard.someone") %> <%= t("child.dashboard.gave_you") %>
       <%= s.emoji %>
       <% if s.note.present? %>— <%= s.note %><% end %>
     </article>
@@ -32,6 +32,9 @@
     <% if new_stickers.to_i > 0 %>
       <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
     <% end %>
+
+    <progress value="<%= earned %>" max="<%= required %>"
+              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
 
     <article class="stickers">
       <% all_stickers = [] %>

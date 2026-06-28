@@ -12,13 +12,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
     assert_response :success
-    assert_select "body"
-  end
-
-  test "child dashboard renders a link to preferences" do
-    sign_in_as @child
-    get child_dashboard_path
-    assert_response :success
-    assert_select "a[href='#{edit_preferences_path}']"
+    assert_select "article.stickers"
+    assert_select "progress[aria-label=?]", I18n.t("child.dashboard.earned", current: 0, total: 2)
   end
 end

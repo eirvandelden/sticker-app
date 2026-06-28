@@ -57,6 +57,17 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
+  test "login page title uses i18n and is not hardcoded in English" do
+    original_locale = I18n.default_locale
+    I18n.default_locale = :nl
+    get new_session_path
+    assert_response :success
+    assert_select "title", text: /#{I18n.t("sessions.login_title", locale: :nl)}/
+    assert_not response.body.include?("<title>Sign in"), "Title is hardcoded English, should use i18n"
+  ensure
+    I18n.default_locale = original_locale
+  end
+
   private
 
   def build_sessions_controller
