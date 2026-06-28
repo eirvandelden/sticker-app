@@ -60,9 +60,29 @@ class User < ApplicationRecord
   end
 
   def validate_avatar_content_type
-    return if AVATAR_CONTENT_TYPES.include?(avatar.blob.content_type)
+    return if AVATAR_CONTENT_TYPES.include?(detected_avatar_content_type)
 
     errors.add(:avatar, :invalid_content_type)
+  end
+
+  def detected_avatar_content_type
+    io = avatar_upload_io
+    Marcel::MimeType.for(io)
+  ensure
+    io&.rewind if io.respond_to?(:rewind)
+  end
+
+  def avatar_upload_io
+    pending_avatar_upload_io || StringIO.new(avatar.blob.download)
+  end
+
+  def pending_avatar_upload_io
+    attachable = attachment_changes["avatar"]&.attachable
+
+    return attachable[:io] if attachable.is_a?(Hash)
+    return attachable.open if attachable.respond_to?(:open) && !attachable.is_a?(ActiveStorage::Blob)
+
+    attachable if attachable.respond_to?(:read)
   end
 
   def validate_avatar_size
