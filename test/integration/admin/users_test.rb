@@ -36,6 +36,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     assert_difference("User.count", 1) do
       post admin_users_path, params: {
         user: {
+          name: "Created User",
           email: "created@example.com",
           role: "parent",
           password: "password",

@@ -4,13 +4,13 @@ class ChildProfileTest < ActiveSupport::TestCase
   test "creating a child profile auto-creates an initial sticker card" do
     # Use a parent user so the User after_create callback does NOT fire,
     # letting us test the ChildProfile callback in isolation.
-    user = User.create!(email: "testparent@example.com", password: "password", role: :parent)
+    user = User.create!(name: "Test Parent", email: "testparent@example.com", password: "password", role: :parent)
     profile = ChildProfile.create!(user: user)
     assert profile.sticker_cards.any?, "Expected at least one sticker_card to be created"
   end
 
   test "active sticker card provisions one for legacy profiles" do
-    user = User.create!(email: "legacyprofile@example.com", password: "password", role: :parent)
+    user = User.create!(name: "Legacy Profile", email: "legacyprofile@example.com", password: "password", role: :parent)
     profile = ChildProfile.create!(user: user)
     profile.sticker_cards.destroy_all
 
@@ -28,7 +28,7 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "lowering sticker goal runs card completion workflow" do
-    user = User.create!(email: "goal-change@example.com", password: "password", role: :child)
+    user = User.create!(name: "Goal Change Child", email: "goal-change@example.com", password: "password", role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 3)
     card = profile.active_sticker_card
@@ -42,7 +42,7 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "changing sticker goal updates only the active unfinished card" do
-    user = User.create!(email: "active-goal-change@example.com", password: "password", role: :child)
+    user = User.create!(name: "Active Goal Change", email: "active-goal-change@example.com", password: "password", role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
 

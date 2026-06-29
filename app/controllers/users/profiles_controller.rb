@@ -1,6 +1,7 @@
 class Users::ProfilesController < ApplicationController
   include UserScoped
 
+  before_action :ensure_profile_viewer, only: :show
   before_action :ensure_current_user, only: %i[ edit update ]
 
   def show
@@ -10,12 +11,26 @@ class Users::ProfilesController < ApplicationController
   end
 
   def update
-    @user.update!(user_params)
-    redirect_to users_url
+    if @user.update(user_params)
+      redirect_to user_profile_path(@user), notice: t(".success")
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
-    def user_params
-      params.require(:user).permit(:name, :email, :password)
-    end
+
+  def ensure_current_user
+    redirect_to root_path unless @user.current?
+  end
+
+  def ensure_profile_viewer
+    redirect_to root_path if Current.user.child? && !@user.current?
+  end
+
+  def user_params
+    return params.require(:user).permit(:avatar) if Current.user.child?
+
+    params.require(:user).permit(:name, :email, :password, :avatar)
+  end
 end

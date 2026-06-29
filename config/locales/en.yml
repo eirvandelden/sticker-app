@@ -12,6 +12,7 @@ en:
         one: "🎉 You got 1 new sticker since last time!"
         other: "🎉 You got %{count} new stickers since last time!"
       no_card: You don't have a sticker card yet.
+      profile_link: "My Profile"
       someone: "Someone"
       gave_you: "gave you"
       title: Your Sticker Card
@@ -28,6 +29,9 @@ en:
     parent_required: "Parent access required"
     child_required: "Child access required"
     child_profile_required: "Child profile not found"
+    messages:
+      invalid_content_type: "must be PNG, JPEG, GIF, or WebP"
+      file_size_too_large: "must be smaller than 5 MB"
   flash:
     parent:
       child_profiles:
@@ -47,6 +51,26 @@ en:
     preferences:
       updated: "Preferences updated successfully"
   parent:
+    children:
+      edit:
+        title: "Edit Child"
+        name_label: "Name"
+        save: "Save"
+        cancel: "Cancel"
+      update:
+        success: "Child updated successfully"
+      index:
+        edit_name: "Edit name"
+        edit_avatar: "Edit avatar"
+    children_avatar:
+      edit:
+        title: "Edit Avatar"
+        current_avatar: "Current avatar"
+        upload_label: "Choose a new avatar"
+        save: "Save"
+        cancel: "Cancel"
+      update:
+        success: "Avatar updated successfully"
     actions:
       give_sticker: "🎉 Give Sticker"
       give_penalty: "❌ Give Penalty"
@@ -144,10 +168,13 @@ en:
         submit: "Create User"
       form:
         email: "Email"
+        name: "Name"
         role: "Role"
         password: "Password"
         password_confirmation: "Confirm Password"
         locale: "Language"
+        avatar: "Avatar"
+        current_avatar: "Current avatar"
         cancel: "Cancel"
       create:
         success: "User created successfully"
@@ -162,3 +189,22 @@ en:
   navigation:
     admin: "Admin"
     preferences: "Preferences"
+  users:
+    profiles:
+      show:
+        title: "My Profile"
+        name: "Name"
+        email: "Email"
+        avatar: "Avatar"
+        edit: "Edit profile"
+      edit:
+        title: "Edit Profile"
+        name_label: "Name"
+        avatar_label: "Avatar"
+        current_avatar: "Current avatar"
+        email_label: "Email"
+        password_label: "Change password"
+        save: "Save"
+        cancel: "Cancel"
+      update:
+        success: "Profile updated successfully"

@@ -73,3 +73,7 @@ group :test do
   # Pin minitest to 5.x for Rails 8.0.2 compatibility
   gem "minitest", "~> 6.0"
 end
+
+group :development, :test do
+  gem "i18n-tasks", "~> 1.1"
+end

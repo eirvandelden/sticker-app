@@ -1,63 +1,46 @@
-<% content_for(:title) { "Your settings" } %>
+<main>
+  <header>
+    <h1><%= t(".title") %></h1>
+  </header>
 
-<% content_for :header do %>
-  <nav>
-    <%= link_to users_path, class: "btn" do %>
-      <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Go back</span>
+  <%= form_with model: @user, url: user_profile_path(@user), method: :patch, multipart: true do |form| %>
+    <% if @user.errors.any? %>
+      <aside role="alert">
+        <ul>
+          <% @user.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </aside>
     <% end %>
 
-    <div class="breadcrumbs">
-      <%= render "books/index_link" %>
-      <span class="flex-item-no-shrink">▸</span>
-      <%= link_to users_path, class: "btn borderless txt-small flex-item-no-shrink" do %>
-        <%= image_tag "people.svg", aria: { label: "People" }, size: 19, class: "colorize--black", alt: "People" %>
-        <span class="for-screen-reader">Manage people</span>
+    <fieldset>
+      <% unless Current.user.child? %>
+        <label for="user_name"><%= t(".name_label") %></label>
+        <%= form.text_field :name, required: true %>
       <% end %>
-      <span class="flex-item-no-shrink">▸</span>
-      <%= @user.name %>
-    </div>
-  </nav>
-<% end %>
 
-<div class="panel margin-block-double shadow center">
-  <%= form_with model: @user, url: user_profile_path(@user), class: "flex flex-column gap" do |form| %>
-    <%= form.hidden_field :role %>
-    <div class="flex align-center gap margin-block-start">
-      <%= translation_button(:user_name) %>
-      <label class="flex align-center gap input input--actor">
-        <%= form.text_field :name, class: "input full-width", autocomplete: "name", placeholder: "Name", autofocus: true, required: true, data: { "1p-ignore": true } %>
-        <%= image_tag "person.svg", aria: { hidden: "true" }, size: 30, class: "colorize--black" %>
-      </label>
-    </div>
-    <div class="flex align-center gap">
-      <%= translation_button(:email) %>
-      <label class="flex align-center gap input input--actor">
-        <%= form.email_field :email, class: "input full-width", autocomplete: "username", placeholder: "Email address", required: true %>
-        <%= image_tag "email.svg", aria: { hidden: "true" }, size: 30, class: "colorize--black" %>
-      </label>
-    </div>
-    <div class="flex align-center gap">
-      <%= translation_button(:update_password) %>
-      <label class="flex align-center gap input input--actor">
-        <%= form.password_field :password, class: "input full-width", autocomplete: "new-password", placeholder: "Change password", maxlength: 72 %>
-        <%= image_tag "password.svg", aria: { hidden: "true" }, size: 30, class: "colorize--black" %>
-      </label>
-    </div>
-    <button type="submit" class="btn btn--reversed center">
-      <%= image_tag "check.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Save changes</span>
-    </button>
+      <% if @user.avatar_displayable? %>
+        <figure>
+          <figcaption><%= t(".current_avatar") %></figcaption>
+          <%= image_tag @user.avatar, size: "80x80", alt: @user.name %>
+        </figure>
+      <% end %>
+      <label for="user_avatar"><%= t(".avatar_label") %></label>
+      <%= form.file_field :avatar, accept: "image/*" %>
+
+      <% unless Current.user.child? %>
+        <label for="user_email"><%= t(".email_label") %></label>
+        <%= form.email_field :email, required: true %>
+
+        <label for="user_password"><%= t(".password_label") %></label>
+        <%= form.password_field :password %>
+      <% end %>
+    </fieldset>
+
+    <nav>
+      <%= form.submit t(".save") %>
+      <%= link_to t(".cancel"), user_profile_path(@user) %>
+    </nav>
   <% end %>
-</div>
-
-<div class="panel margin-block-double shadow center">
-  <%= render "users/transfer", user: @user %>
-</div>
-
-<div class="panel margin-block-double shadow center">
-  <%= button_to session_path, method: :delete, class: "btn center" do %>
-    <%= image_tag "logout.svg", aria: { hidden: true }, size: 24 %>
-    <span class="for-screen-reader">Sign out</span>
-  <% end %>
-</div>
+</main>

@@ -18,6 +18,7 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_difference "User.count", +1 do
       post admin_users_path, params: {
         user: {
+          name: "New Parent",
           email: "newparent@example.com",
           password: "password",
           password_confirmation: "password",
@@ -36,6 +37,7 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_difference "User.count", +1 do
       post admin_users_path, params: {
         user: {
+          name: "New Child",
           email: "newchild@example.com",
           password: "password",
           password_confirmation: "password",

@@ -12,6 +12,7 @@ it:
         one: "🎉 Hai ricevuto 1 nuovo adesivo dall'ultima volta!"
         other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
       no_card: "Non hai ancora una scheda adesivi."
+      profile_link: "Il mio profilo"
       someone: "Qualcuno"
       gave_you: "ti ha dato"
       title: "La tua scheda adesivi"
@@ -28,6 +29,9 @@ it:
     parent_required: "Accesso genitore richiesto"
     child_required: "Accesso bambino richiesto"
     child_profile_required: "Profilo bambino non trovato"
+    messages:
+      invalid_content_type: "deve essere PNG, JPEG, GIF o WebP"
+      file_size_too_large: "deve essere inferiore a 5 MB"
   flash:
     parent:
       child_profiles:
@@ -47,6 +51,26 @@ it:
     preferences:
       updated: "Preferenze aggiornate con successo"
   parent:
+    children:
+      edit:
+        title: "Modifica bambino"
+        name_label: "Nome"
+        save: "Salva"
+        cancel: "Annulla"
+      update:
+        success: "Bambino aggiornato con successo"
+      index:
+        edit_name: "Modifica nome"
+        edit_avatar: "Modifica avatar"
+    children_avatar:
+      edit:
+        title: "Modifica avatar"
+        current_avatar: "Avatar attuale"
+        upload_label: "Scegli un nuovo avatar"
+        save: "Salva"
+        cancel: "Annulla"
+      update:
+        success: "Avatar aggiornato con successo"
     actions:
       give_sticker: "🎉 Dai adesivo"
       give_penalty: "❌ Dai penalita"
@@ -144,10 +168,13 @@ it:
         submit: "Crea Utente"
       form:
         email: "Email"
+        name: "Nome"
         role: "Ruolo"
         password: "Password"
         password_confirmation: "Conferma Password"
         locale: "Lingua"
+        avatar: "Avatar"
+        current_avatar: "Avatar attuale"
         cancel: "Annulla"
       create:
         success: "Utente creato con successo"
@@ -162,3 +189,22 @@ it:
   navigation:
     admin: "Admin"
     preferences: "Preferenze"
+  users:
+    profiles:
+      show:
+        title: "Il mio profilo"
+        name: "Nome"
+        email: "Email"
+        avatar: "Avatar"
+        edit: "Modifica profilo"
+      edit:
+        title: "Modifica profilo"
+        name_label: "Nome"
+        avatar_label: "Avatar"
+        current_avatar: "Avatar attuale"
+        email_label: "Email"
+        password_label: "Cambia password"
+        save: "Salva"
+        cancel: "Annulla"
+      update:
+        success: "Profilo aggiornato con successo"

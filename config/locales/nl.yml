@@ -12,6 +12,7 @@ nl:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
+      profile_link: "Mijn profiel"
       someone: "Iemand"
       gave_you: "gaf je"
       title: Jouw sticker kaart
@@ -28,6 +29,9 @@ nl:
     parent_required: "Parent toegang vereist"
     child_required: "Child toegang vereist"
     child_profile_required: "Kind profiel niet gevonden"
+    messages:
+      invalid_content_type: "moet PNG, JPEG, GIF of WebP zijn"
+      file_size_too_large: "moet kleiner zijn dan 5 MB"
   flash:
     parent:
       child_profiles:
@@ -47,6 +51,26 @@ nl:
     preferences:
       updated: "Voorkeuren bijgewerkt"
   parent:
+    children:
+      edit:
+        title: "Kind bewerken"
+        name_label: "Naam"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Kind succesvol bijgewerkt"
+      index:
+        edit_name: "Naam bewerken"
+        edit_avatar: "Avatar bewerken"
+    children_avatar:
+      edit:
+        title: "Avatar bewerken"
+        current_avatar: "Huidige avatar"
+        upload_label: "Kies een nieuwe avatar"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Avatar succesvol bijgewerkt"
     actions:
       give_sticker: "🎉 Geef Sticker"
       give_penalty: "❌ Geef Straf"
@@ -144,10 +168,13 @@ nl:
         submit: "Gebruiker aanmaken"
       form:
         email: "E-mail"
+        name: "Naam"
         role: "Rol"
         password: "Wachtwoord"
         password_confirmation: "Bevestig wachtwoord"
         locale: "Taal"
+        avatar: "Avatar"
+        current_avatar: "Huidige avatar"
         cancel: "Annuleren"
       create:
         success: "Gebruiker succesvol aangemaakt"
@@ -162,3 +189,22 @@ nl:
   navigation:
     admin: "Beheer"
     preferences: "Voorkeuren"
+  users:
+    profiles:
+      show:
+        title: "Mijn profiel"
+        name: "Naam"
+        email: "E-mail"
+        avatar: "Avatar"
+        edit: "Profiel bewerken"
+      edit:
+        title: "Profiel bewerken"
+        name_label: "Naam"
+        avatar_label: "Avatar"
+        current_avatar: "Huidige avatar"
+        email_label: "E-mail"
+        password_label: "Wachtwoord wijzigen"
+        save: "Opslaan"
+        cancel: "Annuleren"
+      update:
+        success: "Profiel succesvol bijgewerkt"

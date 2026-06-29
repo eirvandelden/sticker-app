@@ -1,31 +1,21 @@
-<% content_for(:title) { @user.name } %>
+<main>
+  <header>
+    <h1><%= t(".title") %></h1>
+  </header>
 
-<% content_for :header do %>
-  <nav>
-    <%= link_to users_path, class: "btn" do %>
-      <%= image_tag "arrow-left.svg", aria: { hidden: true }, size: 24 %>
-      <span class="for-screen-reader">Go back</span>
+  <article>
+    <% if @user.avatar.attached? %>
+      <%= image_tag @user.avatar, size: "80x80", alt: @user.name %>
     <% end %>
 
-    <div class="breadcrumbs">
-      <%= render "books/index_link" %>
-      <span class="flex-item-no-shrink">▸</span>
-      <%= link_to users_path, class: "btn borderless txt-small flex-item-no-shrink" do %>
-        <%= image_tag "people.svg", aria: { label: "People" }, size: 19, class: "colorize--black", alt: "People" %>
-        <span class="for-screen-reader">Manage people</span>
-      <% end %>
-      <span class="flex-item-no-shrink">▸</span>
-      <%= @user.name %>
-    </div>
-  </nav>
-<% end %>
+    <dl>
+      <dt><%= t(".name") %></dt>
+      <dd><%= @user.name %></dd>
 
-<div class="panel margin-block-double shadow center">
-  <h2 class="margin-none-block-end"><%= @user.name %></h2>
-  <p class="margin-none-block-start"><%= mail_to @user.email %></p>
+      <dt><%= t(".email") %></dt>
+      <dd><%= @user.email %></dd>
+    </dl>
 
-  <% if Current.user.can_administer? %>
-    <hr class="full-width margin-block-double" aria-hidden="true">
-    <%= render "users/transfer", user: @user %>
-  <% end %>
-</div>
+    <%= link_to t(".edit"), edit_user_profile_path(@user) %>
+  </article>
+</main>
