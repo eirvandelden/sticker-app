@@ -20,6 +20,13 @@ class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  test "parent can view another user's profile" do
+    sign_in_as @parent
+    get user_profile_path(@child)
+
+    assert_response :success
+  end
+
   test "child can reach profile edit page" do
     sign_in_as @child
     get edit_user_profile_path(@child)

@@ -1,7 +1,8 @@
 class Users::ProfilesController < ApplicationController
   include UserScoped
 
-  before_action :ensure_current_user, only: %i[ show edit update ]
+  before_action :ensure_profile_viewer, only: :show
+  before_action :ensure_current_user, only: %i[ edit update ]
 
   def show
   end
@@ -21,6 +22,10 @@ class Users::ProfilesController < ApplicationController
 
   def ensure_current_user
     redirect_to root_path unless @user.current?
+  end
+
+  def ensure_profile_viewer
+    redirect_to root_path if Current.user.child? && !@user.current?
   end
 
   def user_params
