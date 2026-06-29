@@ -29,22 +29,24 @@
                 aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
       <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
 
-      <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
-                    method: :post,
-                    params: { emoji_mode: "random" },
-                    class: "button-success" %>
+      <footer>
+        <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
+                      method: :post,
+                      params: { emoji_mode: "random" },
+                      class: "button-success" %>
 
-      <%= button_to t("parent.actions.give_penalty"), parent_child_penalty_path(child),
-                    method: :post,
-                    class: "button-danger" %>
+        <%= button_to t("parent.actions.give_penalty"), parent_child_penalty_path(child),
+                      method: :post,
+                      class: "button-danger" %>
 
-      <%= link_to t("parent.actions.view_history"), parent_child_history_path(child) %>
+        <%= link_to t("parent.actions.view_history"), parent_child_history_path(child) %>
 
-      <% if rewardable_card %>
-        <p><%= t("parent.dashboard.card_completed") %></p>
-        <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
-                      method: :post, class: "button-success" %>
-      <% end %>
+        <% if rewardable_card %>
+          <p><%= t("parent.dashboard.card_completed") %></p>
+          <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
+                        method: :post, class: "button-success" %>
+        <% end %>
+      </footer>
     </article>
   <% end %>
 
