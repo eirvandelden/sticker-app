@@ -28,7 +28,7 @@
 
     <main>
       <% if flash.any? %>
-        <output data-mvpa-flashes>
+        <section data-mvpa-flashes>
           <% if flash[:notice] %>
             <aside role="status"><%= flash[:notice] %></aside>
           <% end %>
@@ -36,7 +36,7 @@
           <% if flash[:alert] %>
             <aside role="alert"><%= flash[:alert] %></aside>
           <% end %>
-        </output>
+        </section>
       <% end %>
 
       <%= yield %>

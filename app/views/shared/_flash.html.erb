@@ -1,9 +1,9 @@
 <% if flash.any? %>
-  <output data-mvpa-flashes>
+  <section data-mvpa-flashes>
     <% flash.each do |type, message| %>
       <aside role="<%= type == 'notice' ? 'status' : 'alert' %>" data-controller="fade-out">
         <%= message %>
       </aside>
     <% end %>
-  </output>
+  </section>
 <% end %>
