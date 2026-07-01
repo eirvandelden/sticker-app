@@ -28,7 +28,7 @@
 
     <main>
       <% if flash.any? %>
-        <section data-mvpa-flashes>
+        <section aria-label="<%= t("flash.notifications") %>" data-mvpa-flashes>
           <% if flash[:notice] %>
             <aside role="status"><%= flash[:notice] %></aside>
           <% end %>

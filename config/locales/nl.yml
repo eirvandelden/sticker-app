@@ -33,6 +33,7 @@ nl:
       invalid_content_type: "moet PNG, JPEG, GIF of WebP zijn"
       file_size_too_large: "moet kleiner zijn dan 5 MB"
   flash:
+    notifications: Meldingen
     parent:
       child_profiles:
         updated: "Instellingen opgeslagen"

@@ -33,6 +33,7 @@ en:
       invalid_content_type: "must be PNG, JPEG, GIF, or WebP"
       file_size_too_large: "must be smaller than 5 MB"
   flash:
+    notifications: Notifications
     parent:
       child_profiles:
         updated: "Settings saved"
