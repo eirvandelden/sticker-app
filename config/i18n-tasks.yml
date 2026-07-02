@@ -148,6 +148,9 @@ search:
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
 # - 'simple_form.{error_notification,required}.:'
+ignore_unused:
+  - errors.messages.invalid_content_type
+  - errors.messages.file_size_too_large
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

@@ -1,42 +1,106 @@
 ---
 en:
+  admin:
+    dashboard:
+      index:
+        actions: Actions
+        admin_users: Admin Users
+        created_at: Created
+        edit: Edit
+        email: Email
+        recent_signups: Recent Signups
+        role: Role
+        summary: Summary
+        title: Dashboard
+        total_users: Total Users
+        view: View
+    nav:
+      back_to_site: Back to Site
+      dashboard: Dashboard
+      faultline: Faultline
+      title: Admin
+      users: Users
+    title: Admin
+    users:
+      create:
+        success: User created successfully
+      destroy:
+        cannot_delete_self: You cannot delete yourself
+        success: User deleted successfully
+      edit:
+        submit: Update User
+        title: Edit User
+      form:
+        avatar: Avatar
+        cancel: Cancel
+        current_avatar: Current avatar
+        email: Email
+        locale: Language
+        name: Name
+        password: Password
+        password_confirmation: Confirm Password
+        role: Role
+      index:
+        actions: Actions
+        confirm_delete: Are you sure you want to delete this user?
+        created_at: Created
+        delete: Delete
+        edit: Edit
+        email: Email
+        new_user: New User
+        role: Role
+        title: User Management
+        view: View
+      new:
+        submit: Create User
+        title: New User
+      show:
+        active_sessions: Active Sessions
+        back: Back
+        created_at: Created
+        edit: Edit
+        email: Email
+        role: Role
+        title: User Details
+      update:
+        success: User updated successfully
   app:
-    title: "Sticker App"
+    title: Sticker App
   child:
     dashboard:
       completed:
         one: "You've completed 1 card so far 🎁"
         other: "You've completed %{count} cards so far 🎁"
       earned: You've earned %{current} out of %{total} stickers.
+      gave_you: gave you
       new_stickers:
         one: "🎉 You got 1 new sticker since last time!"
         other: "🎉 You got %{count} new stickers since last time!"
       no_card: You don't have a sticker card yet.
-      profile_link: "My Profile"
-      someone: "Someone"
-      gave_you: "gave you"
+      profile_link: My Profile
+      someone: Someone
       title: Your Sticker Card
   common:
-    logout: "Logout 🐿️"
     back: "← Back"
-  locale_names:
-    en: "English"
-    nl: "Dutch"
-    it: "Italian"
+    logout: "Logout 🐿️"
   errors:
-    authentication_required: "Please log in"
-    admin_required: "Admin access required"
-    parent_required: "Parent access required"
-    child_required: "Child access required"
-    child_profile_required: "Child profile not found"
+    admin_required: Admin access required
+    authentication_required: Please log in
+    child_profile_required: Child profile not found
+    child_required: Child access required
     messages:
-      invalid_content_type: "must be PNG, JPEG, GIF, or WebP"
-      file_size_too_large: "must be smaller than 5 MB"
+      file_size_too_large: must be smaller than 5 MB
+      invalid_content_type: must be PNG, JPEG, GIF, or WebP
+    parent_required: Parent access required
+    template:
+      header:
+        one: 1 error prevented this record from being saved
+        other: "%{count} errors prevented this record from being saved"
   flash:
     notifications: Notifications
     parent:
       child_profiles:
-        updated: "Settings saved"
+        updated: Settings saved
       penalties:
         created: Penalty added ❌
       rewards:
@@ -44,169 +108,108 @@ en:
         success: "🎁 Reward marked as given!"
       stickers:
         created: Sticker added ✅
-    sessions:
-      invalid: Invalid email or password
-      logged_out: "Logged out 🐿️"
-      unauthorized: "Invalid email or password."
-      too_many_requests: "Too many login attempts. Please try again later."
     preferences:
-      updated: "Preferences updated successfully"
+      updated: Preferences updated successfully
+    sessions:
+      logged_out: "Logged out 🐿️"
+      too_many_requests: Too many login attempts. Please try again later.
+      unauthorized: Invalid email or password.
+  locale_names:
+    en: English
+    it: Italian
+    nl: Dutch
+  navigation:
+    admin: Admin
+    preferences: Preferences
   parent:
-    children:
-      edit:
-        title: "Edit Child"
-        name_label: "Name"
-        save: "Save"
-        cancel: "Cancel"
-      update:
-        success: "Child updated successfully"
-      index:
-        edit_name: "Edit name"
-        edit_avatar: "Edit avatar"
-    children_avatar:
-      edit:
-        title: "Edit Avatar"
-        current_avatar: "Current avatar"
-        upload_label: "Choose a new avatar"
-        save: "Save"
-        cancel: "Cancel"
-      update:
-        success: "Avatar updated successfully"
     actions:
-      give_sticker: "🎉 Give Sticker"
       give_penalty: "❌ Give Penalty"
+      give_sticker: "🎉 Give Sticker"
       mark_rewarded: "🎁 Mark Rewarded"
       view_history: "📊 History"
+    child_profile:
+      edit:
+        cancel: Cancel
+        save: Save
+        sticker_goal_label: Sticker goal
+        title: Child Settings
+    children:
+      edit:
+        cancel: Cancel
+        name_label: Name
+        save: Save
+        title: Edit Child
+      index:
+        edit_avatar: Edit avatar
+        edit_name: Edit name
+      update:
+        success: Child updated successfully
+    children_avatar:
+      edit:
+        cancel: Cancel
+        current_avatar: Current avatar
+        save: Save
+        title: Edit Avatar
+        upload_label: Choose a new avatar
+      update:
+        success: Avatar updated successfully
     dashboard:
-      card_completed: "Card completed — awaiting reward"
+      card_completed: Card completed — awaiting reward
       open_cards:
         one: "%{count} card ready to reward!"
         other: "%{count} cards ready to reward!"
       progress: 'Progress: %{current} / %{total} stickers'
       title: Parent Dashboard
-    child_profile:
-      edit:
-        title: "Child Settings"
-        sticker_goal_label: "Sticker goal"
-        save: "Save"
-        cancel: "Cancel"
     history:
-      title: "Sticker History"
       back: "← Back"
-      stickers:
-        one: "%{count} sticker"
-        other: "%{count} stickers"
+      no_stickers: No stickers yet
       penalties:
         one: "%{count} penalty"
         other: "%{count} penalties"
-      no_stickers: "No stickers yet"
+      stickers:
+        one: "%{count} sticker"
+        other: "%{count} stickers"
+      title: Sticker History
+  preferences:
+    account_label: Account
+    color_scheme:
+      dark: Dark
+      light: Light
+      system: System
+    dark_theme:
+      black: Black
+      selenized_dark: Selenized Dark
+    email: Email
+    language_label: Language
+    light_theme:
+      selenized_light: Selenized Light
+      white: White
+    password: Password
+    password_confirmation: Confirm Password
+    password_placeholder: Leave blank to keep current password
+    save: Save Preferences
+    theme_label: Theme
+    title: Preferences
   sessions:
     email: Email
     login_button: Login
     login_title: Login
     password: Password
-  preferences:
-    title: "Preferences"
-    account_label: "Account"
-    email: "Email"
-    password: "Password"
-    password_placeholder: "Leave blank to keep current password"
-    password_confirmation: "Confirm Password"
-    language_label: "Language"
-    theme_label: "Theme"
-    color_scheme:
-      system: "System"
-      light: "Light"
-      dark: "Dark"
-    light_theme:
-      white: "White"
-      selenized_light: "Selenized Light"
-    dark_theme:
-      black: "Black"
-      selenized_dark: "Selenized Dark"
-    save: "Save Preferences"
-  admin:
-    title: "Admin"
-    nav:
-      dashboard: "Dashboard"
-      users: "Users"
-      faultline: "Faultline"
-      back_to_site: "Back to Site"
-    dashboard:
-      index:
-        title: "Dashboard"
-        summary: "Summary"
-        total_users: "Total Users"
-        admin_users: "Admin Users"
-        recent_signups: "Recent Signups"
-        email: "Email"
-        role: "Role"
-        created_at: "Created"
-        actions: "Actions"
-        view: "View"
-        edit: "Edit"
-    users:
-      index:
-        title: "User Management"
-        new_user: "New User"
-        email: "Email"
-        role: "Role"
-        created_at: "Created"
-        actions: "Actions"
-        view: "View"
-        edit: "Edit"
-        delete: "Delete"
-        confirm_delete: "Are you sure you want to delete this user?"
-      show:
-        title: "User Details"
-        email: "Email"
-        role: "Role"
-        created_at: "Created"
-        active_sessions: "Active Sessions"
-        edit: "Edit"
-        back: "Back"
-      new:
-        title: "New User"
-        submit: "Create User"
-      form:
-        email: "Email"
-        name: "Name"
-        role: "Role"
-        password: "Password"
-        password_confirmation: "Confirm Password"
-        locale: "Language"
-        avatar: "Avatar"
-        current_avatar: "Current avatar"
-        cancel: "Cancel"
-      create:
-        success: "User created successfully"
-      edit:
-        title: "Edit User"
-        submit: "Update User"
-      update:
-        success: "User updated successfully"
-      destroy:
-        success: "User deleted successfully"
-        cannot_delete_self: "You cannot delete yourself"
-  navigation:
-    admin: "Admin"
-    preferences: "Preferences"
   users:
     profiles:
-      show:
-        title: "My Profile"
-        name: "Name"
-        email: "Email"
-        avatar: "Avatar"
-        edit: "Edit profile"
       edit:
-        title: "Edit Profile"
-        name_label: "Name"
-        avatar_label: "Avatar"
-        current_avatar: "Current avatar"
-        email_label: "Email"
-        password_label: "Change password"
-        save: "Save"
-        cancel: "Cancel"
+        avatar_label: Avatar
+        cancel: Cancel
+        current_avatar: Current avatar
+        email_label: Email
+        name_label: Name
+        password_label: Change password
+        save: Save
+        title: Edit Profile
+      show:
+        edit: Edit profile
+        email: Email
+        name: Name
+        title: My Profile
       update:
-        success: "Profile updated successfully"
+        success: Profile updated successfully

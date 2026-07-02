@@ -1,42 +1,106 @@
 ---
 nl:
+  admin:
+    dashboard:
+      index:
+        actions: Acties
+        admin_users: Admin-gebruikers
+        created_at: Aangemaakt
+        edit: Bewerken
+        email: E-mail
+        recent_signups: Recente aanmeldingen
+        role: Rol
+        summary: Overzicht
+        title: Dashboard
+        total_users: Totaal gebruikers
+        view: Bekijken
+    nav:
+      back_to_site: Terug naar site
+      dashboard: Dashboard
+      faultline: Faultline
+      title: Beheer
+      users: Gebruikers
+    title: Beheer
+    users:
+      create:
+        success: Gebruiker succesvol aangemaakt
+      destroy:
+        cannot_delete_self: Je kunt jezelf niet verwijderen
+        success: Gebruiker succesvol verwijderd
+      edit:
+        submit: Gebruiker bijwerken
+        title: Gebruiker bewerken
+      form:
+        avatar: Avatar
+        cancel: Annuleren
+        current_avatar: Huidige avatar
+        email: E-mail
+        locale: Taal
+        name: Naam
+        password: Wachtwoord
+        password_confirmation: Bevestig wachtwoord
+        role: Rol
+      index:
+        actions: Acties
+        confirm_delete: Weet je zeker dat je deze gebruiker wilt verwijderen?
+        created_at: Aangemaakt
+        delete: Verwijderen
+        edit: Bewerken
+        email: E-mail
+        new_user: Nieuwe gebruiker
+        role: Rol
+        title: Gebruikersbeheer
+        view: Bekijken
+      new:
+        submit: Gebruiker aanmaken
+        title: Nieuwe gebruiker
+      show:
+        active_sessions: Actieve sessies
+        back: Terug
+        created_at: Aangemaakt
+        edit: Bewerken
+        email: E-mail
+        role: Rol
+        title: Gebruikersdetails
+      update:
+        success: Gebruiker succesvol bijgewerkt
   app:
-    title: "Sticker App"
+    title: Sticker App
   child:
     dashboard:
       completed:
         one: "Je hebt 1 kaart vol 🎁"
         other: "Je hebt %{count} kaarten vol 🎁"
       earned: Je hebt %{current} van %{total} stickers verdient.
+      gave_you: gaf je
       new_stickers:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
-      profile_link: "Mijn profiel"
-      someone: "Iemand"
-      gave_you: "gaf je"
+      profile_link: Mijn profiel
+      someone: Iemand
       title: Jouw sticker kaart
   common:
-    logout: "Uitloggen 🐿️"
     back: "← Terug"
-  locale_names:
-    en: "Engels"
-    nl: "Nederlands"
-    it: "Italiaans"
+    logout: "Uitloggen 🐿️"
   errors:
-    authentication_required: "Gelieve in te loggen"
-    admin_required: "Admin toegang vereist"
-    parent_required: "Parent toegang vereist"
-    child_required: "Child toegang vereist"
-    child_profile_required: "Kind profiel niet gevonden"
+    admin_required: Admin toegang vereist
+    authentication_required: Gelieve in te loggen
+    child_profile_required: Kind profiel niet gevonden
+    child_required: Child toegang vereist
     messages:
-      invalid_content_type: "moet PNG, JPEG, GIF of WebP zijn"
-      file_size_too_large: "moet kleiner zijn dan 5 MB"
+      file_size_too_large: moet kleiner zijn dan 5 MB
+      invalid_content_type: moet PNG, JPEG, GIF of WebP zijn
+    parent_required: Parent toegang vereist
+    template:
+      header:
+        one: 1 fout verhinderde dat dit record werd opgeslagen
+        other: "%{count} fouten verhinderden dat dit record werd opgeslagen"
   flash:
     notifications: Meldingen
     parent:
       child_profiles:
-        updated: "Instellingen opgeslagen"
+        updated: Instellingen opgeslagen
       penalties:
         created: Straf toegevoegd ❌
       rewards:
@@ -44,169 +108,108 @@ nl:
         success: "🎁 Cadeautje is gegeven!"
       stickers:
         created: Sticker toegevoegd ✅
-    sessions:
-      invalid: Ongeldig e-mail of wachtwoord
-      logged_out: "Uitgelogd 🐿️"
-      unauthorized: "Ongeldig e-mailadres of wachtwoord."
-      too_many_requests: "Te veel inlogpogingen. Probeer het later opnieuw."
     preferences:
-      updated: "Voorkeuren bijgewerkt"
+      updated: Voorkeuren bijgewerkt
+    sessions:
+      logged_out: "Uitgelogd 🐿️"
+      too_many_requests: Te veel inlogpogingen. Probeer het later opnieuw.
+      unauthorized: Ongeldig e-mailadres of wachtwoord.
+  locale_names:
+    en: Engels
+    it: Italiaans
+    nl: Nederlands
+  navigation:
+    admin: Beheer
+    preferences: Voorkeuren
   parent:
-    children:
-      edit:
-        title: "Kind bewerken"
-        name_label: "Naam"
-        save: "Opslaan"
-        cancel: "Annuleren"
-      update:
-        success: "Kind succesvol bijgewerkt"
-      index:
-        edit_name: "Naam bewerken"
-        edit_avatar: "Avatar bewerken"
-    children_avatar:
-      edit:
-        title: "Avatar bewerken"
-        current_avatar: "Huidige avatar"
-        upload_label: "Kies een nieuwe avatar"
-        save: "Opslaan"
-        cancel: "Annuleren"
-      update:
-        success: "Avatar succesvol bijgewerkt"
     actions:
-      give_sticker: "🎉 Geef Sticker"
       give_penalty: "❌ Geef Straf"
+      give_sticker: "🎉 Geef Sticker"
       mark_rewarded: "🎁 Markeer Beloond"
       view_history: "📊 Geschiedenis"
+    child_profile:
+      edit:
+        cancel: Annuleren
+        save: Opslaan
+        sticker_goal_label: Stickerdoel
+        title: Kind-instellingen
+    children:
+      edit:
+        cancel: Annuleren
+        name_label: Naam
+        save: Opslaan
+        title: Kind bewerken
+      index:
+        edit_avatar: Avatar bewerken
+        edit_name: Naam bewerken
+      update:
+        success: Kind succesvol bijgewerkt
+    children_avatar:
+      edit:
+        cancel: Annuleren
+        current_avatar: Huidige avatar
+        save: Opslaan
+        title: Avatar bewerken
+        upload_label: Kies een nieuwe avatar
+      update:
+        success: Avatar succesvol bijgewerkt
     dashboard:
-      card_completed: "Kaart vol — beloning uitstaat"
+      card_completed: Kaart vol — beloning uitstaat
       open_cards:
         one: "%{count} kaart klaar voor beloning!"
         other: "%{count} kaarten klaar voor beloning!"
       progress: 'Voortgang: %{current} / %{total} stickers'
       title: Ouder Dashboard
-    child_profile:
-      edit:
-        title: "Kind-instellingen"
-        sticker_goal_label: "Stickerdoel"
-        save: "Opslaan"
-        cancel: "Annuleren"
     history:
-      title: "Sticker Geschiedenis"
       back: "← Terug"
-      stickers:
-        one: "%{count} sticker"
-        other: "%{count} stickers"
+      no_stickers: Nog geen stickers
       penalties:
         one: "%{count} straf"
         other: "%{count} straffen"
-      no_stickers: "Nog geen stickers"
+      stickers:
+        one: "%{count} sticker"
+        other: "%{count} stickers"
+      title: Sticker Geschiedenis
+  preferences:
+    account_label: Account
+    color_scheme:
+      dark: Donker
+      light: Licht
+      system: Systeem
+    dark_theme:
+      black: Zwart
+      selenized_dark: Selenized Donker
+    email: E-mail
+    language_label: Taal
+    light_theme:
+      selenized_light: Selenized Licht
+      white: Wit
+    password: Wachtwoord
+    password_confirmation: Bevestig wachtwoord
+    password_placeholder: Laat leeg om huidig wachtwoord te bewaren
+    save: Voorkeuren Opslaan
+    theme_label: Thema
+    title: Voorkeuren
   sessions:
     email: E-mail
     login_button: Log in
     login_title: Log in
     password: Wachtwoord
-  preferences:
-    title: "Voorkeuren"
-    account_label: "Account"
-    email: "E-mail"
-    password: "Wachtwoord"
-    password_placeholder: "Laat leeg om huidig wachtwoord te bewaren"
-    password_confirmation: "Bevestig wachtwoord"
-    language_label: "Taal"
-    theme_label: "Thema"
-    color_scheme:
-      system: "Systeem"
-      light: "Licht"
-      dark: "Donker"
-    light_theme:
-      white: "Wit"
-      selenized_light: "Selenized Licht"
-    dark_theme:
-      black: "Zwart"
-      selenized_dark: "Selenized Donker"
-    save: "Voorkeuren Opslaan"
-  admin:
-    title: "Beheer"
-    nav:
-      dashboard: "Dashboard"
-      users: "Gebruikers"
-      faultline: "Faultline"
-      back_to_site: "Terug naar site"
-    dashboard:
-      index:
-        title: "Dashboard"
-        summary: "Overzicht"
-        total_users: "Totaal gebruikers"
-        admin_users: "Admin-gebruikers"
-        recent_signups: "Recente aanmeldingen"
-        email: "E-mail"
-        role: "Rol"
-        created_at: "Aangemaakt"
-        actions: "Acties"
-        view: "Bekijken"
-        edit: "Bewerken"
-    users:
-      index:
-        title: "Gebruikersbeheer"
-        new_user: "Nieuwe gebruiker"
-        email: "E-mail"
-        role: "Rol"
-        created_at: "Aangemaakt"
-        actions: "Acties"
-        view: "Bekijken"
-        edit: "Bewerken"
-        delete: "Verwijderen"
-        confirm_delete: "Weet je zeker dat je deze gebruiker wilt verwijderen?"
-      show:
-        title: "Gebruikersdetails"
-        email: "E-mail"
-        role: "Rol"
-        created_at: "Aangemaakt"
-        active_sessions: "Actieve sessies"
-        edit: "Bewerken"
-        back: "Terug"
-      new:
-        title: "Nieuwe gebruiker"
-        submit: "Gebruiker aanmaken"
-      form:
-        email: "E-mail"
-        name: "Naam"
-        role: "Rol"
-        password: "Wachtwoord"
-        password_confirmation: "Bevestig wachtwoord"
-        locale: "Taal"
-        avatar: "Avatar"
-        current_avatar: "Huidige avatar"
-        cancel: "Annuleren"
-      create:
-        success: "Gebruiker succesvol aangemaakt"
-      edit:
-        title: "Gebruiker bewerken"
-        submit: "Gebruiker bijwerken"
-      update:
-        success: "Gebruiker succesvol bijgewerkt"
-      destroy:
-        success: "Gebruiker succesvol verwijderd"
-        cannot_delete_self: "Je kunt jezelf niet verwijderen"
-  navigation:
-    admin: "Beheer"
-    preferences: "Voorkeuren"
   users:
     profiles:
-      show:
-        title: "Mijn profiel"
-        name: "Naam"
-        email: "E-mail"
-        avatar: "Avatar"
-        edit: "Profiel bewerken"
       edit:
-        title: "Profiel bewerken"
-        name_label: "Naam"
-        avatar_label: "Avatar"
-        current_avatar: "Huidige avatar"
-        email_label: "E-mail"
-        password_label: "Wachtwoord wijzigen"
-        save: "Opslaan"
-        cancel: "Annuleren"
+        avatar_label: Avatar
+        cancel: Annuleren
+        current_avatar: Huidige avatar
+        email_label: E-mail
+        name_label: Naam
+        password_label: Wachtwoord wijzigen
+        save: Opslaan
+        title: Profiel bewerken
+      show:
+        edit: Profiel bewerken
+        email: E-mail
+        name: Naam
+        title: Mijn profiel
       update:
-        success: "Profiel succesvol bijgewerkt"
+        success: Profiel succesvol bijgewerkt
