@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Admin - <%= Rails.application.class.module_parent_name %></title>
+    <title><%= t("admin.title") %> - <%= Rails.application.class.module_parent_name %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-cache-control" content="no-cache">
     <%= csrf_meta_tags %>
@@ -15,7 +15,7 @@
   <body>
     <header>
       <nav data-controller="nav" data-action="click->nav#click">
-        <h2><%= t("admin.nav.title", default: "Admin") %></h2>
+        <h2><%= t("admin.nav.title") %></h2>
         <ul>
           <li><%= link_to t("admin.nav.dashboard"), admin_root_path, "aria-current": (current_page?(admin_root_path) ? "page" : nil) %></li>
           <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
@@ -27,12 +27,16 @@
     </header>
 
     <main>
-      <% if flash[:notice] %>
-        <p role="status"><%= flash[:notice] %></p>
-      <% end %>
+      <% if flash.any? %>
+        <section aria-label="<%= t("flash.notifications") %>" data-mvpa-flashes>
+          <% if flash[:notice] %>
+            <aside role="status"><%= flash[:notice] %></aside>
+          <% end %>
 
-      <% if flash[:alert] %>
-        <p role="alert"><%= flash[:alert] %></p>
+          <% if flash[:alert] %>
+            <aside role="alert"><%= flash[:alert] %></aside>
+          <% end %>
+        </section>
       <% end %>
 
       <%= yield %>

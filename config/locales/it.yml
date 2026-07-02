@@ -1,211 +1,215 @@
 ---
 it:
+  admin:
+    dashboard:
+      index:
+        actions: Azioni
+        admin_users: Utenti Admin
+        created_at: Creato
+        edit: Modifica
+        email: Email
+        recent_signups: Iscrizioni Recenti
+        role: Ruolo
+        summary: Riepilogo
+        title: Dashboard
+        total_users: Utenti Totali
+        view: Visualizza
+    nav:
+      back_to_site: Torna al sito
+      dashboard: Dashboard
+      faultline: Faultline
+      title: Admin
+      users: Utenti
+    title: Admin
+    users:
+      create:
+        success: Utente creato con successo
+      destroy:
+        cannot_delete_self: Non puoi eliminare te stesso
+        success: Utente eliminato con successo
+      edit:
+        submit: Aggiorna Utente
+        title: Modifica Utente
+      form:
+        avatar: Avatar
+        cancel: Annulla
+        current_avatar: Avatar attuale
+        email: Email
+        locale: Lingua
+        name: Nome
+        password: Password
+        password_confirmation: Conferma Password
+        role: Ruolo
+      index:
+        actions: Azioni
+        confirm_delete: Sei sicuro di voler eliminare questo utente?
+        created_at: Creato
+        delete: Elimina
+        edit: Modifica
+        email: Email
+        new_user: Nuovo Utente
+        role: Ruolo
+        title: Gestione Utenti
+        view: Visualizza
+      new:
+        submit: Crea Utente
+        title: Nuovo Utente
+      show:
+        active_sessions: Sessioni Attive
+        back: Indietro
+        created_at: Creato
+        edit: Modifica
+        email: Email
+        role: Ruolo
+        title: Dettagli Utente
+      update:
+        success: Utente aggiornato con successo
   app:
-    title: "Sticker App"
+    title: Sticker App
   child:
     dashboard:
       completed:
         one: "Hai completato 1 scheda finora 🎁"
         other: "Hai completato %{count} schede finora 🎁"
-      earned: "Hai guadagnato %{current} su %{total} adesivi."
+      earned: Hai guadagnato %{current} su %{total} adesivi.
+      gave_you: ti ha dato
       new_stickers:
         one: "🎉 Hai ricevuto 1 nuovo adesivo dall'ultima volta!"
         other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
-      no_card: "Non hai ancora una scheda adesivi."
-      profile_link: "Il mio profilo"
-      someone: "Qualcuno"
-      gave_you: "ti ha dato"
-      title: "La tua scheda adesivi"
+      no_card: Non hai ancora una scheda adesivi.
+      profile_link: Il mio profilo
+      someone: Qualcuno
+      title: La tua scheda adesivi
   common:
-    logout: "Esci 🐿️"
     back: "← Indietro"
-  locale_names:
-    en: "Inglese"
-    nl: "Olandese"
-    it: "Italiano"
+    logout: "Esci 🐿️"
   errors:
-    authentication_required: "Effettua il login"
-    admin_required: "Accesso admin richiesto"
-    parent_required: "Accesso genitore richiesto"
-    child_required: "Accesso bambino richiesto"
-    child_profile_required: "Profilo bambino non trovato"
+    admin_required: Accesso admin richiesto
+    authentication_required: Effettua il login
+    child_profile_required: Profilo bambino non trovato
+    child_required: Accesso bambino richiesto
     messages:
-      invalid_content_type: "deve essere PNG, JPEG, GIF o WebP"
-      file_size_too_large: "deve essere inferiore a 5 MB"
+      file_size_too_large: deve essere inferiore a 5 MB
+      invalid_content_type: deve essere PNG, JPEG, GIF o WebP
+    parent_required: Accesso genitore richiesto
+    template:
+      header:
+        one: 1 errore ha impedito il salvataggio di questo record
+        other: "%{count} errori hanno impedito il salvataggio di questo record"
   flash:
+    notifications: Notifiche
     parent:
       child_profiles:
-        updated: "Impostazioni salvate"
+        updated: Impostazioni salvate
       penalties:
-        created: "Penalita aggiunta ❌"
+        created: Penalita aggiunta ❌
       rewards:
-        failure: "La scheda non e ancora completa."
+        failure: La scheda non e ancora completa.
         success: "🎁 Premio segnato come consegnato!"
       stickers:
-        created: "Adesivo aggiunto ✅"
-    sessions:
-      invalid: "Email o password non validi"
-      logged_out: "Disconnesso 🐿️"
-      unauthorized: "Email o password non validi."
-      too_many_requests: "Troppi tentativi di accesso. Riprova più tardi."
+        created: Adesivo aggiunto ✅
     preferences:
-      updated: "Preferenze aggiornate con successo"
+      updated: Preferenze aggiornate con successo
+    sessions:
+      logged_out: "Disconnesso 🐿️"
+      too_many_requests: Troppi tentativi di accesso. Riprova più tardi.
+      unauthorized: Email o password non validi.
+  locale_names:
+    en: Inglese
+    it: Italiano
+    nl: Olandese
+  navigation:
+    admin: Admin
+    preferences: Preferenze
   parent:
-    children:
-      edit:
-        title: "Modifica bambino"
-        name_label: "Nome"
-        save: "Salva"
-        cancel: "Annulla"
-      update:
-        success: "Bambino aggiornato con successo"
-      index:
-        edit_name: "Modifica nome"
-        edit_avatar: "Modifica avatar"
-    children_avatar:
-      edit:
-        title: "Modifica avatar"
-        current_avatar: "Avatar attuale"
-        upload_label: "Scegli un nuovo avatar"
-        save: "Salva"
-        cancel: "Annulla"
-      update:
-        success: "Avatar aggiornato con successo"
     actions:
-      give_sticker: "🎉 Dai adesivo"
       give_penalty: "❌ Dai penalita"
+      give_sticker: "🎉 Dai adesivo"
       mark_rewarded: "🎁 Segna premiato"
       view_history: "📊 Cronologia"
+    child_profile:
+      edit:
+        cancel: Annulla
+        save: Salva
+        sticker_goal_label: Obiettivo adesivi
+        title: Impostazioni bambino
+    children:
+      edit:
+        cancel: Annulla
+        name_label: Nome
+        save: Salva
+        title: Modifica bambino
+      index:
+        edit_avatar: Modifica avatar
+        edit_name: Modifica nome
+      update:
+        success: Bambino aggiornato con successo
+    children_avatar:
+      edit:
+        cancel: Annulla
+        current_avatar: Avatar attuale
+        save: Salva
+        title: Modifica avatar
+        upload_label: Scegli un nuovo avatar
+      update:
+        success: Avatar aggiornato con successo
     dashboard:
-      card_completed: "Scheda completata — in attesa del premio"
+      card_completed: Scheda completata — in attesa del premio
       open_cards:
         one: "%{count} scheda pronta per il premio!"
         other: "%{count} schede pronte per il premio!"
-      progress: "Progresso: %{current} / %{total} adesivi"
-      title: "Dashboard Genitore"
-    child_profile:
-      edit:
-        title: "Impostazioni bambino"
-        sticker_goal_label: "Obiettivo adesivi"
-        save: "Salva"
-        cancel: "Annulla"
+      progress: 'Progresso: %{current} / %{total} adesivi'
+      title: Dashboard Genitore
     history:
-      title: "Cronologia Adesivi"
       back: "← Indietro"
-      stickers:
-        one: "%{count} adesivo"
-        other: "%{count} adesivi"
+      no_stickers: Ancora nessun adesivo
       penalties:
         one: "%{count} penalita"
         other: "%{count} penalita"
-      no_stickers: "Ancora nessun adesivo"
-  sessions:
-    email: "Email"
-    login_button: "Accedi"
-    login_title: "Accedi"
-    password: "Password"
+      stickers:
+        one: "%{count} adesivo"
+        other: "%{count} adesivi"
+      title: Cronologia Adesivi
   preferences:
-    title: "Preferenze"
-    account_label: "Account"
-    email: "Email"
-    password: "Password"
-    password_placeholder: "Lascia vuoto per mantenere la password attuale"
-    password_confirmation: "Conferma Password"
-    language_label: "Lingua"
-    theme_label: "Tema"
+    account_label: Account
     color_scheme:
-      system: "Sistema"
-      light: "Chiaro"
-      dark: "Scuro"
-    light_theme:
-      white: "Bianco"
-      selenized_light: "Selenized Chiaro"
+      dark: Scuro
+      light: Chiaro
+      system: Sistema
     dark_theme:
-      black: "Nero"
-      selenized_dark: "Selenized Scuro"
-    save: "Salva Preferenze"
-  admin:
-    title: "Admin"
-    nav:
-      dashboard: "Dashboard"
-      users: "Utenti"
-      faultline: "Faultline"
-      back_to_site: "Torna al sito"
-    dashboard:
-      index:
-        title: "Dashboard"
-        summary: "Riepilogo"
-        total_users: "Utenti Totali"
-        admin_users: "Utenti Admin"
-        recent_signups: "Iscrizioni Recenti"
-        email: "Email"
-        role: "Ruolo"
-        created_at: "Creato"
-        actions: "Azioni"
-        view: "Visualizza"
-        edit: "Modifica"
-    users:
-      index:
-        title: "Gestione Utenti"
-        new_user: "Nuovo Utente"
-        email: "Email"
-        role: "Ruolo"
-        created_at: "Creato"
-        actions: "Azioni"
-        view: "Visualizza"
-        edit: "Modifica"
-        delete: "Elimina"
-        confirm_delete: "Sei sicuro di voler eliminare questo utente?"
-      show:
-        title: "Dettagli Utente"
-        email: "Email"
-        role: "Ruolo"
-        created_at: "Creato"
-        active_sessions: "Sessioni Attive"
-        edit: "Modifica"
-        back: "Indietro"
-      new:
-        title: "Nuovo Utente"
-        submit: "Crea Utente"
-      form:
-        email: "Email"
-        name: "Nome"
-        role: "Ruolo"
-        password: "Password"
-        password_confirmation: "Conferma Password"
-        locale: "Lingua"
-        avatar: "Avatar"
-        current_avatar: "Avatar attuale"
-        cancel: "Annulla"
-      create:
-        success: "Utente creato con successo"
-      edit:
-        title: "Modifica Utente"
-        submit: "Aggiorna Utente"
-      update:
-        success: "Utente aggiornato con successo"
-      destroy:
-        success: "Utente eliminato con successo"
-        cannot_delete_self: "Non puoi eliminare te stesso"
-  navigation:
-    admin: "Admin"
-    preferences: "Preferenze"
+      black: Nero
+      selenized_dark: Selenized Scuro
+    email: Email
+    language_label: Lingua
+    light_theme:
+      selenized_light: Selenized Chiaro
+      white: Bianco
+    password: Password
+    password_confirmation: Conferma Password
+    password_placeholder: Lascia vuoto per mantenere la password attuale
+    save: Salva Preferenze
+    theme_label: Tema
+    title: Preferenze
+  sessions:
+    email: Email
+    login_button: Accedi
+    login_title: Accedi
+    password: Password
   users:
     profiles:
-      show:
-        title: "Il mio profilo"
-        name: "Nome"
-        email: "Email"
-        avatar: "Avatar"
-        edit: "Modifica profilo"
       edit:
-        title: "Modifica profilo"
-        name_label: "Nome"
-        avatar_label: "Avatar"
-        current_avatar: "Avatar attuale"
-        email_label: "Email"
-        password_label: "Cambia password"
-        save: "Salva"
-        cancel: "Annulla"
+        avatar_label: Avatar
+        cancel: Annulla
+        current_avatar: Avatar attuale
+        email_label: Email
+        name_label: Nome
+        password_label: Cambia password
+        save: Salva
+        title: Modifica profilo
+      show:
+        edit: Modifica profilo
+        email: Email
+        name: Nome
+        title: Il mio profilo
       update:
-        success: "Profilo aggiornato con successo"
+        success: Profilo aggiornato con successo
