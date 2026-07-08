@@ -105,7 +105,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     visit new_session_path
     fill_in "Email", with: user.email
     fill_in "Password", with: "password"
-    click_button "Log in"
+    click_button "Login"
     assert_current_path parent_children_path
   end
 
