@@ -67,11 +67,9 @@ class StickerCard < ApplicationRecord
   end
 
   def broadcast_completion
-    if saved_change_to_completed_at? && completed?
-      ChildProfileChannel.broadcast_to(
-        child_profile,
-        { action: "card_completed", card_id: id }
-      )
-    end
+    return unless saved_change_to_completed_at? && completed?
+
+    child_profile.broadcast_card_refresh
+    child_profile.broadcast_completion_flag
   end
 end

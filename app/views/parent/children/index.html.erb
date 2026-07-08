@@ -17,7 +17,8 @@
   <% end %>
 
   <% @children.each do |child| %>
-    <article>
+    <article data-controller="confetti"
+             data-confetti-completion-flag-id-value="<%= dom_id(child, :completion_flag) %>">
       <header>
         <% if child.user.avatar.attached? %>
           <%= image_tag child.user.avatar, size: "40x40", alt: child.user.name %>
@@ -30,14 +31,11 @@
         </nav>
       </header>
 
-      <% card = child.active_sticker_card %>
-      <% rewardable_card = child.rewardable_sticker_card %>
-      <% total_stickers = card.positive_count %>
-      <% needed = card.required_stickers %>
+      <%= turbo_stream_from child %>
 
-      <progress value="<%= total_stickers %>" max="<%= needed %>"
-                aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
-      <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
+      <span id="<%= dom_id(child, :completion_flag) %>"></span>
+
+      <%= render "parent/children/child_card", child: child %>
 
       <footer>
         <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
@@ -50,12 +48,6 @@
                       class: "button-danger" %>
 
         <%= link_to t("parent.actions.view_history"), parent_child_history_path(child) %>
-
-        <% if rewardable_card %>
-          <p><%= t("parent.dashboard.card_completed") %></p>
-          <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
-                        method: :post, class: "button-success" %>
-        <% end %>
       </footer>
     </article>
   <% end %>

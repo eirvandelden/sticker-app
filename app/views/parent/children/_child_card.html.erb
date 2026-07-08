@@ -1,0 +1,16 @@
+<section id="<%= dom_id(child, :parent_card) %>">
+  <% card = child.active_sticker_card %>
+  <% rewardable_card = child.rewardable_sticker_card %>
+  <% total_stickers = card.positive_count %>
+  <% needed = card.required_stickers %>
+
+  <progress value="<%= total_stickers %>" max="<%= needed %>"
+            aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
+  <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
+
+  <% if rewardable_card %>
+    <p><%= t("parent.dashboard.card_completed") %></p>
+    <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
+                  method: :post, class: "button-success" %>
+  <% end %>
+</section>

@@ -12,7 +12,10 @@ module Parent
         note: params[:note].presence
       )
 
-      redirect_to parent_children_path, notice: t("flash.parent.penalties.created")
+      respond_to do |format|
+        format.turbo_stream { head :ok }
+        format.html { redirect_to parent_children_path, notice: t("flash.parent.penalties.created") }
+      end
     end
   end
 end

@@ -1,0 +1,50 @@
+<%# Locals: child_profile, last_viewed: nil %>
+<% last_viewed ||= nil %>
+<% card = child_profile.active_sticker_card %>
+
+<section id="<%= dom_id(child_profile, :card) %>">
+  <% if card %>
+    <% earned = card.positive_count %>
+    <% required = card.required_stickers %>
+    <% new_stickers = card.stickers.positive.where("created_at > ?", last_viewed).count if last_viewed %>
+
+    <p>
+      <%= earned %>/<%= required %>
+      <% if card.negative_count > 0 %>
+        <span class="penalty-count">+<%= card.negative_count %></span>
+      <% end %>
+    </p>
+
+    <% if new_stickers.to_i > 0 %>
+      <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
+    <% end %>
+
+    <progress value="<%= earned %>" max="<%= required %>"
+              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
+
+    <article class="stickers">
+      <% all_stickers = [] %>
+      <% card.stickers.positive.each do |s| %>
+        <% all_stickers << { emoji: s.emoji, type: "positive", created_at: s.created_at } %>
+      <% end %>
+      <% card.stickers.negative.each do |s| %>
+        <% all_stickers << { emoji: "❌", type: "negative", created_at: s.created_at } %>
+      <% end %>
+      <% all_stickers.sort_by! { |s| s[:created_at] } %>
+
+      <% all_stickers.each do |sticker| %>
+        <section class="<%= sticker[:type] %>">
+          <%= sticker[:emoji] %>
+        </section>
+      <% end %>
+
+      <% (required - all_stickers.length).times do %>
+        <section class="empty">⭐</section>
+      <% end %>
+    </article>
+
+    <p><%= t("child.dashboard.completed", count: child_profile.sticker_cards.where.not(completed_at: nil).count) %></p>
+  <% else %>
+    <p><%= t("child.dashboard.no_card") %></p>
+  <% end %>
+</section>

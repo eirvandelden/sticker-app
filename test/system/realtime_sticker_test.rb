@@ -1,56 +1,116 @@
 require "application_system_test_case"
 
-# Scenario 14: Child's dashboard handles real-time ActionCable sticker events
+# Scenario 14: Child's dashboard updates in real time when a parent gives stickers.
 #
-# Two tests cover different layers:
-# 1. Subscription connects — verifies the Stimulus controller establishes
-#    the ActionCable WebSocket and sets data-cable-connected="true".
-# 2. Event handler — simulates the message the channel sends and verifies
-#    the Stimulus controller increments its DOM counter. Tests the full
-#    JS path without requiring a cross-session broadcast (which is unreliable
-#    with headless Chrome background tab throttling in CI).
+# Uses Capybara multi-session (using_session) to run a parent session and child session
+# concurrently in the same test process. Asserts that visible DOM elements — the sticker
+# grid, progress bar value, and notification text — update without a page reload.
 class RealtimeStickerTest < ApplicationSystemTestCase
-  # Scenario 14a: ActionCable subscription connects on the child dashboard
-  test "child dashboard establishes ActionCable subscription on load" do
-    child = users(:user_three)
+  # Scenario 14a: Child dashboard shows new sticker without reload
+  test "child dashboard updates live when a parent gives a sticker" do
+    child_user   = users(:user_three)
+    parent_user  = users(:parent)
+    profile      = child_profiles(:three)
+    card         = sticker_cards(:three)
 
-    sign_in_child child
+    # Sign the child in — card three has sticker_goal:3 with 2 positive stickers already.
+    # Progress is 2/3, so the progress bar value should start at 2.
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress[value='2']", wait: 5
+    end
 
-    assert_text "Your Sticker Card"
-    assert_selector "[data-child-dashboard-subscription-child-profile-id-value]"
-    assert_selector "[data-cable-connected='true']", wait: 5
+    # Sign the parent in and give a sticker from the parent session.
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    # Back on the child session: progress bar should now show 3/3 without a reload.
+    using_session(:child) do
+      assert_selector "progress[value='3']", wait: 10
+    end
   end
 
-  # Scenario 14b: Stimulus controller handles sticker-added message from channel
-  test "child dashboard increments sticker counter when sticker-added message arrives" do
-    child = users(:user_three)
+  # Scenario 14b: Child dashboard shows sticker notification live
+  test "child dashboard shows sticker notification live when parent gives a sticker" do
+    child_user  = users(:user_three)
+    parent_user = users(:parent)
+    profile     = child_profiles(:three)
 
-    sign_in_child child
-    assert_selector "[data-cable-connected='true']", wait: 5
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress", wait: 5
+    end
 
-    # Simulate the message the ChildProfileChannel sends on sticker creation
-    page.execute_script(<<~JS)
-      const el = document.querySelector('[data-controller~="child-dashboard-subscription"]');
-      const event = el._stimulus_application?.getControllerForElementAndIdentifier(
-        el, 'child-dashboard-subscription'
-      );
-      if (event && event.handleMessage) {
-        event.handleMessage({ action: 'sticker_added', sticker: { kind: 'positive', emoji: '⭐' } });
-      } else {
-        // Fallback: directly call the received callback via the subscription
-        const controllers = window.Stimulus?.controllers || [];
-        const ctrl = controllers.find(c => c.identifier === 'child-dashboard-subscription');
-        if (ctrl) ctrl.handleMessage({ action: 'sticker_added', sticker: { kind: 'positive', emoji: '⭐' } });
-      }
-    JS
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
 
-    assert_selector "[data-sticker-event-count='1']", wait: 3
+    using_session(:child) do
+      assert_selector "article[role='status']", wait: 10
+    end
+  end
+
+  # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
+  test "parent dashboard updates live when a sticker is given" do
+    parent_user = users(:parent)
+    profile     = child_profiles(:three)
+
+    using_session(:parent) do
+      sign_in_parent parent_user
+      visit parent_children_path
+      assert_selector "progress[value='2']", wait: 5
+    end
+
+    using_session(:actor) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    using_session(:parent) do
+      assert_selector "progress[value='3']", wait: 10
+    end
+  end
+
+  # Scenario 14d: Confetti appears on card completion
+  test "confetti container appears when a card completes" do
+    child_user  = users(:user_three)
+    parent_user = users(:parent)
+    profile     = child_profiles(:three)
+
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress", wait: 5
+    end
+
+    # Give the one sticker needed to complete the card (currently at 2/3).
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    using_session(:child) do
+      assert_selector ".confetti-container", wait: 10
+    end
   end
 
   private
-    def sign_in_child(child)
-      visit session_transfer_path(child.transfer_id)
 
-      assert_current_path child_dashboard_path
-    end
+  def sign_in_parent(user)
+    visit new_session_path
+    fill_in "Email", with: user.email
+    fill_in "Password", with: "password"
+    click_button "Log in"
+    assert_current_path parent_children_path
+  end
+
+  def post_sticker_for(profile)
+    visit parent_children_path
+    find("form[action*='#{parent_child_sticker_path(profile)}'] button").click
+  end
 end

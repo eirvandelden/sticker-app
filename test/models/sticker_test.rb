@@ -1,6 +1,16 @@
 require "test_helper"
 
 class StickerTest < ActiveSupport::TestCase
+  test "creating a positive sticker broadcasts without error" do
+    card = sticker_cards(:one)
+    assert_nothing_raised { card.stickers.create!(kind: :positive) }
+  end
+
+  test "creating a negative sticker broadcasts without error" do
+    card = sticker_cards(:one)
+    assert_nothing_raised { card.stickers.create!(kind: :negative) }
+  end
+
   test "random emoji is assigned if none given" do
     card = create_card
     sticker = card.stickers.create!(kind: :positive)

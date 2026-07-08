@@ -1,22 +1,30 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static values = {
+    completionFlagId: String
+  }
+
   connect() {
-    this.boundCelebrate = this.celebrate.bind(this)
-    window.addEventListener("celebrate", this.boundCelebrate)
+    this.boundHandleStreamRender = this.handleStreamRender.bind(this)
+    document.addEventListener("turbo:before-stream-render", this.boundHandleStreamRender)
   }
 
   disconnect() {
-    window.removeEventListener("celebrate", this.boundCelebrate)
+    document.removeEventListener("turbo:before-stream-render", this.boundHandleStreamRender)
+  }
+
+  handleStreamRender(event) {
+    if (this.hasCompletionFlagIdValue && event.detail.newStream.target === this.completionFlagIdValue) {
+      this.celebrate()
+    }
   }
 
   celebrate() {
-    // Create confetti container
     const container = document.createElement("div")
     container.className = "confetti-container"
     document.body.appendChild(container)
 
-    // Create multiple confetti pieces
     const emojis = ["🎉", "🎊", "✨", "🌟", "⭐", "🎈", "🎁", "🏆"]
     const count = 30
 
@@ -30,7 +38,6 @@ export default class extends Controller {
       container.appendChild(piece)
     }
 
-    // Remove after animation completes
     setTimeout(() => container.remove(), 4000)
   }
 }

@@ -1,5 +1,5 @@
-<main data-controller="child-dashboard-subscription confetti"
-      data-child-dashboard-subscription-child-profile-id-value="<%= @child_profile.id if @card %>">
+<main data-controller="confetti"
+      data-confetti-completion-flag-id-value="<%= dom_id(@child_profile, :completion_flag) %>">
   <header>
     <h1><%= t("child.dashboard.title") %></h1>
     <nav>
@@ -9,58 +9,16 @@
     </nav>
   </header>
 
-  <% @recent_stickers.each do |s| %>
-    <article role="<%= s.positive? ? 'status' : 'alert' %>" data-controller="fade-out">
-      <%= s.positive? ? "✅" : "❌" %>
-      <%= s.giver&.email || t("child.dashboard.someone") %> <%= t("child.dashboard.gave_you") %>
-      <%= s.emoji %>
-      <% if s.note.present? %>— <%= s.note %><% end %>
-    </article>
-  <% end %>
+  <%= turbo_stream_from @child_profile %>
 
-  <% if @card %>
-    <% earned = @card.positive_count %>
-    <% required = @card.required_stickers %>
-    <% new_stickers = @card.stickers.positive.where("created_at > ?", @last_viewed).count if @last_viewed %>
+  <span id="<%= dom_id(@child_profile, :completion_flag) %>"></span>
 
-    <p>
-      <%= earned %>/<%= required %>
-      <% if @card.negative_count > 0 %>
-        <span class="penalty-count">+<%= @card.negative_count %></span>
-      <% end %>
-    </p>
-
-    <% if new_stickers.to_i > 0 %>
-      <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
+  <section id="<%= dom_id(@child_profile, :notifications) %>">
+    <% @recent_stickers.each do |s| %>
+      <%= render "child/dashboard/sticker_notification", sticker: s %>
     <% end %>
+  </section>
 
-    <progress value="<%= earned %>" max="<%= required %>"
-              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
-
-    <article class="stickers">
-      <% all_stickers = [] %>
-      <% @card.stickers.positive.each do |s| %>
-        <% all_stickers << { emoji: s.emoji, type: 'positive', created_at: s.created_at } %>
-      <% end %>
-      <% @card.stickers.negative.each do |s| %>
-        <% all_stickers << { emoji: '❌', type: 'negative', created_at: s.created_at } %>
-      <% end %>
-      <% all_stickers.sort_by! { |s| s[:created_at] } %>
-
-      <% all_stickers.each do |sticker| %>
-        <section class="<%= sticker[:type] %>">
-          <%= sticker[:emoji] %>
-        </section>
-      <% end %>
-
-      <% (required - all_stickers.length).times do %>
-        <section class="empty">⭐</section>
-      <% end %>
-    </article>
-
-    <p><%= t("child.dashboard.completed", count: @completed_count) %></p>
-  <% else %>
-    <p><%= t("child.dashboard.no_card") %></p>
-  <% end %>
+  <%= render "child/dashboard/card", child_profile: @child_profile, last_viewed: @last_viewed %>
 
 </main>

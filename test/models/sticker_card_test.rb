@@ -51,6 +51,12 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_equal 2, child.sticker_cards.count
   end
 
+  test "completing a card broadcasts without error" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    assert_nothing_raised { card.stickers.create!(kind: :positive) }
+  end
+
   test "reward cannot be marked if card is incomplete" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
