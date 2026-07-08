@@ -15,21 +15,17 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     parent_user  = users(:parent)
     child_user, profile = child_ready_for_completion
 
-    # Sign the child in — card three has sticker_goal:3 with 2 positive stickers already.
-    # Progress is 2/3, so the progress bar value should start at 2.
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress[value='2']", wait: 5
     end
 
-    # Sign the parent in and give a sticker from the parent session.
     using_session(:parent) do
       sign_in_parent parent_user
       post_sticker_for profile
     end
 
-    # Back on the child session: progress bar should now show 3/3 without a reload.
     using_session(:child) do
       assert_selector "progress[value='3']", wait: 10
     end
@@ -77,7 +73,10 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     end
   end
 
-  # Scenario 14d: Confetti appears on card completion
+  # Scenario 14d: Confetti appears on card completion.
+  #
+  # Waits for turbo-cable-stream-source[connected] to ensure the ActionCable subscription is
+  # established before the completion_flag broadcast fires.
   test "confetti container appears when a card completes" do
     parent_user = users(:parent)
     child_user, profile = child_ready_for_completion
@@ -86,9 +85,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress", wait: 5
+      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
     end
 
-    # Give the one sticker needed to complete the card (currently at 2/3).
     using_session(:parent) do
       sign_in_parent parent_user
       post_sticker_for profile
