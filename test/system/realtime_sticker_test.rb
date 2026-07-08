@@ -6,12 +6,14 @@ require "application_system_test_case"
 # concurrently in the same test process. Asserts that visible DOM elements — the sticker
 # grid, progress bar value, and notification text — update without a page reload.
 class RealtimeStickerTest < ApplicationSystemTestCase
+  teardown do
+    Capybara.reset_sessions!
+  end
+
   # Scenario 14a: Child dashboard shows new sticker without reload
   test "child dashboard updates live when a parent gives a sticker" do
-    child_user   = users(:user_three)
     parent_user  = users(:parent)
-    profile      = child_profiles(:three)
-    card         = sticker_cards(:three)
+    child_user, profile = child_ready_for_completion
 
     # Sign the child in — card three has sticker_goal:3 with 2 positive stickers already.
     # Progress is 2/3, so the progress bar value should start at 2.
@@ -35,9 +37,8 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14b: Child dashboard shows sticker notification live
   test "child dashboard shows sticker notification live when parent gives a sticker" do
-    child_user  = users(:user_three)
     parent_user = users(:parent)
-    profile     = child_profiles(:three)
+    child_user, profile = child_ready_for_completion
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
@@ -58,7 +59,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
   test "parent dashboard updates live when a sticker is given" do
     parent_user = users(:parent)
-    profile     = child_profiles(:three)
+    _child_user, profile = child_ready_for_completion
 
     using_session(:parent) do
       sign_in_parent parent_user
@@ -78,9 +79,8 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14d: Confetti appears on card completion
   test "confetti container appears when a card completes" do
-    child_user  = users(:user_three)
     parent_user = users(:parent)
-    profile     = child_profiles(:three)
+    child_user, profile = child_ready_for_completion
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
@@ -100,6 +100,19 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   end
 
   private
+
+  def child_ready_for_completion
+    child = User.create!(
+      name: "Realtime Child",
+      email: "realtime-#{SecureRandom.hex(4)}@example.com",
+      password: "password",
+      role: :child
+    )
+    profile = child.child_profile
+    profile.update!(sticker_goal: 3)
+    2.times { profile.active_sticker_card.stickers.create!(kind: :positive, giver: users(:parent)) }
+    [ child, profile ]
+  end
 
   def sign_in_parent(user)
     visit new_session_path

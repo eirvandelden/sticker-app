@@ -1,6 +1,6 @@
 <%# Locals: child_profile, last_viewed: nil %>
 <% last_viewed ||= nil %>
-<% card = child_profile.active_sticker_card %>
+<% card = child_profile.display_sticker_card %>
 
 <section id="<%= dom_id(child_profile, :card) %>">
   <% if card %>

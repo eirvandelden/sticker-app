@@ -15,6 +15,10 @@ class ChildProfile < ApplicationRecord
     sticker_cards.where.not(completed_at: nil).where(reward_given: [ nil, false ]).order(completed_at: :asc).first
   end
 
+  def display_sticker_card
+    rewardable_sticker_card || active_sticker_card
+  end
+
   def broadcast_card_refresh
     broadcast_replace_to(
       self,
