@@ -1,0 +1,6 @@
+<article role="<%= sticker.positive? ? 'status' : 'alert' %>" data-controller="fade-out">
+  <%= sticker.positive? ? "✅" : "❌" %>
+  <%= sticker.giver&.email || t("child.dashboard.someone") %> <%= t("child.dashboard.gave_you") %>
+  <%= sticker.emoji %>
+  <% if sticker.note.present? %>— <%= sticker.note %><% end %>
+</article>

@@ -10,6 +10,7 @@ class StickerCard < ApplicationRecord
   before_save :mark_completion_time
   after_save :create_new_card_if_just_completed
   after_save :broadcast_completion
+  after_save :broadcast_reward_given
 
   # TODO: refactor away
   def positive_count
@@ -32,11 +33,7 @@ class StickerCard < ApplicationRecord
     return unless completed?
     return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
 
-    # Mark completion if not already marked
-    update_column(:completed_at, Time.current) if completed_at.nil?
-
-    # Create next card
-    child_profile.sticker_cards.create!
+    complete_now
   end
 
   private
@@ -67,11 +64,21 @@ class StickerCard < ApplicationRecord
   end
 
   def broadcast_completion
-    if saved_change_to_completed_at? && completed?
-      ChildProfileChannel.broadcast_to(
-        child_profile,
-        { action: "card_completed", card_id: id }
-      )
-    end
+    return unless saved_change_to_completed_at? && completed?
+
+    child_profile.broadcast_card_refresh
+    child_profile.broadcast_completion_flag
+  end
+
+  def broadcast_reward_given
+    return unless saved_change_to_reward_given? && reward_given?
+
+    child_profile.broadcast_card_refresh
+  end
+
+  def complete_now
+    return child_profile.sticker_cards.create! if completed_at?
+
+    update!(completed_at: Time.current)
   end
 end

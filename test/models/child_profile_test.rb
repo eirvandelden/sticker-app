@@ -55,4 +55,16 @@ class ChildProfileTest < ActiveSupport::TestCase
     assert_equal 1, completed_card.reload.sticker_goal
     assert_equal 4, active_card.reload.sticker_goal
   end
+
+  test "display sticker card returns active card when completed card awaits reward" do
+    user = User.create!(name: "Display Card Child", email: "display-card@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    profile.update!(sticker_goal: 1)
+    completed_card = profile.active_sticker_card
+
+    completed_card.stickers.create!(kind: :positive)
+
+    assert_not_equal completed_card, profile.active_sticker_card
+    assert_equal profile.active_sticker_card, profile.display_sticker_card
+  end
 end

@@ -22,9 +22,13 @@ class Sticker < ApplicationRecord
   end
 
   def broadcast_sticker_added
-    ChildProfileChannel.broadcast_to(
-      sticker_card.child_profile,
-      { action: "sticker_added", sticker_id: id, emoji: emoji, kind: kind }
+    profile = sticker_card.child_profile
+    broadcast_append_to(
+      profile,
+      target: ActionView::RecordIdentifier.dom_id(profile, :notifications),
+      partial: "child/dashboard/sticker_notification",
+      locals: { sticker: self }
     )
+    profile.broadcast_card_refresh
   end
 end

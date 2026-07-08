@@ -1,6 +1,9 @@
 require "test_helper"
+require "turbo/broadcastable/test_helper"
 
 class StickerCardTest < ActiveSupport::TestCase
+  include Turbo::Broadcastable::TestHelper
+
   test "card is not completed with fewer stickers than required" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
@@ -51,6 +54,35 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_equal 2, child.sticker_cards.count
   end
 
+  test "completing a card broadcasts without error" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    assert_nothing_raised { card.stickers.create!(kind: :positive) }
+  end
+
+  test "completing a card broadcasts completion flag" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+
+    streams = capture_turbo_stream_broadcasts(child) do
+      card.stickers.create!(kind: :positive)
+    end
+
+    assert_includes stream_targets(streams), dom_id(child, :completion_flag)
+  end
+
+  test "marking reward as given broadcasts parent card refresh" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+
+    streams = capture_turbo_stream_broadcasts(child) do
+      card.reload.update!(reward_given: true)
+    end
+
+    assert_includes stream_targets(streams), dom_id(child, :parent_card)
+  end
+
   test "reward cannot be marked if card is incomplete" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
@@ -66,5 +98,13 @@ class StickerCardTest < ActiveSupport::TestCase
   def create_child(goal:)
     user = User.create!(name: "Test Child", email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
     user.child_profile.tap { |p| p.update!(sticker_goal: goal) }
+  end
+
+  def dom_id(...)
+    ActionView::RecordIdentifier.dom_id(...)
+  end
+
+  def stream_targets(streams)
+    streams.map { |stream| stream["target"] }
   end
 end

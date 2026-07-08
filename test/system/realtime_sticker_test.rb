@@ -1,56 +1,170 @@
 require "application_system_test_case"
 
-# Scenario 14: Child's dashboard handles real-time ActionCable sticker events
+# Scenario 14: Child's dashboard updates in real time when a parent gives stickers.
 #
-# Two tests cover different layers:
-# 1. Subscription connects — verifies the Stimulus controller establishes
-#    the ActionCable WebSocket and sets data-cable-connected="true".
-# 2. Event handler — simulates the message the channel sends and verifies
-#    the Stimulus controller increments its DOM counter. Tests the full
-#    JS path without requiring a cross-session broadcast (which is unreliable
-#    with headless Chrome background tab throttling in CI).
+# Uses Capybara multi-session (using_session) to run a parent session and child session
+# concurrently in the same test process. Asserts that visible DOM elements — the sticker
+# grid, progress bar value, and notification text — update without a page reload.
 class RealtimeStickerTest < ApplicationSystemTestCase
-  # Scenario 14a: ActionCable subscription connects on the child dashboard
-  test "child dashboard establishes ActionCable subscription on load" do
-    child = users(:user_three)
-
-    sign_in_child child
-
-    assert_text "Your Sticker Card"
-    assert_selector "[data-child-dashboard-subscription-child-profile-id-value]"
-    assert_selector "[data-cable-connected='true']", wait: 5
+  teardown do
+    Capybara.reset_sessions!
   end
 
-  # Scenario 14b: Stimulus controller handles sticker-added message from channel
-  test "child dashboard increments sticker counter when sticker-added message arrives" do
-    child = users(:user_three)
+  # Scenario 14a: Child dashboard shows new sticker without reload
+  test "child dashboard updates live when a parent gives a sticker" do
+    parent_user = create_realtime_parent
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
-    sign_in_child child
-    assert_selector "[data-cable-connected='true']", wait: 5
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress[value='2']", wait: 5
+      wait_for_turbo_stream_connection
+    end
 
-    # Simulate the message the ChildProfileChannel sends on sticker creation
-    page.execute_script(<<~JS)
-      const el = document.querySelector('[data-controller~="child-dashboard-subscription"]');
-      const event = el._stimulus_application?.getControllerForElementAndIdentifier(
-        el, 'child-dashboard-subscription'
-      );
-      if (event && event.handleMessage) {
-        event.handleMessage({ action: 'sticker_added', sticker: { kind: 'positive', emoji: '⭐' } });
-      } else {
-        // Fallback: directly call the received callback via the subscription
-        const controllers = window.Stimulus?.controllers || [];
-        const ctrl = controllers.find(c => c.identifier === 'child-dashboard-subscription');
-        if (ctrl) ctrl.handleMessage({ action: 'sticker_added', sticker: { kind: 'positive', emoji: '⭐' } });
-      }
-    JS
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
 
-    assert_selector "[data-sticker-event-count='1']", wait: 3
+    using_session(:child) do
+      assert_selector "progress[value='3']", wait: 10
+    end
+  end
+
+  # Scenario 14b: Child dashboard shows sticker notification live
+  test "child dashboard shows sticker notification live when parent gives a sticker" do
+    parent_user = create_realtime_parent
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
+
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress", wait: 5
+      wait_for_turbo_stream_connection
+    end
+
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    using_session(:child) do
+      assert_selector "article[role='status']", wait: 10
+    end
+  end
+
+  # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
+  test "parent dashboard updates live when a sticker is given" do
+    observer_parent = create_realtime_parent
+    actor_parent = create_realtime_parent
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
+
+    using_session(:parent) do
+      sign_in_parent observer_parent
+      visit parent_children_path
+      wait_for_turbo_stream_connection
+      within_child_article(child_user) do
+        assert_selector "progress[value='2']", wait: 5
+      end
+    end
+
+    using_session(:actor) do
+      sign_in_parent actor_parent
+      post_sticker_for profile
+    end
+
+    using_session(:parent) do
+      within_child_article(child_user) do
+        assert_selector "progress[value='3']", wait: 10
+      end
+    end
+  end
+
+  # Scenario 14d: Confetti appears on card completion.
+  #
+  # Waits for turbo-cable-stream-source[connected] to ensure the ActionCable subscription is
+  # established before the completion_flag broadcast fires.
+  test "confetti container appears when a card completes" do
+    parent_user = create_realtime_parent
+    child_user, profile = child_ready_for_completion
+
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path
+      assert_selector "progress", wait: 5
+      wait_for_turbo_stream_connection
+    end
+
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    using_session(:child) do
+      assert_selector "[data-confetti-celebrated='true']", wait: 10
+    end
   end
 
   private
-    def sign_in_child(child)
-      visit session_transfer_path(child.transfer_id)
 
-      assert_current_path child_dashboard_path
+  def child_ready_for_completion
+    child_with_progress(goal: 3, stickers: 2)
+  end
+
+  def child_with_progress(goal:, stickers:)
+    child = create_realtime_child
+    profile = child.child_profile
+    profile.update!(sticker_goal: goal)
+    stickers.times { profile.active_sticker_card.stickers.create!(kind: :positive, giver: users(:parent)) }
+    [ child, profile ]
+  end
+
+  def create_realtime_child
+    token = SecureRandom.hex(4)
+
+    User.create!(
+      name: "Realtime Child #{token}",
+      email: "realtime-#{token}@example.com",
+      password: "password",
+      role: :child
+    )
+  end
+
+  def create_realtime_parent
+    token = SecureRandom.hex(4)
+
+    User.create!(
+      name: "Realtime Parent #{token}",
+      email: "realtime-parent-#{token}@example.com",
+      password: "password",
+      role: :parent
+    )
+  end
+
+  def sign_in_parent(user)
+    visit new_session_path
+    fill_in "Email", with: user.email
+    fill_in "Password", with: "password"
+    click_button "Login"
+    assert_current_path parent_children_path
+  end
+
+  def post_sticker_for(profile)
+    visit parent_children_path
+    wait_for_turbo_stream_connection
+    within_child_article(profile.user) do
+      click_button I18n.t("parent.actions.give_sticker")
     end
+  end
+
+  def wait_for_turbo_stream_connection
+    connect_turbo_cable_stream_sources
+  end
+
+  def within_child_article(child)
+    within(:xpath, "//article[.//h2[normalize-space()='#{child.name}']]") do
+      yield
+    end
+  end
 end

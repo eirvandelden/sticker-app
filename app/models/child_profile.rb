@@ -15,6 +15,34 @@ class ChildProfile < ApplicationRecord
     sticker_cards.where.not(completed_at: nil).where(reward_given: [ nil, false ]).order(completed_at: :asc).first
   end
 
+  def display_sticker_card
+    active_sticker_card
+  end
+
+  def broadcast_card_refresh
+    broadcast_replace_to(
+      self,
+      target: ActionView::RecordIdentifier.dom_id(self, :card),
+      partial: "child/dashboard/card",
+      locals: { child_profile: self }
+    )
+    broadcast_replace_to(
+      self,
+      target: ActionView::RecordIdentifier.dom_id(self, :parent_card),
+      partial: "parent/children/child_card",
+      locals: { child: self }
+    )
+  end
+
+  def broadcast_completion_flag
+    broadcast_replace_to(
+      self,
+      target: ActionView::RecordIdentifier.dom_id(self, :completion_flag),
+      partial: "child/dashboard/completion_flag",
+      locals: { child_profile: self }
+    )
+  end
+
   private
 
   def sync_active_card_sticker_goal
