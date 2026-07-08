@@ -6,7 +6,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     sign_in parent
 
-    click_link "Preferences"
+    open_preferences
     select "Dark", from: "user_color_scheme"
 
     assert_equal "system", page.evaluate_script("document.documentElement.dataset.colorScheme")
@@ -24,7 +24,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     sign_in parent
 
-    click_link "Preferences"
+    open_preferences
     select "Dark", from: "user_color_scheme"
     go_back
 
@@ -38,7 +38,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     sign_in parent
 
-    click_link "Preferences"
+    open_preferences
 
     html_background = page.evaluate_script(
       "getComputedStyle(document.documentElement).getPropertyValue('--color-bg-0')"
@@ -55,7 +55,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     emulate_color_scheme "dark"
     sign_in parent
 
-    click_link "Preferences"
+    open_preferences
     assert_selector 'html[data-theme="solunized-dark"]', visible: :all
 
     emulate_color_scheme "light"
@@ -67,6 +67,13 @@ class PreferencesSystemTest < ApplicationSystemTestCase
   private
     def sign_in(user)
       visit session_transfer_path(user.transfer_id)
+      assert_current_path parent_children_path
+    end
+
+    def open_preferences
+      visit edit_preferences_path
+      assert_current_path edit_preferences_path
+      assert_selector "select#user_color_scheme"
     end
 
     def emulate_color_scheme(value)
