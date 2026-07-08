@@ -35,7 +35,7 @@ module Authentication
       secure: Rails.env.production?,
       same_site: :lax
     }
-    cookie_options[:expires] = 1.year.from_now if user.child?
+    cookie_options[:expires] = 1.year.from_now
 
     cookies.signed[:session_token] = cookie_options
   end

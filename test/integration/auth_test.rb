@@ -6,6 +6,12 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to parent_children_path
   end
 
+  test "parent login persists the session cookie" do
+    post session_path, params: { email: users(:parent).email, password: "password" }
+
+    assert_match(/expires=/i, session_token_cookie)
+  end
+
   test "parent login fails with wrong password and redirects to login" do
     post session_path, params: { email: users(:parent).email, password: "wrong" }
     assert_redirected_to new_session_path
@@ -77,5 +83,9 @@ class AuthTest < ActionDispatch::IntegrationTest
       controller.set_request!(request)
       controller.set_response!(ActionDispatch::TestResponse.new)
     end
+  end
+
+  def session_token_cookie
+    response.headers["Set-Cookie"].split("\n").find { |cookie| cookie.start_with?("session_token=") }
   end
 end
