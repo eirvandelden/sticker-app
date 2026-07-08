@@ -55,12 +55,15 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
   test "parent dashboard updates live when a sticker is given" do
     parent_user = users(:parent)
-    _child_user, profile = child_ready_for_completion
+    child_user, profile = child_ready_for_completion
 
     using_session(:parent) do
       sign_in_parent parent_user
       visit parent_children_path
-      assert_selector "progress[value='2']", wait: 5
+      within_child_article(child_user) do
+        assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
+        assert_selector "progress[value='2']", wait: 5
+      end
     end
 
     using_session(:actor) do
@@ -69,7 +72,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     end
 
     using_session(:parent) do
-      assert_selector "progress[value='3']", wait: 10
+      within_child_article(child_user) do
+        assert_selector "progress[value='3']", wait: 10
+      end
     end
   end
 
@@ -124,5 +129,11 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   def post_sticker_for(profile)
     visit parent_children_path
     find("form[action*='#{parent_child_sticker_path(profile)}'] button").click
+  end
+
+  def within_child_article(child)
+    within(:xpath, "//article[.//h2[normalize-space()='#{child.name}']]") do
+      yield
+    end
   end
 end
