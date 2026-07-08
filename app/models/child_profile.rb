@@ -16,7 +16,7 @@ class ChildProfile < ApplicationRecord
   end
 
   def display_sticker_card
-    rewardable_sticker_card || active_sticker_card
+    active_sticker_card
   end
 
   def broadcast_card_refresh

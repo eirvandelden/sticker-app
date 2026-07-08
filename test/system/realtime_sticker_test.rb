@@ -13,12 +13,13 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Scenario 14a: Child dashboard shows new sticker without reload
   test "child dashboard updates live when a parent gives a sticker" do
     parent_user  = users(:parent)
-    child_user, profile = child_ready_for_completion
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress[value='2']", wait: 5
+      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
     end
 
     using_session(:parent) do
@@ -34,12 +35,13 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Scenario 14b: Child dashboard shows sticker notification live
   test "child dashboard shows sticker notification live when parent gives a sticker" do
     parent_user = users(:parent)
-    child_user, profile = child_ready_for_completion
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress", wait: 5
+      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
     end
 
     using_session(:parent) do
@@ -55,7 +57,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
   test "parent dashboard updates live when a sticker is given" do
     parent_user = users(:parent)
-    child_user, profile = child_ready_for_completion
+    child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:parent) do
       sign_in_parent parent_user
@@ -106,16 +108,24 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   private
 
   def child_ready_for_completion
-    child = User.create!(
+    child_with_progress(goal: 3, stickers: 2)
+  end
+
+  def child_with_progress(goal:, stickers:)
+    child = create_realtime_child
+    profile = child.child_profile
+    profile.update!(sticker_goal: goal)
+    stickers.times { profile.active_sticker_card.stickers.create!(kind: :positive, giver: users(:parent)) }
+    [ child, profile ]
+  end
+
+  def create_realtime_child
+    User.create!(
       name: "Realtime Child",
       email: "realtime-#{SecureRandom.hex(4)}@example.com",
       password: "password",
       role: :child
     )
-    profile = child.child_profile
-    profile.update!(sticker_goal: 3)
-    2.times { profile.active_sticker_card.stickers.create!(kind: :positive, giver: users(:parent)) }
-    [ child, profile ]
   end
 
   def sign_in_parent(user)
@@ -128,7 +138,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   def post_sticker_for(profile)
     visit parent_children_path
-    find("form[action*='#{parent_child_sticker_path(profile)}'] button").click
+    within_child_article(profile.user) do
+      click_button I18n.t("parent.actions.give_sticker")
+    end
   end
 
   def within_child_article(child)
