@@ -21,6 +21,8 @@ export default class extends Controller {
   }
 
   celebrate() {
+    this.element.dataset.confettiCelebrated = "true"
+
     const container = document.createElement("div")
     container.className = "confetti-container"
     document.body.appendChild(container)

@@ -19,7 +19,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress[value='2']", wait: 5
-      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
+      wait_for_turbo_stream_connection
     end
 
     using_session(:parent) do
@@ -41,7 +41,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress", wait: 5
-      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
+      wait_for_turbo_stream_connection
     end
 
     using_session(:parent) do
@@ -56,20 +56,21 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
   test "parent dashboard updates live when a sticker is given" do
-    parent_user = create_realtime_parent
+    observer_parent = create_realtime_parent
+    actor_parent = create_realtime_parent
     child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:parent) do
-      sign_in_parent parent_user
+      sign_in_parent observer_parent
       visit parent_children_path
+      wait_for_turbo_stream_connection
       within_child_article(child_user) do
-        assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
         assert_selector "progress[value='2']", wait: 5
       end
     end
 
     using_session(:actor) do
-      sign_in_parent parent_user
+      sign_in_parent actor_parent
       post_sticker_for profile
     end
 
@@ -92,7 +93,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       visit session_transfer_path(child_user.transfer_id)
       assert_current_path child_dashboard_path
       assert_selector "progress", wait: 5
-      assert_selector "turbo-cable-stream-source[connected]", visible: :all, wait: 5
+      wait_for_turbo_stream_connection
     end
 
     using_session(:parent) do
@@ -101,7 +102,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     end
 
     using_session(:child) do
-      assert_selector ".confetti-container", wait: 10
+      assert_selector "[data-confetti-celebrated='true']", wait: 10
     end
   end
 
@@ -151,9 +152,14 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   def post_sticker_for(profile)
     visit parent_children_path
+    wait_for_turbo_stream_connection
     within_child_article(profile.user) do
       click_button I18n.t("parent.actions.give_sticker")
     end
+  end
+
+  def wait_for_turbo_stream_connection
+    connect_turbo_cable_stream_sources
   end
 
   def within_child_article(child)
