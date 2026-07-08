@@ -12,7 +12,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14a: Child dashboard shows new sticker without reload
   test "child dashboard updates live when a parent gives a sticker" do
-    parent_user  = users(:parent)
+    parent_user = create_realtime_parent
     child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:child) do
@@ -34,7 +34,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14b: Child dashboard shows sticker notification live
   test "child dashboard shows sticker notification live when parent gives a sticker" do
-    parent_user = users(:parent)
+    parent_user = create_realtime_parent
     child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:child) do
@@ -56,7 +56,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
   # Scenario 14c: Parent dashboard updates live when another parent gives a sticker
   test "parent dashboard updates live when a sticker is given" do
-    parent_user = users(:parent)
+    parent_user = create_realtime_parent
     child_user, profile = child_with_progress(goal: 4, stickers: 2)
 
     using_session(:parent) do
@@ -85,7 +85,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   # Waits for turbo-cable-stream-source[connected] to ensure the ActionCable subscription is
   # established before the completion_flag broadcast fires.
   test "confetti container appears when a card completes" do
-    parent_user = users(:parent)
+    parent_user = create_realtime_parent
     child_user, profile = child_ready_for_completion
 
     using_session(:child) do
@@ -120,11 +120,24 @@ class RealtimeStickerTest < ApplicationSystemTestCase
   end
 
   def create_realtime_child
+    token = SecureRandom.hex(4)
+
     User.create!(
-      name: "Realtime Child",
-      email: "realtime-#{SecureRandom.hex(4)}@example.com",
+      name: "Realtime Child #{token}",
+      email: "realtime-#{token}@example.com",
       password: "password",
       role: :child
+    )
+  end
+
+  def create_realtime_parent
+    token = SecureRandom.hex(4)
+
+    User.create!(
+      name: "Realtime Parent #{token}",
+      email: "realtime-parent-#{token}@example.com",
+      password: "password",
+      role: :parent
     )
   end
 
