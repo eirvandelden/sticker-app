@@ -6,10 +6,34 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to parent_children_path
   end
 
-  test "parent login persists the session cookie" do
+  test "parent login persists the session cookie with a far-future expiry" do
     post session_path, params: { email: users(:parent).email, password: "password" }
 
+    assert session_token_cookie_expires > 10.years.from_now
+  end
+
+  test "resuming a parent session renews the cookie expiration" do
+    post session_path, params: { email: users(:parent).email, password: "password" }
+
+    get parent_children_path
+
     assert_match(/expires=/i, session_token_cookie)
+    assert session_token_cookie_expires > 10.years.from_now
+  end
+
+  test "child login persists the session cookie with a far-future expiry" do
+    post session_path, params: { email: users(:user).email, password: "password" }
+
+    assert session_token_cookie_expires > 10.years.from_now
+  end
+
+  test "resuming a child session renews the cookie expiration" do
+    post session_path, params: { email: users(:user).email, password: "password" }
+
+    get child_dashboard_path
+
+    assert_match(/expires=/i, session_token_cookie)
+    assert session_token_cookie_expires > 10.years.from_now
   end
 
   test "parent login fails with wrong password and redirects to login" do
@@ -86,6 +110,13 @@ class AuthTest < ActionDispatch::IntegrationTest
   end
 
   def session_token_cookie
-    response.headers["Set-Cookie"].split("\n").find { |cookie| cookie.start_with?("session_token=") }
+    set_cookie = response.headers["Set-Cookie"]
+    cookies = set_cookie.is_a?(Array) ? set_cookie : set_cookie.split("\n")
+    cookies.find { |cookie| cookie.start_with?("session_token=") }
+  end
+
+  def session_token_cookie_expires
+    expires_str = session_token_cookie[/expires=([^;]+)/i, 1]
+    Time.parse(expires_str)
   end
 end
