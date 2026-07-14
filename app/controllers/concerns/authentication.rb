@@ -1,7 +1,7 @@
 module Authentication
   extend ActiveSupport::Concern
 
-  SESSION_COOKIE_LIFETIME = 20.years
+  SESSION_COOKIE_LIFETIME = 1.year
 
   included do
     before_action :resume_session
