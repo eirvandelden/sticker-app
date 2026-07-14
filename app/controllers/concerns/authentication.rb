@@ -1,7 +1,7 @@
 module Authentication
   extend ActiveSupport::Concern
 
-  SESSION_COOKIE_LIFETIME = 1.year
+  SESSION_COOKIE_LIFETIME = 20.years
 
   included do
     before_action :resume_session
@@ -24,16 +24,6 @@ module Authentication
     end
   end
 
-  def renew_session_cookie(session_token)
-    cookies.signed[:session_token] = {
-      value: session_token,
-      httponly: true,
-      secure: Rails.env.production?,
-      same_site: :lax,
-      expires: SESSION_COOKIE_LIFETIME.from_now
-    }
-  end
-
   def start_new_session_for(user)
     session_record = user.sessions.create!(
       ip_address: request.remote_ip,
@@ -41,9 +31,12 @@ module Authentication
     )
     Current.session = session_record
     Current.user = user
+    renew_session_cookie(session_record.token)
+  end
 
+  def renew_session_cookie(session_token)
     cookies.signed[:session_token] = {
-      value: session_record.token,
+      value: session_token,
       httponly: true,
       secure: Rails.env.production?,
       same_site: :lax,

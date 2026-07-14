@@ -6,10 +6,10 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_redirected_to parent_children_path
   end
 
-  test "parent login persists the session cookie for one year" do
+  test "parent login persists the session cookie far into the future" do
     post session_path, params: { email: users(:parent).email, password: "password" }
 
-    assert_session_cookie_expires_in_one_year
+    assert_session_cookie_expires_far_into_the_future
   end
 
   test "resuming a parent session renews the cookie expiration" do
@@ -17,13 +17,13 @@ class AuthTest < ActionDispatch::IntegrationTest
 
     get parent_children_path
 
-    assert_session_cookie_expires_in_one_year
+    assert_session_cookie_expires_far_into_the_future
   end
 
-  test "child login persists the session cookie for one year" do
+  test "child login persists the session cookie far into the future" do
     post session_path, params: { email: users(:user).email, password: "password" }
 
-    assert_session_cookie_expires_in_one_year
+    assert_session_cookie_expires_far_into_the_future
   end
 
   test "resuming a child session renews the cookie expiration" do
@@ -31,7 +31,7 @@ class AuthTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_session_cookie_expires_in_one_year
+    assert_session_cookie_expires_far_into_the_future
   end
 
   test "parent login fails with wrong password and redirects to login" do
@@ -118,7 +118,8 @@ class AuthTest < ActionDispatch::IntegrationTest
     Time.parse(expires_str) if expires_str
   end
 
-  def assert_session_cookie_expires_in_one_year
-    assert_in_delta 1.year.from_now.to_i, session_token_cookie_expires.to_i, 5.seconds
+  def assert_session_cookie_expires_far_into_the_future
+    assert session_token_cookie_expires > 10.years.from_now,
+      "Cookie expires in less than 10 years"
   end
 end
