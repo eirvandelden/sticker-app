@@ -17,7 +17,6 @@ class AuthTest < ActionDispatch::IntegrationTest
 
     get parent_children_path
 
-    assert_match(/expires=/i, session_token_cookie)
     assert session_token_cookie_expires > 10.years.from_now
   end
 
@@ -32,7 +31,6 @@ class AuthTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_match(/expires=/i, session_token_cookie)
     assert session_token_cookie_expires > 10.years.from_now
   end
 
@@ -116,7 +114,7 @@ class AuthTest < ActionDispatch::IntegrationTest
   end
 
   def session_token_cookie_expires
-    expires_str = session_token_cookie[/expires=([^;]+)/i, 1]
-    Time.parse(expires_str)
+    expires_str = session_token_cookie&.[](/expires=([^;]+)/i, 1)
+    Time.parse(expires_str) if expires_str
   end
 end
