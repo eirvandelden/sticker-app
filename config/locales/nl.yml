@@ -15,6 +15,7 @@ nl:
         total_users: Totaal gebruikers
         view: Bekijken
     nav:
+      back_to_site: Terug naar site
       dashboard: Dashboard
       faultline: Faultline
       users: Gebruikers

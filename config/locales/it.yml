@@ -15,6 +15,7 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
+      back_to_site: Torna al sito
       dashboard: Dashboard
       faultline: Faultline
       users: Utenti

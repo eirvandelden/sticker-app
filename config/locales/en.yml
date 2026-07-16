@@ -15,6 +15,7 @@ en:
         total_users: Total Users
         view: View
     nav:
+      back_to_site: Back to Site
       dashboard: Dashboard
       faultline: Faultline
       users: Users
