@@ -12,7 +12,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     assert_equal "system", page.evaluate_script("document.documentElement.dataset.colorScheme")
 
     assert_field "user_color_scheme", with: "dark"
-    page.execute_script("document.querySelector('form').requestSubmit()")
+    click_button I18n.t("preferences.save", locale: :en)
     assert_text I18n.t("flash.preferences.updated", locale: :en)
 
     assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")

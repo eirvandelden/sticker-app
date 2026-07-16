@@ -2,11 +2,6 @@
       data-confetti-completion-flag-id-value="<%= dom_id(@child_profile, :completion_flag) %>">
   <header>
     <h1><%= t("child.dashboard.title") %></h1>
-    <nav>
-      <%= link_to t("child.dashboard.profile_link"), edit_user_profile_path(Current.user) %>
-      <%= link_to t("navigation.preferences"), edit_preferences_path %>
-      <%= button_to t("common.logout"), session_path, method: :delete %>
-    </nav>
   </header>
 
   <article>

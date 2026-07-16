@@ -10,5 +10,14 @@ class ApplicationController < ActionController::Base
   include Authentication
   include Authorization
 
+  layout :resolve_layout
+
   before_action :require_authentication
+
+  private
+
+  def resolve_layout
+    return "signin" unless Current.user
+    Current.user.child? ? "child" : "parent"
+  end
 end

@@ -6,6 +6,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#c51f23">
+    <% if Current.user.admin? %>
+      <meta name="turbo-cache-control" content="no-cache">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -17,13 +20,27 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Load MVPA.css framework and local app-specific styles %>
     <%= stylesheet_link_tag "mvpa/mvpa", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
+    <header>
+      <nav data-controller="nav" data-action="click->nav#click">
+        <h2><%= t("app.title") %></h2>
+        <ul>
+          <% if Current.user.admin? %>
+            <li><%= link_to t("admin.nav.dashboard"), admin_root_path, "aria-current": (current_page?(admin_root_path) ? "page" : nil) %></li>
+            <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
+            <li><%= link_to t("admin.nav.faultline"), faultline.root_path %></li>
+            <li><%= link_to t("admin.nav.back_to_site"), root_path %></li>
+          <% end %>
+          <li><%= link_to t("navigation.preferences"), edit_preferences_path %></li>
+          <li><%= button_to t("common.logout"), session_path, method: :delete %></li>
+        </ul>
+      </nav>
+    </header>
     <%= render "shared/flash" %>
     <%= yield %>
   </body>

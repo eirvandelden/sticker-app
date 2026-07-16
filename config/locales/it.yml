@@ -18,9 +18,7 @@ it:
       back_to_site: Torna al sito
       dashboard: Dashboard
       faultline: Faultline
-      title: Admin
       users: Utenti
-    title: Admin
     users:
       create:
         success: Utente creato con successo
@@ -119,7 +117,6 @@ it:
     it: Italiano
     nl: Olandese
   navigation:
-    admin: Admin
     preferences: Preferenze
   parent:
     actions:

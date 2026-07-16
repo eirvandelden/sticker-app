@@ -18,9 +18,7 @@ nl:
       back_to_site: Terug naar site
       dashboard: Dashboard
       faultline: Faultline
-      title: Beheer
       users: Gebruikers
-    title: Beheer
     users:
       create:
         success: Gebruiker succesvol aangemaakt
@@ -119,7 +117,6 @@ nl:
     it: Italiaans
     nl: Nederlands
   navigation:
-    admin: Beheer
     preferences: Voorkeuren
   parent:
     actions:
