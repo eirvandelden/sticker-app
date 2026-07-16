@@ -3,44 +3,46 @@
     <h1><%= t(".title") %></h1>
   </header>
 
-  <%= form_with model: @user, url: user_profile_path(@user), method: :patch, multipart: true do |form| %>
-    <% if @user.errors.any? %>
-      <aside role="alert">
-        <ul>
-          <% @user.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </aside>
+  <article>
+    <%= form_with model: @user, url: user_profile_path(@user), method: :patch, multipart: true do |form| %>
+      <% if @user.errors.any? %>
+        <aside role="alert">
+          <ul>
+            <% @user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </aside>
+      <% end %>
+
+      <fieldset>
+        <% unless Current.user.child? %>
+          <label for="user_name"><%= t(".name_label") %></label>
+          <%= form.text_field :name, required: true %>
+        <% end %>
+
+        <% if @user.avatar_displayable? %>
+          <figure>
+            <figcaption><%= t(".current_avatar") %></figcaption>
+            <%= image_tag @user.avatar, size: "80x80", alt: @user.name %>
+          </figure>
+        <% end %>
+        <label for="user_avatar"><%= t(".avatar_label") %></label>
+        <%= form.file_field :avatar, accept: "image/*" %>
+
+        <% unless Current.user.child? %>
+          <label for="user_email"><%= t(".email_label") %></label>
+          <%= form.email_field :email, required: true %>
+
+          <label for="user_password"><%= t(".password_label") %></label>
+          <%= form.password_field :password %>
+        <% end %>
+      </fieldset>
+
+      <nav>
+        <%= form.submit t(".save") %>
+        <%= link_to t(".cancel"), user_profile_path(@user) %>
+      </nav>
     <% end %>
-
-    <fieldset>
-      <% unless Current.user.child? %>
-        <label for="user_name"><%= t(".name_label") %></label>
-        <%= form.text_field :name, required: true %>
-      <% end %>
-
-      <% if @user.avatar_displayable? %>
-        <figure>
-          <figcaption><%= t(".current_avatar") %></figcaption>
-          <%= image_tag @user.avatar, size: "80x80", alt: @user.name %>
-        </figure>
-      <% end %>
-      <label for="user_avatar"><%= t(".avatar_label") %></label>
-      <%= form.file_field :avatar, accept: "image/*" %>
-
-      <% unless Current.user.child? %>
-        <label for="user_email"><%= t(".email_label") %></label>
-        <%= form.email_field :email, required: true %>
-
-        <label for="user_password"><%= t(".password_label") %></label>
-        <%= form.password_field :password %>
-      <% end %>
-    </fieldset>
-
-    <nav>
-      <%= form.submit t(".save") %>
-      <%= link_to t(".cancel"), user_profile_path(@user) %>
-    </nav>
-  <% end %>
+  </article>
 </main>

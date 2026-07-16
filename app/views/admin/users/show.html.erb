@@ -6,16 +6,18 @@
   </nav>
 </header>
 
-<dl>
-  <dt><%= t(".email") %></dt>
-  <dd><%= @user.email %></dd>
+<article>
+  <dl>
+    <dt><%= t(".email") %></dt>
+    <dd><%= @user.email %></dd>
 
-  <dt><%= t(".role") %></dt>
-  <dd><%= @user.role %></dd>
+    <dt><%= t(".role") %></dt>
+    <dd><%= @user.role %></dd>
 
-  <dt><%= t(".created_at") %></dt>
-  <dd><%= l(@user.created_at, format: :long) %></dd>
+    <dt><%= t(".created_at") %></dt>
+    <dd><%= l(@user.created_at, format: :long) %></dd>
 
-  <dt><%= t(".active_sessions") %></dt>
-  <dd><%= @user.sessions.count %></dd>
-</dl>
+    <dt><%= t(".active_sessions") %></dt>
+    <dd><%= @user.sessions.count %></dd>
+  </dl>
+</article>
