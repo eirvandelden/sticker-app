@@ -69,6 +69,13 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{root_path}']", text: I18n.t("admin.nav.back_to_site")
   end
 
+  test "admin pages are not cached by Turbo" do
+    sign_in_as @admin
+    get admin_root_path
+    assert_response :success
+    assert_select "meta[name='turbo-cache-control'][content='no-cache']"
+  end
+
   test "admin destroys a user and the user can no longer log in" do
     target = users(:user_two)
     target_email = target.email
