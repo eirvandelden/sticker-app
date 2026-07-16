@@ -9,16 +9,18 @@
     </nav>
   </header>
 
-  <%= turbo_stream_from @child_profile %>
+  <article>
+    <%= turbo_stream_from @child_profile %>
 
-  <span id="<%= dom_id(@child_profile, :completion_flag) %>"></span>
+    <span id="<%= dom_id(@child_profile, :completion_flag) %>"></span>
 
-  <section id="<%= dom_id(@child_profile, :notifications) %>">
-    <% @recent_stickers.each do |s| %>
-      <%= render "child/dashboard/sticker_notification", sticker: s %>
-    <% end %>
-  </section>
+    <section id="<%= dom_id(@child_profile, :notifications) %>">
+      <% @recent_stickers.each do |s| %>
+        <%= render "child/dashboard/sticker_notification", sticker: s %>
+      <% end %>
+    </section>
 
-  <%= render "child/dashboard/card", child_profile: @child_profile, last_viewed: @last_viewed %>
+    <%= render "child/dashboard/card", child_profile: @child_profile, last_viewed: @last_viewed %>
+  </article>
 
 </main>

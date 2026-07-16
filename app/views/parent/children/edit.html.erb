@@ -3,25 +3,27 @@
     <h1><%= t(".title") %></h1>
   </header>
 
-  <%= form_with model: @child.user, url: parent_child_path(@child), method: :patch do |form| %>
-    <% if @child.user.errors.any? %>
-      <aside role="alert">
-        <ul>
-          <% @child.user.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </aside>
+  <article>
+    <%= form_with model: @child.user, url: parent_child_path(@child), method: :patch do |form| %>
+      <% if @child.user.errors.any? %>
+        <aside role="alert">
+          <ul>
+            <% @child.user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </aside>
+      <% end %>
+
+      <fieldset>
+        <label for="user_name"><%= t(".name_label") %></label>
+        <%= form.text_field :name, required: true %>
+      </fieldset>
+
+      <nav>
+        <%= form.submit t(".save") %>
+        <%= link_to t(".cancel"), parent_children_path %>
+      </nav>
     <% end %>
-
-    <fieldset>
-      <label for="user_name"><%= t(".name_label") %></label>
-      <%= form.text_field :name, required: true %>
-    </fieldset>
-
-    <nav>
-      <%= form.submit t(".save") %>
-      <%= link_to t(".cancel"), parent_children_path %>
-    </nav>
-  <% end %>
+  </article>
 </main>
