@@ -1,0 +1,4 @@
+pre-push:
+  commands:
+    bundle-audit:
+      run: env -u GIT_DIR bin/bundler-audit --config config/bundler-audit.yml --update
