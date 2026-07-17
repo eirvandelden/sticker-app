@@ -22,7 +22,7 @@ gem "jbuilder"
 gem "bcrypt", "~> 3.1.22"
 
 gem "exception_notification", ">= 5.0"
-gem "exception_notification-campfire-once", github: "eirvandelden/exception_notification-campfire-once", branch: "ai/reykjavik"
+gem "exception_notification-campfire-once", github: "eirvandelden/exception_notification-campfire-once"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
