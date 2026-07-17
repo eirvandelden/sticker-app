@@ -17,7 +17,6 @@ it:
     nav:
       back_to_site: Torna al sito
       dashboard: Dashboard
-      faultline: Faultline
       users: Utenti
     users:
       create:

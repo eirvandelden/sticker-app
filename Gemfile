@@ -21,8 +21,8 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.22"
 
-# Exception and error tracking [https://github.com/dlt/faultline]
-gem "faultline", git: "https://github.com/dlt/faultline.git"
+gem "exception_notification", ">= 5.0"
+gem "exception_notification-campfire-once", github: "eirvandelden/exception_notification-campfire-once", branch: "ai/reykjavik"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

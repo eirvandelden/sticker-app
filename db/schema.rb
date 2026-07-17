@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_26_072254) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_000003) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -45,90 +45,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_072254) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index [ "user_id" ], name: "index_child_profiles_on_user_id"
-  end
-
-  create_table "faultline_error_contexts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "error_occurrence_id", null: false
-    t.string "key", null: false
-    t.datetime "updated_at", null: false
-    t.text "value"
-    t.index [ "error_occurrence_id", "key" ], name: "index_faultline_error_contexts_on_error_occurrence_id_and_key"
-    t.index [ "error_occurrence_id" ], name: "index_faultline_error_contexts_on_error_occurrence_id"
-  end
-
-  create_table "faultline_error_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "exception_class", null: false
-    t.string "file_path"
-    t.string "fingerprint", null: false
-    t.datetime "first_seen_at"
-    t.datetime "last_notified_at"
-    t.datetime "last_seen_at"
-    t.integer "line_number"
-    t.string "method_name"
-    t.integer "occurrences_count", default: 0
-    t.datetime "resolved_at"
-    t.text "sanitized_message", null: false
-    t.string "status", default: "unresolved"
-    t.datetime "updated_at", null: false
-    t.index [ "exception_class" ], name: "index_faultline_error_groups_on_exception_class"
-    t.index [ "fingerprint" ], name: "index_faultline_error_groups_on_fingerprint", unique: true
-    t.index [ "last_seen_at" ], name: "index_faultline_error_groups_on_last_seen_at"
-    t.index [ "status" ], name: "index_faultline_error_groups_on_status"
-  end
-
-  create_table "faultline_error_occurrences", force: :cascade do |t|
-    t.text "backtrace"
-    t.datetime "created_at", null: false
-    t.string "environment"
-    t.integer "error_group_id", null: false
-    t.string "exception_class", null: false
-    t.string "hostname"
-    t.string "ip_address"
-    t.json "local_variables"
-    t.text "message", null: false
-    t.string "process_id"
-    t.text "request_headers"
-    t.string "request_method"
-    t.text "request_params"
-    t.string "request_url"
-    t.string "session_id"
-    t.datetime "updated_at", null: false
-    t.string "user_agent"
-    t.bigint "user_id"
-    t.string "user_type"
-    t.index [ "created_at" ], name: "index_faultline_error_occurrences_on_created_at"
-    t.index [ "error_group_id", "created_at" ], name: "idx_on_error_group_id_created_at_98b32c40ac"
-    t.index [ "error_group_id" ], name: "index_faultline_error_occurrences_on_error_group_id"
-    t.index [ "user_type", "user_id" ], name: "index_faultline_error_occurrences_on_user_type_and_user_id"
-  end
-
-  create_table "faultline_request_profiles", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.float "interval_ms"
-    t.string "mode", default: "cpu"
-    t.text "profile_data", null: false
-    t.integer "request_trace_id", null: false
-    t.integer "samples", default: 0
-    t.index [ "request_trace_id" ], name: "index_faultline_request_profiles_on_request_trace_id"
-  end
-
-  create_table "faultline_request_traces", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "db_query_count", default: 0
-    t.float "db_runtime_ms"
-    t.float "duration_ms"
-    t.string "endpoint", null: false
-    t.boolean "has_profile", default: false
-    t.string "http_method", null: false
-    t.string "path"
-    t.json "spans"
-    t.integer "status"
-    t.float "view_runtime_ms"
-    t.index [ "created_at" ], name: "index_faultline_request_traces_on_created_at"
-    t.index [ "endpoint", "created_at" ], name: "index_faultline_request_traces_on_endpoint_and_created_at"
-    t.index [ "endpoint" ], name: "index_faultline_request_traces_on_endpoint"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -182,9 +98,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_072254) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "child_profiles", "users"
-  add_foreign_key "faultline_error_contexts", "faultline_error_occurrences", column: "error_occurrence_id"
-  add_foreign_key "faultline_error_occurrences", "faultline_error_groups", column: "error_group_id"
-  add_foreign_key "faultline_request_profiles", "faultline_request_traces", column: "request_trace_id", on_delete: :cascade
   add_foreign_key "sessions", "users"
   add_foreign_key "sticker_cards", "child_profiles"
   add_foreign_key "stickers", "sticker_cards"
