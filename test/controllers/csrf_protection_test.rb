@@ -27,7 +27,7 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     get session_transfer_path(transfer_id)
     assert_response :success
 
-    token = css_select("form#session_transfer_form input[name='authenticity_token']").first["value"]
+    token = css_select("form input[name='authenticity_token']").first["value"]
     assert token.present?, "expected the auto-submit form to carry a real CSRF token"
 
     put session_transfer_path(transfer_id), params: { authenticity_token: token }
@@ -38,7 +38,7 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
 
   def sign_in_as(user)
     ApplicationController.allow_forgery_protection = false
-    post session_path, params: { email: user.email, password: "password" }
+    post session_path, params: { email_address: user.email, password: "password" }
     ApplicationController.allow_forgery_protection = true
   end
 end

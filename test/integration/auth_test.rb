@@ -2,18 +2,18 @@ require "test_helper"
 
 class AuthTest < ActionDispatch::IntegrationTest
   test "parent logs in with valid credentials and is redirected to children dashboard" do
-    post session_path, params: { email: users(:parent).email, password: "password" }
+    post session_path, params: { email_address: users(:parent).email, password: "password" }
     assert_redirected_to parent_children_path
   end
 
   test "parent login persists the session cookie for one year" do
-    post session_path, params: { email: users(:parent).email, password: "password" }
+    post session_path, params: { email_address: users(:parent).email, password: "password" }
 
     assert_session_cookie_expires_in_one_year
   end
 
   test "resuming a parent session renews the cookie expiration" do
-    post session_path, params: { email: users(:parent).email, password: "password" }
+    post session_path, params: { email_address: users(:parent).email, password: "password" }
 
     get parent_children_path
 
@@ -21,22 +21,22 @@ class AuthTest < ActionDispatch::IntegrationTest
   end
 
   test "child login persists the session cookie for one year" do
-    post session_path, params: { email: users(:user).email, password: "password" }
+    post session_path, params: { email_address: users(:user).email, password: "password" }
 
     assert_session_cookie_expires_in_one_year
   end
 
   test "resuming a child session renews the cookie expiration" do
-    post session_path, params: { email: users(:user).email, password: "password" }
+    post session_path, params: { email_address: users(:user).email, password: "password" }
 
     get child_dashboard_path
 
     assert_session_cookie_expires_in_one_year
   end
 
-  test "parent login fails with wrong password and redirects to login" do
-    post session_path, params: { email: users(:parent).email, password: "wrong" }
-    assert_redirected_to new_session_path
+  test "parent login fails with wrong password and re-renders the login form" do
+    post session_path, params: { email_address: users(:parent).email, password: "wrong" }
+    assert_response :unauthorized
   end
 
   test "rate limit rejection returns too many requests" do
@@ -49,17 +49,17 @@ class AuthTest < ActionDispatch::IntegrationTest
   end
 
   test "child logs in with valid credentials and is redirected to dashboard" do
-    post session_path, params: { email: users(:user).email, password: "password" }
+    post session_path, params: { email_address: users(:user).email, password: "password" }
     assert_redirected_to child_dashboard_path
   end
 
-  test "child login fails with wrong password and redirects to login" do
-    post session_path, params: { email: users(:user).email, password: "wrong" }
-    assert_redirected_to new_session_path
+  test "child login fails with wrong password and re-renders the login form" do
+    post session_path, params: { email_address: users(:user).email, password: "wrong" }
+    assert_response :unauthorized
   end
 
   test "admin logs in with valid credentials and is redirected to parent children" do
-    post session_path, params: { email: users(:admin).email, password: "password" }
+    post session_path, params: { email_address: users(:admin).email, password: "password" }
     assert_redirected_to parent_children_path
   end
 
@@ -69,7 +69,7 @@ class AuthTest < ActionDispatch::IntegrationTest
     get session_transfer_path(transfer_id)
 
     assert_response :success
-    assert_select "form#session_transfer_form[action='#{session_transfer_path(transfer_id)}']"
+    assert_select "form[action='#{session_transfer_path(transfer_id)}']"
     assert_select "input[name='_method'][value='put']"
   end
 
@@ -90,7 +90,7 @@ class AuthTest < ActionDispatch::IntegrationTest
     I18n.default_locale = :nl
     get new_session_path
     assert_response :success
-    assert_select "title", text: /#{I18n.t("sessions.login_title", locale: :nl)}/
+    assert_select "title", text: I18n.t("app.title", locale: :nl)
     assert_not response.body.include?("<title>Sign in"), "Title is hardcoded English, should use i18n"
   ensure
     I18n.default_locale = original_locale
@@ -99,9 +99,9 @@ class AuthTest < ActionDispatch::IntegrationTest
   private
 
   def build_sessions_controller
-    SessionsController.new.tap do |controller|
+    Appkit::SessionsController.new.tap do |controller|
       request = ActionDispatch::TestRequest.create
-      request.env["action_dispatch.request.path_parameters"] = { controller: "sessions", action: "create" }
+      request.env["action_dispatch.request.path_parameters"] = { controller: "appkit/sessions", action: "create" }
       controller.set_request!(request)
       controller.set_response!(ActionDispatch::TestResponse.new)
     end

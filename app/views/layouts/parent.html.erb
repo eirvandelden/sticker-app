@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" <%= tag.attributes(theme_attributes) %>>
+<html lang="<%= I18n.locale %>" data-controller="theme" <%= tag.attributes(theme_attributes) %>>
   <head>
     <title><%= content_for(:title) || t("app.title") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="view-transition" content="same-origin">
+    <meta name="color-scheme" content="light dark">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#c51f23">
     <% if Current.user.admin? %>
       <meta name="turbo-cache-control" content="no-cache">
     <% end %>
@@ -14,18 +15,17 @@
 
     <%= yield :head %>
 
-    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= render "appkit/shared/pwa_meta" %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
 
     <%= stylesheet_link_tag "mvpa/mvpa", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
+  <body>
     <header>
       <nav data-controller="nav" data-action="click->nav#click">
         <h2><%= t("app.title") %></h2>
@@ -40,7 +40,13 @@
         </ul>
       </nav>
     </header>
-    <%= render "shared/flash" %>
+    <%= render "appkit/shared/flashes" %>
     <%= yield %>
+    <fieldset data-controller="push">
+      <button type="button" data-action="push#subscribe"><%= t("parent.push.enable") %></button>
+    </fieldset>
+    <footer>
+      <p><%= t("footer.copyright", year: Date.current.year, app_name: t("app.title")) %></p>
+    </footer>
   </body>
 </html>

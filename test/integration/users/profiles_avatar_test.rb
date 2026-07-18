@@ -76,4 +76,23 @@ class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
   end
+
+  test "blank password does not change the parent's password" do
+    sign_in_as @parent
+    original_digest = @parent.password_digest
+
+    patch user_profile_path(@parent), params: { user: { name: @parent.name, password: "" } }
+
+    assert_redirected_to user_profile_path(@parent)
+    assert_equal original_digest, @parent.reload.password_digest
+  end
+
+  test "non-blank password updates the parent's password" do
+    sign_in_as @parent
+
+    patch user_profile_path(@parent), params: { user: { name: @parent.name, password: "new-secure-pass" } }
+
+    assert_redirected_to user_profile_path(@parent)
+    assert @parent.reload.authenticate("new-secure-pass"), "Expected password to be updated"
+  end
 end

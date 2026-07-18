@@ -12,8 +12,8 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     assert_equal "system", page.evaluate_script("document.documentElement.dataset.colorScheme")
 
     assert_field "user_color_scheme", with: "dark"
-    click_button I18n.t("preferences.save", locale: :en)
-    assert_text I18n.t("flash.preferences.updated", locale: :en)
+    click_button I18n.t("appkit.preferences.edit.submit", locale: :en)
+    assert_current_path edit_preferences_path
 
     assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")
     assert_equal "solunized-dark", page.evaluate_script("document.documentElement.dataset.theme")

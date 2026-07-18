@@ -78,11 +78,9 @@ nl:
       someone: Iemand
       title: Jouw sticker kaart
   common:
-    back: "← Terug"
     logout: "Uitloggen 🐿️"
   errors:
     admin_required: Admin toegang vereist
-    authentication_required: Gelieve in te loggen
     child_profile_required: Kind profiel niet gevonden
     child_required: Child toegang vereist
     messages:
@@ -94,7 +92,6 @@ nl:
         one: 1 fout verhinderde dat dit record werd opgeslagen
         other: "%{count} fouten verhinderden dat dit record werd opgeslagen"
   flash:
-    notifications: Meldingen
     parent:
       child_profiles:
         updated: Instellingen opgeslagen
@@ -105,12 +102,8 @@ nl:
         success: "🎁 Cadeautje is gegeven!"
       stickers:
         created: Sticker toegevoegd ✅
-    preferences:
-      updated: Voorkeuren bijgewerkt
-    sessions:
-      logged_out: "Uitgelogd 🐿️"
-      too_many_requests: Te veel inlogpogingen. Probeer het later opnieuw.
-      unauthorized: Ongeldig e-mailadres of wachtwoord.
+  footer:
+    copyright: "© %{year} %{app_name}"
   locale_names:
     en: Engels
     it: Italiaans
@@ -166,31 +159,8 @@ nl:
         one: "%{count} sticker"
         other: "%{count} stickers"
       title: Sticker Geschiedenis
-  preferences:
-    account_label: Account
-    color_scheme:
-      dark: Donker
-      light: Licht
-      system: Systeem
-    dark_theme:
-      black: Zwart
-      selenized_dark: Selenized Donker
-    email: E-mail
-    language_label: Taal
-    light_theme:
-      selenized_light: Selenized Licht
-      white: Wit
-    password: Wachtwoord
-    password_confirmation: Bevestig wachtwoord
-    password_placeholder: Laat leeg om huidig wachtwoord te bewaren
-    save: Voorkeuren Opslaan
-    theme_label: Thema
-    title: Voorkeuren
-  sessions:
-    email: E-mail
-    login_button: Log in
-    login_title: Log in
-    password: Wachtwoord
+    push:
+      enable: Herinneringen inschakelen
   users:
     profiles:
       edit:
@@ -205,7 +175,9 @@ nl:
       show:
         edit: Profiel bewerken
         email: E-mail
+        log_in_on_phone: Inloggen op telefoon
         name: Naam
+        qr_alt: QR-code om in te loggen op een ander apparaat
         title: Mijn profiel
       update:
         success: Profiel succesvol bijgewerkt

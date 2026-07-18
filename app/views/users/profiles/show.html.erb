@@ -17,5 +17,12 @@
     </dl>
 
     <%= link_to t(".edit"), edit_user_profile_path(@user) %>
+
+    <% if @user.current? || (Current.user.parent? && @user.child?) %>
+      <p>
+        <%= link_to t(".log_in_on_phone"), session_transfer_path(@user.transfer_id) %>
+        <%= image_tag transfer_qr_code_path(@user), alt: t(".qr_alt"), size: 160 %>
+      </p>
+    <% end %>
   </article>
 </main>

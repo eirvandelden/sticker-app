@@ -20,7 +20,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "it", @user.reload.locale
     assert_select 'html[lang="it"]'
-    assert_select "h1", text: I18n.t("preferences.title", locale: :it)
+    assert_select "h1", text: I18n.t("appkit.preferences.edit.title", locale: :it)
   end
 
   test "user cannot set an unsupported locale" do
@@ -36,36 +36,8 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     assert_equal "en", @user.reload.locale
   end
 
-  test "blank password does not change the user's password" do
-    sign_in_as(@user)
-    original_digest = @user.password_digest
-
-    patch preferences_path, params: {
-      user: {
-        locale: "en",
-        password: "",
-        password_confirmation: ""
-      }
-    }
-
-    assert_redirected_to edit_preferences_path
-    assert_equal original_digest, @user.reload.password_digest
-  end
-
-  test "non-blank password updates the user's password" do
-    sign_in_as(@user)
-
-    patch preferences_path, params: {
-      user: {
-        locale: "en",
-        password: "new-secure-pass",
-        password_confirmation: "new-secure-pass"
-      }
-    }
-
-    assert_redirected_to edit_preferences_path
-    assert @user.reload.authenticate("new-secure-pass"), "Expected password to be updated"
-  end
+  # Email/password/password_confirmation moved to Users::ProfilesController
+  # (identity fields, app-local) — see test/integration/users/profiles_avatar_test.rb.
 
   test "child can access preferences edit page" do
     sign_in_as(@user)
@@ -91,7 +63,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
       sign_in_as(@parent)
       get edit_preferences_path
       assert_response :success
-      assert_select "h1", text: I18n.t("preferences.title")
+      assert_select "h1", text: I18n.t("appkit.preferences.edit.title")
     end
 
     test "parent can update locale via preferences" do

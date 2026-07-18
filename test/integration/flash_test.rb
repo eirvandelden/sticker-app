@@ -7,7 +7,7 @@ class FlashTest < ActionDispatch::IntegrationTest
     patch preferences_path, params: { user: { locale: "en" } }
     follow_redirect!
 
-    assert_select %(section[data-mvpa-flashes][aria-label="#{I18n.t("flash.notifications")}"])
+    assert_select %(section[data-mvpa-flashes][aria-label="#{I18n.t("appkit.flash.notifications")}"])
   end
 
   test "admin flash container is labelled" do
@@ -17,6 +17,6 @@ class FlashTest < ActionDispatch::IntegrationTest
     delete admin_user_path(admin)
     follow_redirect!
 
-    assert_select %(section[data-mvpa-flashes][aria-label="#{I18n.t("flash.notifications")}"])
+    assert_select %(section[data-mvpa-flashes][aria-label="#{I18n.t("appkit.flash.notifications")}"])
   end
 end

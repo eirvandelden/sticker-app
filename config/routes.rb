@@ -1,18 +1,14 @@
 Rails.application.routes.draw do
+  mount Appkit::Engine => "/"
+
   namespace :admin do
     root "dashboard#index"
     resources :users
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  root "sessions#new"
-
-  get "session/transfer/:id", to: "sessions/transfers#show", as: :session_transfer
-  put "session/transfer/:id", to: "sessions/transfers#update"
-  resource :session, only: [ :new, :create, :destroy ]
-  resource :preferences, only: [ :edit, :update ]
+  root "appkit/sessions#new"
 
   resources :users, only: [] do
     resource :profile, only: [ :show, :edit, :update ], controller: "users/profiles"
