@@ -8,3 +8,6 @@ application.register("push", PushController)
 
 import ThemeController from "appkit/controllers/theme_controller"
 application.register("theme", ThemeController)
+
+import AutoSubmitController from "appkit/controllers/auto_submit_controller"
+application.register("auto-submit", AutoSubmitController)
