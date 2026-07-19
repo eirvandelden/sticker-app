@@ -62,9 +62,9 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     get edit_admin_user_path(@user)
 
     assert_response :success
-    assert_select "option", text: I18n.t("locale_names.en", locale: :nl)
-    assert_select "option", text: I18n.t("locale_names.nl", locale: :nl)
-    assert_select "option", text: I18n.t("locale_names.it", locale: :nl)
+    assert_select "option", text: I18n.t("locales.en", locale: :nl)
+    assert_select "option", text: I18n.t("locales.nl", locale: :nl)
+    assert_select "option", text: I18n.t("locales.it", locale: :nl)
   end
 
   test "admin can update a user" do

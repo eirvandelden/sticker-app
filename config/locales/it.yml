@@ -104,7 +104,7 @@ it:
         created: Adesivo aggiunto ✅
   footer:
     copyright: "© %{year} %{app_name}"
-  locale_names:
+  locales:
     en: Inglese
     it: Italiano
     nl: Olandese

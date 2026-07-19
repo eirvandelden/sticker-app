@@ -104,7 +104,7 @@ nl:
         created: Sticker toegevoegd ✅
   footer:
     copyright: "© %{year} %{app_name}"
-  locale_names:
+  locales:
     en: Engels
     it: Italiaans
     nl: Nederlands
