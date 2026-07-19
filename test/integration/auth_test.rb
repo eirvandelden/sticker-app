@@ -71,6 +71,7 @@ class AuthTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "form[action='#{session_transfer_path(transfer_id)}']"
     assert_select "input[name='_method'][value='put']"
+    assert_select "script[type='importmap']"
   end
 
   test "session transfer logs child in and redirects to dashboard" do
