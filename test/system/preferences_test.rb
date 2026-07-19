@@ -67,7 +67,10 @@ class PreferencesSystemTest < ApplicationSystemTestCase
   private
     def sign_in(user)
       visit session_transfer_path(user.transfer_id)
-      assert_current_path parent_children_path
+      # The transfer page auto-submits via a Stimulus controller (connect ->
+      # requestSubmit -> PUT -> redirect) rather than a user click; give it a
+      # generous wait past Capybara's default before asserting the landed page.
+      assert_current_path parent_children_path, wait: 10
     end
 
     def open_preferences

@@ -17,7 +17,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
-      assert_current_path child_dashboard_path
+      # Auto-submits via Stimulus (connect -> requestSubmit -> PUT -> redirect),
+      # not a user click; give it more time than Capybara's default wait.
+      assert_current_path child_dashboard_path, wait: 10
       assert_selector "progress[value='2']", wait: 5
       wait_for_turbo_stream_connection
     end
@@ -39,7 +41,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
-      assert_current_path child_dashboard_path
+      # Auto-submits via Stimulus (connect -> requestSubmit -> PUT -> redirect),
+      # not a user click; give it more time than Capybara's default wait.
+      assert_current_path child_dashboard_path, wait: 10
       assert_selector "progress", wait: 5
       wait_for_turbo_stream_connection
     end
@@ -91,7 +95,9 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
-      assert_current_path child_dashboard_path
+      # Auto-submits via Stimulus (connect -> requestSubmit -> PUT -> redirect),
+      # not a user click; give it more time than Capybara's default wait.
+      assert_current_path child_dashboard_path, wait: 10
       assert_selector "progress", wait: 5
       wait_for_turbo_stream_connection
     end
