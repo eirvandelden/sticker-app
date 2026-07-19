@@ -64,6 +64,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
       get edit_preferences_path
       assert_response :success
       assert_select "h1", text: I18n.t("appkit.preferences.edit.title")
+      assert_select "form[data-turbo=false]"
     end
 
     test "parent can update locale via preferences" do
