@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" data-controller="theme" <%= tag.attributes(theme_attributes) %>>
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || t("app.title") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -24,7 +24,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <header>
       <nav data-controller="nav" data-action="click->nav#click">
         <h2><%= t("app.title") %></h2>
