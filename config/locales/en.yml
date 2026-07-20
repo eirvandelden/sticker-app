@@ -78,11 +78,9 @@ en:
       someone: Someone
       title: Your Sticker Card
   common:
-    back: "← Back"
     logout: "Logout 🐿️"
   errors:
     admin_required: Admin access required
-    authentication_required: Please log in
     child_profile_required: Child profile not found
     child_required: Child access required
     messages:
@@ -94,7 +92,6 @@ en:
         one: 1 error prevented this record from being saved
         other: "%{count} errors prevented this record from being saved"
   flash:
-    notifications: Notifications
     parent:
       child_profiles:
         updated: Settings saved
@@ -105,13 +102,9 @@ en:
         success: "🎁 Reward marked as given!"
       stickers:
         created: Sticker added ✅
-    preferences:
-      updated: Preferences updated successfully
-    sessions:
-      logged_out: "Logged out 🐿️"
-      too_many_requests: Too many login attempts. Please try again later.
-      unauthorized: Invalid email or password.
-  locale_names:
+  footer:
+    copyright: "© %{year} %{app_name}"
+  locales:
     en: English
     it: Italian
     nl: Dutch
@@ -125,28 +118,18 @@ en:
       view_history: "📊 History"
     child_profile:
       edit:
-        cancel: Cancel
+        avatar_label: Choose a new avatar
+        back: Back to dashboard
+        current_avatar: Current avatar
+        link: Edit %{name} settings
+        name_label: Name
         save: Save
         sticker_goal_label: Sticker goal
         title: Child Settings
     children:
-      edit:
-        cancel: Cancel
-        name_label: Name
-        save: Save
-        title: Edit Child
-      index:
-        edit_avatar: Edit avatar
-        edit_name: Edit name
       update:
         success: Child updated successfully
     children_avatar:
-      edit:
-        cancel: Cancel
-        current_avatar: Current avatar
-        save: Save
-        title: Edit Avatar
-        upload_label: Choose a new avatar
       update:
         success: Avatar updated successfully
     dashboard:
@@ -166,31 +149,8 @@ en:
         one: "%{count} sticker"
         other: "%{count} stickers"
       title: Sticker History
-  preferences:
-    account_label: Account
-    color_scheme:
-      dark: Dark
-      light: Light
-      system: System
-    dark_theme:
-      black: Black
-      selenized_dark: Selenized Dark
-    email: Email
-    language_label: Language
-    light_theme:
-      selenized_light: Selenized Light
-      white: White
-    password: Password
-    password_confirmation: Confirm Password
-    password_placeholder: Leave blank to keep current password
-    save: Save Preferences
-    theme_label: Theme
-    title: Preferences
-  sessions:
-    email: Email
-    login_button: Login
-    login_title: Login
-    password: Password
+    push:
+      enable: Enable reminders
   users:
     profiles:
       edit:
@@ -205,7 +165,9 @@ en:
       show:
         edit: Edit profile
         email: Email
+        log_in_on_phone: Log in on phone
         name: Name
+        qr_alt: QR code to log in on another device
         title: My Profile
       update:
         success: Profile updated successfully

@@ -1,10 +1,9 @@
 class User < ApplicationRecord
-  include Role, Transferable
+  include Role, Appkit::Transferable
+  include Appkit::Authenticatable, Appkit::UserTheming
 
   AVATAR_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
   MAX_AVATAR_SIZE = 5.megabytes
-
-  has_many :sessions, dependent: :destroy
 
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:name) }
@@ -13,23 +12,11 @@ class User < ApplicationRecord
     self == Current.user
   end
 
-  def deactivate
-    transaction do
-      sessions.delete_all
-      update! active: false, email: deactivated_email
-    end
-  end
-
   def avatar_displayable?
     avatar.attached? && avatar.attachment.persisted?
   end
 
-  has_secure_password
-
   enum :role, { child: 0, parent: 1, admin: 2 }, default: :parent
-  enum :color_scheme, { system: 0, light: 1, dark: 2 }, default: :system
-  enum :light_theme, { white: 0, selenized_light: 1 }, default: :selenized_light
-  enum :dark_theme, { black: 0, selenized_dark: 1 }, default: :selenized_dark
 
   has_one :child_profile, dependent: :destroy
   has_one_attached :avatar

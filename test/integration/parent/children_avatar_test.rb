@@ -7,13 +7,16 @@ class Parent::ChildrenAvatarTest < ActionDispatch::IntegrationTest
     @child  = child_profiles(:one)
   end
 
-  test "parent can reach child avatar edit page" do
+  test "parent can reach child settings page with avatar form" do
     sign_in_as @parent
-    get edit_parent_child_avatar_path(@child)
+    get edit_parent_child_path(@child)
 
     assert_response :success
-    assert_select "h1", text: "Edit Avatar"
-    assert_select "form"
+    assert_select "h1", text: I18n.t("parent.child_profile.edit.title")
+    assert_select "form[action='#{parent_child_avatar_path(@child)}'][method='post']" do
+      assert_select "input[name='_method'][type='hidden'][value='patch']"
+      assert_select "input[name='user[avatar]'][type='file'][required]"
+    end
   end
 
   test "parent can upload child avatar" do
@@ -21,7 +24,7 @@ class Parent::ChildrenAvatarTest < ActionDispatch::IntegrationTest
     avatar = fixture_file_upload("avatar.png", "image/png")
     patch parent_child_avatar_path(@child), params: { user: { avatar: avatar } }
 
-    assert_redirected_to parent_children_path
+    assert_redirected_to edit_parent_child_path(@child)
     assert_equal "Avatar updated successfully", flash[:notice]
     assert_predicate @child.user.reload.avatar, :attached?
   end
@@ -40,13 +43,24 @@ class Parent::ChildrenAvatarTest < ActionDispatch::IntegrationTest
     avatar = fixture_file_upload("avatar.png", "image/png")
     patch parent_child_avatar_path(@child), params: { user: { avatar: avatar } }
 
-    assert_redirected_to parent_children_path
+    assert_redirected_to edit_parent_child_path(@child)
     assert_predicate @child.user.reload.avatar, :attached?
   end
 
-  test "child cannot reach parent avatar page for another child" do
+  test "child cannot reach parent child settings page" do
     sign_in_as users(:user)
-    get edit_parent_child_avatar_path(@child)
+    get edit_parent_child_path(@child)
+
+    assert_redirected_to root_path
+  end
+
+  test "child cannot update another child's avatar" do
+    other_child = child_profiles(:two)
+    sign_in_as users(:user)
+    avatar = fixture_file_upload("avatar.png", "image/png")
+    assert_no_changes -> { other_child.user.reload.avatar.attached? } do
+      patch parent_child_avatar_path(other_child), params: { user: { avatar: avatar } }
+    end
 
     assert_redirected_to root_path
   end

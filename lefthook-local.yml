@@ -1,4 +1,12 @@
+pre-commit:
+  commands:
+    # No package.json/yarn toolchain in this app — nothing for stylelint to run against.
+    csslint:
+      skip: true
+
 pre-push:
   commands:
     bundle-audit:
       run: env -u GIT_DIR bin/bundler-audit --config config/bundler-audit.yml --update
+    csslint:
+      skip: true

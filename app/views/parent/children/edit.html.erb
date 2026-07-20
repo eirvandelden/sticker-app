@@ -1,6 +1,6 @@
 <main>
   <header>
-    <h1><%= t(".title") %></h1>
+    <h1><%= t("parent.child_profile.edit.title") %></h1>
   </header>
 
   <article>
@@ -16,14 +16,70 @@
       <% end %>
 
       <fieldset>
-        <label for="user_name"><%= t(".name_label") %></label>
+        <label for="user_name"><%= t("parent.child_profile.edit.name_label") %></label>
         <%= form.text_field :name, required: true %>
       </fieldset>
 
       <nav>
-        <%= form.submit t(".save") %>
-        <%= link_to t(".cancel"), parent_children_path %>
+        <%= form.submit t("parent.child_profile.edit.save") %>
       </nav>
     <% end %>
   </article>
+
+  <article>
+    <%= form_with model: @child.user, url: parent_child_avatar_path(@child), method: :patch, multipart: true do |form| %>
+      <% if @child.user.errors.any? %>
+        <aside role="alert">
+          <ul>
+            <% @child.user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </aside>
+      <% end %>
+
+      <% if @child.user.avatar_displayable? %>
+        <figure>
+          <figcaption><%= t("parent.child_profile.edit.current_avatar") %></figcaption>
+          <%= image_tag @child.user.avatar, size: "80x80", alt: @child.user.name %>
+        </figure>
+      <% end %>
+
+      <fieldset>
+        <label for="user_avatar"><%= t("parent.child_profile.edit.avatar_label") %></label>
+        <%= form.file_field :avatar, accept: "image/*", required: true %>
+      </fieldset>
+
+      <nav>
+        <%= form.submit t("parent.child_profile.edit.save") %>
+      </nav>
+    <% end %>
+  </article>
+
+  <article>
+    <%= form_with model: @child, url: parent_child_child_profile_path(@child), method: :patch do |form| %>
+      <% if @child.errors.any? %>
+        <aside role="alert">
+          <ul>
+            <% @child.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </aside>
+      <% end %>
+
+      <fieldset>
+        <label for="child_profile_sticker_goal"><%= t("parent.child_profile.edit.sticker_goal_label") %></label>
+        <%= form.number_field :sticker_goal, min: 1, required: true %>
+      </fieldset>
+
+      <nav>
+        <%= form.submit t("parent.child_profile.edit.save") %>
+      </nav>
+    <% end %>
+  </article>
+
+  <nav>
+    <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
+  </nav>
 </main>

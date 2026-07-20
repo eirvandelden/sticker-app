@@ -18,6 +18,25 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "parent sees child settings links below child cards" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+
+    assert_select "main > article:last-of-type" do
+      assert_select "h2", text: I18n.t("parent.child_profile.edit.title")
+      [ @profile_one, @profile_two, @profile_three ].each do |profile|
+        assert_select "a[href='#{edit_parent_child_path(profile)}']",
+                      text: "Edit #{profile.user.name} settings", count: 1
+      end
+    end
+
+    [ @profile_one, @profile_two, @profile_three ].each do |profile|
+      assert_select "article[data-controller='confetti'] a[href='#{edit_parent_child_path(profile)}']", count: 0
+    end
+  end
+
   # Scenario 7: Parent awards a positive sticker
   test "parent awards a positive sticker and count increases" do
     sign_in_as @parent

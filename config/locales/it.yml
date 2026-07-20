@@ -78,11 +78,9 @@ it:
       someone: Qualcuno
       title: La tua scheda adesivi
   common:
-    back: "← Indietro"
     logout: "Esci 🐿️"
   errors:
     admin_required: Accesso admin richiesto
-    authentication_required: Effettua il login
     child_profile_required: Profilo bambino non trovato
     child_required: Accesso bambino richiesto
     messages:
@@ -94,7 +92,6 @@ it:
         one: 1 errore ha impedito il salvataggio di questo record
         other: "%{count} errori hanno impedito il salvataggio di questo record"
   flash:
-    notifications: Notifiche
     parent:
       child_profiles:
         updated: Impostazioni salvate
@@ -105,13 +102,9 @@ it:
         success: "🎁 Premio segnato come consegnato!"
       stickers:
         created: Adesivo aggiunto ✅
-    preferences:
-      updated: Preferenze aggiornate con successo
-    sessions:
-      logged_out: "Disconnesso 🐿️"
-      too_many_requests: Troppi tentativi di accesso. Riprova più tardi.
-      unauthorized: Email o password non validi.
-  locale_names:
+  footer:
+    copyright: "© %{year} %{app_name}"
+  locales:
     en: Inglese
     it: Italiano
     nl: Olandese
@@ -125,28 +118,18 @@ it:
       view_history: "📊 Cronologia"
     child_profile:
       edit:
-        cancel: Annulla
+        avatar_label: Scegli un nuovo avatar
+        back: Torna alla dashboard
+        current_avatar: Avatar attuale
+        link: Modifica impostazioni di %{name}
+        name_label: Nome
         save: Salva
         sticker_goal_label: Obiettivo adesivi
         title: Impostazioni bambino
     children:
-      edit:
-        cancel: Annulla
-        name_label: Nome
-        save: Salva
-        title: Modifica bambino
-      index:
-        edit_avatar: Modifica avatar
-        edit_name: Modifica nome
       update:
         success: Bambino aggiornato con successo
     children_avatar:
-      edit:
-        cancel: Annulla
-        current_avatar: Avatar attuale
-        save: Salva
-        title: Modifica avatar
-        upload_label: Scegli un nuovo avatar
       update:
         success: Avatar aggiornato con successo
     dashboard:
@@ -166,31 +149,8 @@ it:
         one: "%{count} adesivo"
         other: "%{count} adesivi"
       title: Cronologia Adesivi
-  preferences:
-    account_label: Account
-    color_scheme:
-      dark: Scuro
-      light: Chiaro
-      system: Sistema
-    dark_theme:
-      black: Nero
-      selenized_dark: Selenized Scuro
-    email: Email
-    language_label: Lingua
-    light_theme:
-      selenized_light: Selenized Chiaro
-      white: Bianco
-    password: Password
-    password_confirmation: Conferma Password
-    password_placeholder: Lascia vuoto per mantenere la password attuale
-    save: Salva Preferenze
-    theme_label: Tema
-    title: Preferenze
-  sessions:
-    email: Email
-    login_button: Accedi
-    login_title: Accedi
-    password: Password
+    push:
+      enable: Attiva promemoria
   users:
     profiles:
       edit:
@@ -205,7 +165,9 @@ it:
       show:
         edit: Modifica profilo
         email: Email
+        log_in_on_phone: Accedi da telefono
         name: Nome
+        qr_alt: Codice QR per accedere da un altro dispositivo
         title: Il mio profilo
       update:
         success: Profilo aggiornato con successo

@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.deactivate
+    @user.deactivate!
     redirect_to users_url
   end
 
