@@ -13,7 +13,7 @@ jobs:
     name: i18n normalized
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.0
       - uses: spinel-coop/setup-rv@main
         with:
           ruby-version: current
