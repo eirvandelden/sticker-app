@@ -13,7 +13,7 @@ module Parent
 
     def update
       if @child.user.update(child_user_params)
-        redirect_to parent_children_path, notice: t(".success")
+        redirect_to edit_parent_child_path(@child), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end

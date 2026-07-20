@@ -118,28 +118,18 @@ nl:
       view_history: "📊 Geschiedenis"
     child_profile:
       edit:
-        cancel: Annuleren
+        avatar_label: Kies een nieuwe avatar
+        back: Terug naar dashboard
+        current_avatar: Huidige avatar
+        link: Instellingen voor %{name} bewerken
+        name_label: Naam
         save: Opslaan
         sticker_goal_label: Stickerdoel
         title: Kind-instellingen
     children:
-      edit:
-        cancel: Annuleren
-        name_label: Naam
-        save: Opslaan
-        title: Kind bewerken
-      index:
-        edit_avatar: Avatar bewerken
-        edit_name: Naam bewerken
       update:
         success: Kind succesvol bijgewerkt
     children_avatar:
-      edit:
-        cancel: Annuleren
-        current_avatar: Huidige avatar
-        save: Opslaan
-        title: Avatar bewerken
-        upload_label: Kies een nieuwe avatar
       update:
         success: Avatar succesvol bijgewerkt
     dashboard:

@@ -17,11 +17,6 @@
           <%= image_tag child.user.avatar, size: "40x40", alt: child.user.name %>
         <% end %>
         <h2><%= child.user.name %></h2>
-        <nav>
-          <%= link_to t("parent.children.index.edit_name"), edit_parent_child_path(child) %>
-          <%= link_to t("parent.children.index.edit_avatar"), edit_parent_child_avatar_path(child) %>
-          <%= link_to t("parent.child_profile.edit.title"), edit_parent_child_child_profile_path(child) %>
-        </nav>
       </header>
 
       <%= turbo_stream_from child %>
@@ -44,5 +39,17 @@
       </footer>
     </article>
   <% end %>
+
+  <article>
+    <header>
+      <h2><%= t("parent.child_profile.edit.title") %></h2>
+    </header>
+
+    <nav>
+      <% @children.each do |child| %>
+        <%= link_to t("parent.child_profile.edit.link", name: child.user.name), edit_parent_child_path(child) %>
+      <% end %>
+    </nav>
+  </article>
 
 </main>

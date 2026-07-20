@@ -118,28 +118,18 @@ en:
       view_history: "📊 History"
     child_profile:
       edit:
-        cancel: Cancel
+        avatar_label: Choose a new avatar
+        back: Back to dashboard
+        current_avatar: Current avatar
+        link: Edit %{name} settings
+        name_label: Name
         save: Save
         sticker_goal_label: Sticker goal
         title: Child Settings
     children:
-      edit:
-        cancel: Cancel
-        name_label: Name
-        save: Save
-        title: Edit Child
-      index:
-        edit_avatar: Edit avatar
-        edit_name: Edit name
       update:
         success: Child updated successfully
     children_avatar:
-      edit:
-        cancel: Cancel
-        current_avatar: Current avatar
-        save: Save
-        title: Edit Avatar
-        upload_label: Choose a new avatar
       update:
         success: Avatar updated successfully
     dashboard:

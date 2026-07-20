@@ -118,28 +118,18 @@ it:
       view_history: "📊 Cronologia"
     child_profile:
       edit:
-        cancel: Annulla
+        avatar_label: Scegli un nuovo avatar
+        back: Torna alla dashboard
+        current_avatar: Avatar attuale
+        link: Modifica impostazioni di %{name}
+        name_label: Nome
         save: Salva
         sticker_goal_label: Obiettivo adesivi
         title: Impostazioni bambino
     children:
-      edit:
-        cancel: Annulla
-        name_label: Nome
-        save: Salva
-        title: Modifica bambino
-      index:
-        edit_avatar: Modifica avatar
-        edit_name: Modifica nome
       update:
         success: Bambino aggiornato con successo
     children_avatar:
-      edit:
-        cancel: Annulla
-        current_avatar: Avatar attuale
-        save: Salva
-        title: Modifica avatar
-        upload_label: Scegli un nuovo avatar
       update:
         success: Avatar aggiornato con successo
     dashboard:
