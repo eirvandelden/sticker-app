@@ -15,8 +15,8 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     click_button I18n.t("appkit.preferences.edit.submit", locale: :en)
     assert_current_path edit_preferences_path
 
-    assert_equal "dark", page.evaluate_script("document.documentElement.dataset.colorScheme")
-    assert_equal "solunized-dark", page.evaluate_script("document.documentElement.dataset.theme")
+    assert_selector 'html[data-color-scheme="dark"]', visible: :all
+    assert_selector 'html[data-theme="solunized-dark"]', visible: :all
   end
 
   test "unsaved color scheme is discarded on browser back" do
