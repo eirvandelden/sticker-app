@@ -25,6 +25,7 @@
   </head>
 
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
+    <%= render "appkit/shared/skip_link" %>
     <header>
       <nav data-controller="nav" data-action="click->nav#click">
         <h2><%= t("app.title") %></h2>
@@ -40,7 +41,9 @@
       </nav>
     </header>
     <%= render "appkit/shared/flashes" %>
-    <%= yield %>
+    <main id="main">
+      <%= yield %>
+    </main>
     <fieldset data-controller="push">
       <button type="button" data-action="push#subscribe"><%= t("parent.push.enable") %></button>
     </fieldset>
