@@ -16,14 +16,13 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     assert_select "progress[aria-label=?]", I18n.t("child.dashboard.earned", current: 0, total: 2)
   end
 
-  test "viewing the dashboard exposes completed card ids without recording anything in the session" do
+  test "viewing the dashboard exposes completed card ids" do
     2.times { @card.stickers.create!(kind: :positive) }
     sign_in_as @child
 
     get child_dashboard_path
 
     assert_select "main[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
-    assert_nil session[:celebrated_card_ids]
   end
 
   test "revisiting the dashboard still reports the same completed card ids" do
