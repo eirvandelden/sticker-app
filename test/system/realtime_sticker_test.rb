@@ -205,7 +205,10 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     fill_in "Email address", with: user.email
     fill_in "Password", with: "password"
     click_button "Sign in"
-    assert_current_path parent_children_path
+    # Real POST + redirect racing Capybara's default 2s wait under CI's concurrent
+    # multi-session load; other post-login assertions in this file already use
+    # a generous wait for the same reason.
+    assert_current_path parent_children_path, wait: 10
   end
 
   def post_sticker_for(profile)
