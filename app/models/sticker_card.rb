@@ -67,7 +67,7 @@ class StickerCard < ApplicationRecord
     return unless saved_change_to_completed_at? && completed?
 
     child_profile.broadcast_card_refresh
-    child_profile.broadcast_completion_flag
+    child_profile.broadcast_completion_flag(card_id: id)
   end
 
   def broadcast_reward_given

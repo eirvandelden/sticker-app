@@ -34,12 +34,12 @@ class ChildProfile < ApplicationRecord
     )
   end
 
-  def broadcast_completion_flag
+  def broadcast_completion_flag(card_id:)
     broadcast_replace_to(
       self,
       target: ActionView::RecordIdentifier.dom_id(self, :completion_flag),
       partial: "child/dashboard/completion_flag",
-      locals: { child_profile: self }
+      locals: { child_profile: self, card_id: card_id }
     )
   end
 

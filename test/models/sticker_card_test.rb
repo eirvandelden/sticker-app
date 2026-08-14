@@ -71,6 +71,19 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_includes stream_targets(streams), dom_id(child, :completion_flag)
   end
 
+  test "completion flag broadcast carries the id of the card that completed" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+
+    streams = capture_turbo_stream_broadcasts(child) do
+      card.stickers.create!(kind: :positive)
+    end
+
+    completion_flag_stream = streams.find { |stream| stream["target"] == dom_id(child, :completion_flag) }
+
+    assert_equal card.id.to_s, completion_flag_stream.at_css("[data-card-id]")["data-card-id"]
+  end
+
   test "marking reward as given broadcasts parent card refresh" do
     child = create_child(goal: 1)
     card = child.active_sticker_card
