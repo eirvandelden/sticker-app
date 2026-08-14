@@ -85,6 +85,28 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     end
   end
 
+  # Scenario 14e: Child sees confetti on first visit after card is already completed.
+  test "child sees confetti when visiting the dashboard after their card was completed" do
+    child_user, _profile = child_with_completed_card
+
+    visit session_transfer_path(child_user.transfer_id)
+    assert_current_path child_dashboard_path, wait: 10
+
+    assert_selector "[data-confetti-celebrated='true']", wait: 5
+  end
+
+  # Scenario 14f: Child does not see confetti again on the second visit.
+  test "child does not see confetti again on a second visit after card completion" do
+    child_user, _profile = child_with_completed_card
+
+    visit session_transfer_path(child_user.transfer_id)
+    assert_current_path child_dashboard_path, wait: 10
+    assert_selector "[data-confetti-celebrated='true']", wait: 5
+
+    visit child_dashboard_path
+    assert_no_selector "[data-confetti-celebrated='true']"
+  end
+
   # Scenario 14d: Confetti appears on card completion.
   #
   # Waits for turbo-cable-stream-source[connected] to ensure the ActionCable subscription is
@@ -112,10 +134,40 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     end
   end
 
+  # Scenario 14g: Child does not see confetti a second time for a card they already
+  # celebrated live, once they leave the dashboard and come back.
+  test "child does not see confetti again after revisiting following a live completion" do
+    parent_user = create_realtime_parent
+    child_user, profile = child_ready_for_completion
+
+    using_session(:child) do
+      visit session_transfer_path(child_user.transfer_id)
+      assert_current_path child_dashboard_path, wait: 10
+      assert_selector "progress", wait: 5
+      wait_for_turbo_stream_connection
+    end
+
+    using_session(:parent) do
+      sign_in_parent parent_user
+      post_sticker_for profile
+    end
+
+    using_session(:child) do
+      assert_selector "[data-confetti-celebrated='true']", wait: 10
+
+      visit child_dashboard_path
+      assert_no_selector "[data-confetti-celebrated='true']"
+    end
+  end
+
   private
 
   def child_ready_for_completion
     child_with_progress(goal: 3, stickers: 2)
+  end
+
+  def child_with_completed_card
+    child_with_progress(goal: 2, stickers: 2)
   end
 
   def child_with_progress(goal:, stickers:)
@@ -153,7 +205,10 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     fill_in "Email address", with: user.email
     fill_in "Password", with: "password"
     click_button "Sign in"
-    assert_current_path parent_children_path
+    # Real POST + redirect racing Capybara's default 2s wait under CI's concurrent
+    # multi-session load; other post-login assertions in this file already use
+    # a generous wait for the same reason.
+    assert_current_path parent_children_path, wait: 10
   end
 
   def post_sticker_for(profile)

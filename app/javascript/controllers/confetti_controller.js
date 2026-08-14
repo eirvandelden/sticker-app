@@ -2,12 +2,16 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = {
-    completionFlagId: String
+    completionFlagId: String,
+    childId: String,
+    completedCardIds: Array
   }
 
   connect() {
     this.boundHandleStreamRender = this.handleStreamRender.bind(this)
     document.addEventListener("turbo:before-stream-render", this.boundHandleStreamRender)
+
+    this.completedCardIdsValue.forEach(cardId => this.celebrateUnlessAlreadyCelebrated(cardId))
   }
 
   disconnect() {
@@ -15,9 +19,35 @@ export default class extends Controller {
   }
 
   handleStreamRender(event) {
-    if (this.hasCompletionFlagIdValue && event.detail.newStream.target === this.completionFlagIdValue) {
-      this.celebrate()
-    }
+    if (!this.hasCompletionFlagIdValue || event.detail.newStream.target !== this.completionFlagIdValue) return
+
+    const cardId = event.detail.newStream.templateContent.querySelector("[data-card-id]")?.dataset.cardId
+    if (cardId) this.celebrateUnlessAlreadyCelebrated(cardId)
+  }
+
+  celebrateUnlessAlreadyCelebrated(cardId) {
+    if (this.alreadyCelebrated(cardId)) return
+
+    this.rememberCelebrated(cardId)
+    this.celebrate()
+  }
+
+  alreadyCelebrated(cardId) {
+    return this.celebratedCardIds().includes(String(cardId))
+  }
+
+  rememberCelebrated(cardId) {
+    const ids = this.celebratedCardIds()
+    ids.push(String(cardId))
+    localStorage.setItem(this.storageKey, JSON.stringify(ids))
+  }
+
+  celebratedCardIds() {
+    return JSON.parse(localStorage.getItem(this.storageKey) || "[]")
+  }
+
+  get storageKey() {
+    return `confetti-celebrated-cards-${this.childIdValue}`
   }
 
   celebrate() {

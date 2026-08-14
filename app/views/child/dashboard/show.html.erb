@@ -1,5 +1,7 @@
 <main data-controller="confetti"
-      data-confetti-completion-flag-id-value="<%= dom_id(@child_profile, :completion_flag) %>">
+      data-confetti-completion-flag-id-value="<%= dom_id(@child_profile, :completion_flag) %>"
+      data-confetti-child-id-value="<%= @child_profile.id %>"
+      data-confetti-completed-card-ids-value="<%= @completed_card_ids.to_json %>">
   <header>
     <h1><%= t("child.dashboard.title") %></h1>
   </header>
