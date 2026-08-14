@@ -35,4 +35,16 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
 
     assert_select "main[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
   end
+
+  test "a completed card that already received its reward is not offered for confetti" do
+    2.times { @card.stickers.create!(kind: :positive) }
+    @card.reload.update!(reward_given: true)
+    still_open_card = @profile.active_sticker_card
+    still_open_card.stickers.create!(kind: :positive)
+    sign_in_as @child
+
+    get child_dashboard_path
+
+    assert_select "main[data-confetti-completed-card-ids-value=?]", [ still_open_card.id ].to_json
+  end
 end
