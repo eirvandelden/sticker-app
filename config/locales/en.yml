@@ -65,6 +65,13 @@ en:
     title: Sticker App
   child:
     dashboard:
+      allowances:
+        kleedgeld: Clothing allowance
+        none_owed: Up to date
+        owed:
+          one: "%{count} payment still owed"
+          other: "%{count} payments still owed"
+        zakgeld: Pocket money
       completed:
         one: "You've completed 1 card so far 🎁"
         other: "You've completed %{count} cards so far 🎁"
@@ -94,6 +101,9 @@ en:
         other: "%{count} errors prevented this record from being saved"
   flash:
     parent:
+      allowances:
+        created: Allowance configured
+        updated: Settings saved
       child_profiles:
         updated: Settings saved
       penalties:
@@ -117,8 +127,18 @@ en:
     actions:
       give_penalty: "❌ Give Penalty"
       give_sticker: "🎉 Give Sticker"
+      mark_allowance_given: "💰 Mark given"
       mark_rewarded: "🎁 Mark Rewarded"
       view_history: "📊 History"
+    allowances:
+      amount_label: Amount (in cents)
+      birthdate_label: Date of birth (for Nibud suggestion)
+      due_day_label_weekly: Day of the week
+      frequency_label: Frequency
+      frequency_monthly: Monthly
+      frequency_weekly: Weekly
+      nibud_suggestion: 'Nibud suggestion: %{amount}'
+      save: Save
     child_profile:
       edit:
         avatar_label: Choose a new avatar

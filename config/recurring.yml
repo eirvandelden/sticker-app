@@ -16,3 +16,6 @@ production:
   appkit_session_expiry:
     class: Appkit::SessionExpiryJob
     schedule: every day at midnight
+  allowance_period_granting:
+    class: AllowancePeriodGrantingJob
+    schedule: every day at 6am

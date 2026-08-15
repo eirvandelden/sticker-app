@@ -1,0 +1,15 @@
+zakgeld_one:
+  child_profile: one
+  kind: 0
+  amount_cents: 500
+  frequency: 0
+  due_day: 5
+  next_due_on: <%= Date.today + 7 %>
+
+kleedgeld_one:
+  child_profile: one
+  kind: 1
+  amount_cents: 3000
+  frequency: 1
+  due_day: 1
+  next_due_on: <%= Date.today + 14 %>

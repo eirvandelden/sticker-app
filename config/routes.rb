@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       resource :child_profile, only: :update
       resource :avatar, only: :update, controller: "children_avatar"
       resource :card_goal, only: :update, controller: "sticker_card_goals"
+      resources :allowances, only: [ :create, :update ]
+      resources :allowance_payments, only: [ :create ]
       get "history", to: "stickers#index"
     end
   end

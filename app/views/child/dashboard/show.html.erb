@@ -18,6 +18,23 @@
     </section>
 
     <%= render "child/dashboard/card", child_profile: @child_profile, last_viewed: @last_viewed %>
+
+    <% allowances = [ @child_profile.zakgeld, @child_profile.kleedgeld ].compact %>
+    <% if allowances.any? %>
+      <section>
+        <% allowances.each do |allowance| %>
+          <% owed_count = allowance.owed_periods.count %>
+          <p>
+            <%= t("child.dashboard.allowances.#{allowance.kind}") %>:
+            <% if owed_count > 0 %>
+              <%= t("child.dashboard.allowances.owed", count: owed_count) %>
+            <% else %>
+              <%= t("child.dashboard.allowances.none_owed") %>
+            <% end %>
+          </p>
+        <% end %>
+      </section>
+    <% end %>
   </article>
 
 </div>

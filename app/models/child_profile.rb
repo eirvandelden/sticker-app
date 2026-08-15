@@ -1,6 +1,7 @@
 class ChildProfile < ApplicationRecord
   belongs_to :user
   has_many :sticker_cards, dependent: :destroy
+  has_many :allowances, dependent: :destroy
 
   after_create :provision_initial_sticker_card
   after_update :sync_active_card_sticker_goal, if: :saved_change_to_sticker_goal?
@@ -18,6 +19,14 @@ class ChildProfile < ApplicationRecord
 
   def display_sticker_card
     active_sticker_card
+  end
+
+  def zakgeld
+    allowances.find_by(kind: :zakgeld)
+  end
+
+  def kleedgeld
+    allowances.find_by(kind: :kleedgeld)
   end
 
   def broadcast_card_refresh

@@ -23,4 +23,20 @@
     <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
                   method: :post, class: "button-success" %>
   <% end %>
+
+  <% [ child.zakgeld, child.kleedgeld ].compact.each do |allowance| %>
+    <% owed_count = allowance.owed_periods.count %>
+    <p>
+      <%= t("child.dashboard.allowances.#{allowance.kind}") %>:
+      <% if owed_count > 0 %>
+        <%= t("child.dashboard.allowances.owed", count: owed_count) %>
+        <%= button_to t("parent.actions.mark_allowance_given"),
+                      parent_child_allowance_payments_path(child),
+                      params: { kind: allowance.kind },
+                      method: :post, class: "button-success" %>
+      <% else %>
+        <%= t("child.dashboard.allowances.none_owed") %>
+      <% end %>
+    </p>
+  <% end %>
 </section>
