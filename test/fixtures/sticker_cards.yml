@@ -1,6 +1,8 @@
 one:
   child_profile: one
   sticker_goal: 1
+  goal: New bike
+  goal_overridden: false
   reward_given: false
   completed: false
 

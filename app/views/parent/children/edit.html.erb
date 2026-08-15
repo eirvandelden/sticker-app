@@ -73,6 +73,11 @@
         <%= form.number_field :sticker_goal, min: 1, required: true %>
       </fieldset>
 
+      <fieldset>
+        <label for="child_profile_goal"><%= t("parent.child_profile.edit.goal_label") %></label>
+        <%= form.text_field :goal %>
+      </fieldset>
+
       <nav>
         <%= form.submit t("parent.child_profile.edit.save") %>
       </nav>

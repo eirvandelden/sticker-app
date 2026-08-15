@@ -29,6 +29,10 @@ class StickerCard < ApplicationRecord
     positive_count >= required_stickers
   end
 
+  def override_goal!(new_goal)
+    update!(goal: new_goal, goal_overridden: true)
+  end
+
   def check_and_create_next_card_if_completed
     return unless completed?
     return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
@@ -40,6 +44,7 @@ class StickerCard < ApplicationRecord
 
   def assign_sticker_goal
     self.sticker_goal = child_profile.sticker_goal
+    self.goal = child_profile.goal
   end
 
   def only_complete_cards_can_be_rewarded

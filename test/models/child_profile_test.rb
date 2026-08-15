@@ -56,6 +56,38 @@ class ChildProfileTest < ActiveSupport::TestCase
     assert_equal 4, active_card.reload.sticker_goal
   end
 
+  test "updating default goal propagates to active card when card goal is not overridden" do
+    user = User.create!(name: "Goal Sync Child", email: "goal-sync@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    card = profile.active_sticker_card
+
+    profile.update!(goal: "New bike")
+
+    assert_equal "New bike", card.reload.goal
+  end
+
+  test "updating default goal does not change active card goal when card goal was overridden" do
+    user = User.create!(name: "Goal Override Child", email: "goal-override@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    card = profile.active_sticker_card
+    card.update!(goal: "€2,50", goal_overridden: true)
+
+    profile.update!(goal: "New bike")
+
+    assert_equal "€2,50", card.reload.goal
+  end
+
+  test "new card inherits default goal from child profile" do
+    user = User.create!(name: "Goal Inherit Child", email: "goal-inherit@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    profile.update!(goal: "New bike")
+
+    new_card = profile.sticker_cards.create!
+
+    assert_equal "New bike", new_card.goal
+    assert_equal false, new_card.goal_overridden
+  end
+
   test "display sticker card returns active card when completed card awaits reward" do
     user = User.create!(name: "Display Card Child", email: "display-card@example.com", password: "password", role: :child)
     profile = user.child_profile

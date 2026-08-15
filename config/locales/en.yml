@@ -70,6 +70,7 @@ en:
         other: "You've completed %{count} cards so far 🎁"
       earned: You've earned %{current} out of %{total} stickers.
       gave_you: gave you
+      goal: 'Saving for: %{goal}'
       new_stickers:
         one: "🎉 You got 1 new sticker since last time!"
         other: "🎉 You got %{count} new stickers since last time!"
@@ -100,6 +101,8 @@ en:
       rewards:
         failure: Card is not yet complete.
         success: "🎁 Reward marked as given!"
+      sticker_card_goals:
+        updated: Card goal updated
       stickers:
         created: Sticker added ✅
   footer:
@@ -121,7 +124,7 @@ en:
         avatar_label: Choose a new avatar
         back: Back to dashboard
         current_avatar: Current avatar
-        link: Edit %{name} settings
+        goal_label: Saving for
         name_label: Name
         save: Save
         sticker_goal_label: Sticker goal
@@ -134,6 +137,7 @@ en:
         success: Avatar updated successfully
     dashboard:
       card_completed: Card completed — awaiting reward
+      goal: 'Saving for: %{goal}'
       open_cards:
         one: "%{count} card ready to reward!"
         other: "%{count} cards ready to reward!"
@@ -151,6 +155,9 @@ en:
       title: Sticker History
     push:
       enable: Enable reminders
+    settings:
+      index:
+        title: Settings
   users:
     profiles:
       edit:

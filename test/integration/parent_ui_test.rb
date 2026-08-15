@@ -46,4 +46,34 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "main", count: 1
   end
+
+  test "parent dashboard shows card goal as read-only text" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :parent_card)}" do
+      assert_select "p", text: /New bike/
+    end
+  end
+
+  test "parent dashboard shows inline override form for card goal" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "form[action='#{parent_child_card_goal_path(@profile)}']" do
+      assert_select "input[name='sticker_card[goal]']"
+    end
+  end
+
+  test "parent dashboard shows nothing for goal when card goal is blank" do
+    sticker_cards(:one).update_column(:goal, nil)
+
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :parent_card)} p", text: /Saving for/, count: 0
+  end
 end

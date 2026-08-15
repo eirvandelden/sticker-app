@@ -1,6 +1,7 @@
 one:
   user: user
   sticker_goal: 1
+  goal: New bike
 
 two:
   user: user_two

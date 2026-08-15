@@ -19,7 +19,7 @@ module Parent
     end
 
     def child_profile_params
-      params.expect(child_profile: [ :sticker_goal ])
+      params.expect(child_profile: [ :sticker_goal, :goal ])
     end
   end
 end

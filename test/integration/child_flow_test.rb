@@ -35,6 +35,27 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     assert_select "div[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
   end
 
+  test "child dashboard shows card goal as read-only text" do
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :card)}" do
+      assert_select "p", text: /New bike/
+      assert_select "input[name*='goal']", count: 0
+    end
+  end
+
+  test "child dashboard shows nothing for goal when card goal is blank" do
+    @card.update_column(:goal, nil)
+
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :card)} p", text: /Saving for/, count: 0
+  end
+
   test "a completed card that already received its reward is not offered for confetti" do
     2.times { @card.stickers.create!(kind: :positive) }
     @card.reload.update!(reward_given: true)

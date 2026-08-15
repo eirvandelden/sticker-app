@@ -8,6 +8,15 @@
             aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
   <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
 
+  <% if card.goal.present? %>
+    <p><%= t("parent.dashboard.goal", goal: card.goal) %></p>
+  <% end %>
+
+  <%= form_with url: parent_child_card_goal_path(child), method: :patch do |form| %>
+    <%= form.text_field :goal, name: "sticker_card[goal]", value: card.goal %>
+    <%= form.submit t("parent.child_profile.edit.save") %>
+  <% end %>
+
   <% if rewardable_card %>
     <p><%= t("parent.dashboard.card_completed") %></p>
     <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
