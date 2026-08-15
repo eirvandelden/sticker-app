@@ -1,7 +1,7 @@
 source "https://gem.coop"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.3"
+gem "rails", "~> 8.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 gem "mvpa-css", github: "eirvandelden/mvpa.css"
@@ -20,7 +20,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-gem "bcrypt", "~> 3.1.22"
+gem "bcrypt", "~> 3.1"
 
 gem "exception_notification", ">= 5.0"
 gem "exception_notification-campfire-once", github: "eirvandelden/exception_notification-campfire-once"
@@ -55,13 +55,13 @@ group :development, :test do
   gem "brakeman", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop", "~> 1.89.0", require: false
+  gem "rubocop", "~> 1.89", require: false
   gem "rubocop-rails-omakase", require: false
   gem "rubocop-capybara", require: false
 end
 
 group :development do
-  gem "bundler-audit", "~> 0.9.3"
+  gem "bundler-audit", "~> 0.9"
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
