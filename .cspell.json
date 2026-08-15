@@ -36,6 +36,13 @@
     "stylesheet",
     "stackprof",
     "tsvector",
-    "Opsgenie"
+    "Opsgenie",
+    "zakgeld",
+    "Zakgeld",
+    "kleedgeld",
+    "Kleedgeld",
+    "Nibud",
+    "nibud",
+    "Nibud-advies"
   ]
 }

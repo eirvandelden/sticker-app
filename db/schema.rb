@@ -39,6 +39,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
     t.index [ "blob_id", "variation_digest" ], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "allowance_periods", force: :cascade do |t|
+    t.integer "allowance_id", null: false
+    t.datetime "created_at", null: false
+    t.date "due_on", null: false
+    t.boolean "given", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index [ "allowance_id" ], name: "index_allowance_periods_on_allowance_id"
+  end
+
+  create_table "allowances", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "child_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "due_day", null: false
+    t.integer "frequency", null: false
+    t.integer "kind", null: false
+    t.date "next_due_on", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "child_profile_id", "kind" ], name: "index_allowances_on_child_profile_id_and_kind", unique: true
+    t.index [ "child_profile_id" ], name: "index_allowances_on_child_profile_id"
+  end
+
   create_table "appkit_push_subscriptions", force: :cascade do |t|
     t.string "auth_key"
     t.datetime "created_at", null: false
@@ -52,6 +74,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
   end
 
   create_table "child_profiles", force: :cascade do |t|
+    t.date "birthdate"
     t.datetime "created_at", null: false
     t.string "goal"
     t.integer "sticker_goal", default: 10, null: false
@@ -113,6 +136,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "allowance_periods", "allowances"
+  add_foreign_key "allowances", "child_profiles"
   add_foreign_key "appkit_push_subscriptions", "users"
   add_foreign_key "child_profiles", "users"
   add_foreign_key "sessions", "users"

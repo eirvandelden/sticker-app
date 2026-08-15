@@ -65,6 +65,13 @@ nl:
     title: Sticker App
   child:
     dashboard:
+      allowances:
+        kleedgeld: Kleedgeld
+        none_owed: Up-to-date
+        owed:
+          one: "%{count} keer nog te ontvangen"
+          other: "%{count} keer nog te ontvangen"
+        zakgeld: Zakgeld
       completed:
         one: "Je hebt 1 kaart vol 🎁"
         other: "Je hebt %{count} kaarten vol 🎁"
@@ -94,6 +101,9 @@ nl:
         other: "%{count} fouten verhinderden dat dit record werd opgeslagen"
   flash:
     parent:
+      allowances:
+        created: Zakgeld/kleedgeld ingesteld
+        updated: Instellingen opgeslagen
       child_profiles:
         updated: Instellingen opgeslagen
       penalties:
@@ -117,8 +127,18 @@ nl:
     actions:
       give_penalty: "❌ Geef Straf"
       give_sticker: "🎉 Geef Sticker"
+      mark_allowance_given: "💰 Gegeven"
       mark_rewarded: "🎁 Markeer Beloond"
       view_history: "📊 Geschiedenis"
+    allowances:
+      amount_label: Bedrag (in centen)
+      birthdate_label: Geboortedatum (voor Nibud-advies)
+      due_day_label_weekly: Dag van de week
+      frequency_label: Hoe vaak
+      frequency_monthly: Maandelijks
+      frequency_weekly: Wekelijks
+      nibud_suggestion: 'Nibud-advies: %{amount}'
+      save: Opslaan
     child_profile:
       edit:
         avatar_label: Kies een nieuwe avatar

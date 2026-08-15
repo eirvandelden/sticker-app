@@ -1,0 +1,9 @@
+owed_period_one:
+  allowance: zakgeld_one
+  due_on: <%= Date.today %>
+  given: false
+
+paid_period_one:
+  allowance: zakgeld_one
+  due_on: <%= 1.week.ago.to_date %>
+  given: true

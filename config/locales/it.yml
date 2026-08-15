@@ -65,6 +65,13 @@ it:
     title: Sticker App
   child:
     dashboard:
+      allowances:
+        kleedgeld: Indennità abbigliamento
+        none_owed: In pari
+        owed:
+          one: "%{count} pagamento ancora dovuto"
+          other: "%{count} pagamenti ancora dovuti"
+        zakgeld: Paghetta
       completed:
         one: "Hai completato 1 scheda finora 🎁"
         other: "Hai completato %{count} schede finora 🎁"
@@ -94,6 +101,9 @@ it:
         other: "%{count} errori hanno impedito il salvataggio di questo record"
   flash:
     parent:
+      allowances:
+        created: Indennita configurata
+        updated: Impostazioni salvate
       child_profiles:
         updated: Impostazioni salvate
       penalties:
@@ -117,8 +127,18 @@ it:
     actions:
       give_penalty: "❌ Dai penalita"
       give_sticker: "🎉 Dai adesivo"
+      mark_allowance_given: "💰 Segna pagato"
       mark_rewarded: "🎁 Segna premiato"
       view_history: "📊 Cronologia"
+    allowances:
+      amount_label: Importo (in centesimi)
+      birthdate_label: Data di nascita (per suggerimento Nibud)
+      due_day_label_weekly: Giorno della settimana
+      frequency_label: Frequenza
+      frequency_monthly: Mensile
+      frequency_weekly: Settimanale
+      nibud_suggestion: 'Suggerimento Nibud: %{amount}'
+      save: Salva
     child_profile:
       edit:
         avatar_label: Scegli un nuovo avatar
