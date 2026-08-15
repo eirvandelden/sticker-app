@@ -11,6 +11,7 @@ class StickerCard < ApplicationRecord
   after_save :create_new_card_if_just_completed
   after_save :broadcast_completion
   after_save :broadcast_reward_given
+  after_save :broadcast_goal_change
 
   # TODO: refactor away
   def positive_count
@@ -77,6 +78,12 @@ class StickerCard < ApplicationRecord
 
   def broadcast_reward_given
     return unless saved_change_to_reward_given? && reward_given?
+
+    child_profile.broadcast_card_refresh
+  end
+
+  def broadcast_goal_change
+    return unless saved_change_to_goal?
 
     child_profile.broadcast_card_refresh
   end

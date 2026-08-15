@@ -96,6 +96,17 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_includes stream_targets(streams), dom_id(child, :parent_card)
   end
 
+  test "overriding the card goal broadcasts parent card refresh" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+
+    streams = capture_turbo_stream_broadcasts(child) do
+      card.override_goal!("New bike")
+    end
+
+    assert_includes stream_targets(streams), dom_id(child, :parent_card)
+  end
+
   test "reward cannot be marked if card is incomplete" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
