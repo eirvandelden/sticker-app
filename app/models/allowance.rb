@@ -21,6 +21,8 @@ class Allowance < ApplicationRecord
   end
 
   def next_occurrence_of(day, after:)
+    return nil unless valid_due_day?(day)
+
     if weekly?
       next_weekday(day, after: after)
     else
@@ -29,6 +31,12 @@ class Allowance < ApplicationRecord
   end
 
   private
+
+  def valid_due_day?(day)
+    return false unless day.is_a?(Integer)
+
+    weekly? ? (0..6).cover?(day) : (1..31).cover?(day)
+  end
 
   def next_weekday(wday, after:)
     candidate = after + 1

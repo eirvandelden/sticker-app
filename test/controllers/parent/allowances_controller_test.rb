@@ -30,6 +30,12 @@ module Parent
       assert_response :unprocessable_entity
     end
 
+    test "missing due_day re-renders instead of hanging" do
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly" } }
+      assert_response :unprocessable_entity
+    end
+
     test "updating an allowance amount" do
       allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
                                     frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)

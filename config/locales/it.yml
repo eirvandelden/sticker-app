@@ -133,7 +133,7 @@ it:
     allowances:
       amount_label: Importo (in centesimi)
       birthdate_label: Data di nascita (per suggerimento Nibud)
-      due_day_label_weekly: Giorno della settimana
+      due_day_label: Giorno di scadenza (giorno della settimana per settimanale, giorno del mese per mensile)
       frequency_label: Frequenza
       frequency_monthly: Mensile
       frequency_weekly: Settimanale
