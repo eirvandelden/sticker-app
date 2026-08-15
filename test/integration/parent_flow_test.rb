@@ -24,7 +24,7 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "main > article:last-of-type" do
+    assert_select "div > article:last-of-type" do
       assert_select "h2", text: I18n.t("parent.child_profile.edit.title")
       [ @profile_one, @profile_two, @profile_three ].each do |profile|
         assert_select "a[href='#{edit_parent_child_path(profile)}']",

@@ -39,4 +39,11 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     end
     assert_select ".child-actions", count: 0
   end
+
+  test "parent dashboard has a single main landmark" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+    assert_select "main", count: 1
+  end
 end
