@@ -76,4 +76,15 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "##{dom_id(@profile, :parent_card)} p", text: /Saving for/, count: 0
   end
+
+  test "each child's goal override field has its own id" do
+    other_profile = child_profiles(:two)
+
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "input[id='#{dom_id(@profile, :goal_field)}']", count: 1
+    assert_select "input[id='#{dom_id(other_profile, :goal_field)}']", count: 1
+  end
 end

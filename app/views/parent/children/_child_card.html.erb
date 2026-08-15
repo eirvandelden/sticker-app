@@ -13,7 +13,7 @@
   <% end %>
 
   <%= form_with url: parent_child_card_goal_path(child), method: :patch do |form| %>
-    <%= form.text_field :goal, name: "sticker_card[goal]", value: card.goal %>
+    <%= form.text_field :goal, name: "sticker_card[goal]", value: card.goal, id: dom_id(child, :goal_field) %>
     <%= form.submit t("parent.child_profile.edit.save") %>
   <% end %>
 
