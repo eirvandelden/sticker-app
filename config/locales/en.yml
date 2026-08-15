@@ -133,7 +133,7 @@ en:
     allowances:
       amount_label: Amount (in cents)
       birthdate_label: Date of birth (for Nibud suggestion)
-      due_day_label_weekly: Day of the week
+      due_day_label: Due day (weekday for weekly, day of month for monthly)
       frequency_label: Frequency
       frequency_monthly: Monthly
       frequency_weekly: Weekly

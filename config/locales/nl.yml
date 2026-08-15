@@ -133,7 +133,7 @@ nl:
     allowances:
       amount_label: Bedrag (in centen)
       birthdate_label: Geboortedatum (voor Nibud-advies)
-      due_day_label_weekly: Dag van de week
+      due_day_label: Vervaldag (dag van de week bij wekelijks, dag van de maand bij maandelijks)
       frequency_label: Hoe vaak
       frequency_monthly: Maandelijks
       frequency_weekly: Wekelijks

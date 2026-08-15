@@ -1,4 +1,5 @@
 require "test_helper"
+require "timeout"
 
 class AllowanceTest < ActiveSupport::TestCase
   def setup
@@ -95,6 +96,24 @@ class AllowanceTest < ActiveSupport::TestCase
     assert_no_difference -> { allowance.allowance_periods.count } do
       allowance.grant_due_period!
     end
+  end
+
+  # --- next_occurrence_of (invalid day) ---
+
+  test "next_occurrence_of returns nil instead of hanging when due_day is blank" do
+    allowance = Allowance.new(frequency: :weekly)
+
+    result = Timeout.timeout(2) { allowance.next_occurrence_of(nil, after: Date.today) }
+
+    assert_nil result
+  end
+
+  test "next_occurrence_of returns nil instead of hanging when due_day is not a valid weekday" do
+    allowance = Allowance.new(frequency: :weekly)
+
+    result = Timeout.timeout(2) { allowance.next_occurrence_of(15, after: Date.today) }
+
+    assert_nil result
   end
 
   # --- next_occurrence_of (weekly) ---
