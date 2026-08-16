@@ -58,7 +58,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
     t.date "next_due_on", null: false
     t.datetime "updated_at", null: false
     t.index [ "child_profile_id", "kind" ], name: "index_allowances_on_child_profile_id_and_kind", unique: true
-    t.index [ "child_profile_id" ], name: "index_allowances_on_child_profile_id"
   end
 
   create_table "appkit_push_subscriptions", force: :cascade do |t|
