@@ -9,7 +9,7 @@ class Allowance < ApplicationRecord
   validates :kind, uniqueness: { scope: :child_profile_id }
 
   def owed_periods
-    allowance_periods.where(given: false)
+    allowance_periods.to_a.reject(&:given?)
   end
 
   def grant_due_period!

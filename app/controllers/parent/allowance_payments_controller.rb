@@ -6,7 +6,7 @@ module Parent
       child    = ChildProfile.find(params[:child_id])
       kind     = params[:kind]
       allowance = child.allowances.find_by(kind: kind)
-      period   = allowance&.owed_periods&.order(due_on: :asc)&.first
+      period   = allowance&.owed_periods&.min_by(&:due_on)
 
       period&.update(given: true)
 
