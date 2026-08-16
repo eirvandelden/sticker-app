@@ -46,4 +46,53 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "main", count: 1
   end
+
+  test "parent dashboard shows card goal as read-only text" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :parent_card)}" do
+      assert_select "p", text: /New bike/
+    end
+  end
+
+  test "parent dashboard shows inline override form for card goal" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "form[action='#{parent_child_card_goal_path(@profile)}']" do
+      assert_select "input[name='sticker_card[goal]']"
+    end
+  end
+
+  test "parent dashboard shows nothing for goal when card goal is blank" do
+    sticker_cards(:one).update_column(:goal, nil)
+
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "##{dom_id(@profile, :parent_card)} p", text: /Saving for/, count: 0
+  end
+
+  test "each child's goal override field has its own id" do
+    other_profile = child_profiles(:two)
+
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "input[id='#{dom_id(@profile, :goal_field)}']", count: 1
+    assert_select "input[id='#{dom_id(other_profile, :goal_field)}']", count: 1
+  end
+
+  test "goal override field has an associated label" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "label[for='#{dom_id(@profile, :goal_field)}']", text: I18n.t("parent.child_profile.edit.goal_label")
+  end
 end

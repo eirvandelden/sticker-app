@@ -11,6 +11,7 @@ class StickerCard < ApplicationRecord
   after_save :create_new_card_if_just_completed
   after_save :broadcast_completion
   after_save :broadcast_reward_given
+  after_save :broadcast_goal_change
 
   # TODO: refactor away
   def positive_count
@@ -29,6 +30,10 @@ class StickerCard < ApplicationRecord
     positive_count >= required_stickers
   end
 
+  def override_goal!(new_goal)
+    update!(goal: new_goal, goal_overridden: true)
+  end
+
   def check_and_create_next_card_if_completed
     return unless completed?
     return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
@@ -40,6 +45,7 @@ class StickerCard < ApplicationRecord
 
   def assign_sticker_goal
     self.sticker_goal = child_profile.sticker_goal
+    self.goal = child_profile.goal
   end
 
   def only_complete_cards_can_be_rewarded
@@ -72,6 +78,12 @@ class StickerCard < ApplicationRecord
 
   def broadcast_reward_given
     return unless saved_change_to_reward_given? && reward_given?
+
+    child_profile.broadcast_card_refresh
+  end
+
+  def broadcast_goal_change
+    return unless saved_change_to_goal?
 
     child_profile.broadcast_card_refresh
   end

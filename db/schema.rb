@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_205648) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -53,6 +53,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_205648) do
 
   create_table "child_profiles", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "goal"
     t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -76,6 +77,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_205648) do
     t.boolean "completed"
     t.datetime "completed_at"
     t.datetime "created_at", null: false
+    t.string "goal"
+    t.boolean "goal_overridden", default: false, null: false
     t.boolean "reward_given"
     t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false

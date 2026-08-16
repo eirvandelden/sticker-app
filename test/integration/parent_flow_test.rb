@@ -18,22 +18,15 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "parent sees child settings links below child cards" do
+  test "parent dashboard shows one Settings link and no per-child edit links" do
     sign_in_as @parent
     get parent_children_path
 
     assert_response :success
-
-    assert_select "div > article:last-of-type" do
-      assert_select "h2", text: I18n.t("parent.child_profile.edit.title")
-      [ @profile_one, @profile_two, @profile_three ].each do |profile|
-        assert_select "a[href='#{edit_parent_child_path(profile)}']",
-                      text: "Edit #{profile.user.name} settings", count: 1
-      end
-    end
+    assert_select "a[href='#{parent_settings_path}']", count: 1
 
     [ @profile_one, @profile_two, @profile_three ].each do |profile|
-      assert_select "article[data-controller='confetti'] a[href='#{edit_parent_child_path(profile)}']", count: 0
+      assert_select "a[href='#{edit_parent_child_path(profile)}']", count: 0
     end
   end
 

@@ -15,12 +15,15 @@ Rails.application.routes.draw do
   end
 
   namespace :parent do
+    get "settings", to: "settings#index", as: :settings
+
     resources :children, only: [ :index, :show, :edit, :update ] do
       resource :sticker, only: [ :create ]
       resource :penalty, only: [ :create ]
       resource :reward, only: [ :create ]
       resource :child_profile, only: :update
       resource :avatar, only: :update, controller: "children_avatar"
+      resource :card_goal, only: :update, controller: "sticker_card_goals"
       get "history", to: "stickers#index"
     end
   end

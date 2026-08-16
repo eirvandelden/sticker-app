@@ -1,0 +1,11 @@
+<main>
+  <header>
+    <h1><%= t("parent.settings.index.title") %></h1>
+  </header>
+
+  <nav>
+    <% @children.each do |child| %>
+      <%= link_to child.user.name, edit_parent_child_path(child) %>
+    <% end %>
+  </nav>
+</main>
