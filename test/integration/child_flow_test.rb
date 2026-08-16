@@ -22,7 +22,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_select "main[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
+    assert_select "div[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
   end
 
   test "revisiting the dashboard still reports the same completed card ids" do
@@ -32,7 +32,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     get child_dashboard_path
     get child_dashboard_path
 
-    assert_select "main[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
+    assert_select "div[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
   end
 
   test "a completed card that already received its reward is not offered for confetti" do
@@ -44,6 +44,13 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_select "main[data-confetti-completed-card-ids-value=?]", [ still_open_card.id ].to_json
+    assert_select "div[data-confetti-completed-card-ids-value=?]", [ still_open_card.id ].to_json
+  end
+
+  test "child dashboard has a single main landmark" do
+    sign_in_as @child
+    get child_dashboard_path
+    assert_response :success
+    assert_select "main", count: 1
   end
 end
