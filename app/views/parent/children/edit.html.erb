@@ -90,9 +90,19 @@
   </article>
 
   <% [ :zakgeld, :kleedgeld ].each do |kind| %>
-    <% allowance = @child.allowances.find_by(kind: kind) %>
+    <% allowance = @invalid_allowance&.kind&.to_sym == kind ? @invalid_allowance : @child.allowances.find_by(kind: kind) %>
     <article>
-      <% if allowance %>
+      <% if allowance&.errors&.any? %>
+        <aside role="alert">
+          <ul>
+            <% allowance.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </aside>
+      <% end %>
+
+      <% if allowance&.persisted? %>
         <% nibud = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: allowance.frequency.to_sym) %>
         <%= form_with model: allowance, url: parent_child_allowance_path(@child, allowance), method: :patch do |form| %>
           <fieldset>

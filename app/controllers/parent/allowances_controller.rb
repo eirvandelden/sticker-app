@@ -10,7 +10,7 @@ module Parent
       if allowance.save
         redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.created")
       else
-        @child_profile = @child
+        @invalid_allowance = allowance
         render "parent/children/edit", status: :unprocessable_entity
       end
     end
@@ -21,7 +21,7 @@ module Parent
       if allowance.update(allowance_params)
         redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.updated")
       else
-        @child_profile = @child
+        @invalid_allowance = allowance
         render "parent/children/edit", status: :unprocessable_entity
       end
     end
