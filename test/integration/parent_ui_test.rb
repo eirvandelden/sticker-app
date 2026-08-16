@@ -87,4 +87,12 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_select "input[id='#{dom_id(@profile, :goal_field)}']", count: 1
     assert_select "input[id='#{dom_id(other_profile, :goal_field)}']", count: 1
   end
+
+  test "goal override field has an associated label" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_response :success
+    assert_select "label[for='#{dom_id(@profile, :goal_field)}']", text: I18n.t("parent.child_profile.edit.goal_label")
+  end
 end
