@@ -22,11 +22,11 @@ class ChildProfile < ApplicationRecord
   end
 
   def zakgeld
-    allowances.find_by(kind: :zakgeld)
+    allowances.detect { |allowance| allowance.kind == "zakgeld" }
   end
 
   def kleedgeld
-    allowances.find_by(kind: :kleedgeld)
+    allowances.detect { |allowance| allowance.kind == "kleedgeld" }
   end
 
   def broadcast_card_refresh
