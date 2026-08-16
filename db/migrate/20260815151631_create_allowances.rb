@@ -1,7 +1,7 @@
 class CreateAllowances < ActiveRecord::Migration[8.1]
   def change
     create_table :allowances do |t|
-      t.references :child_profile, null: false, foreign_key: true
+      t.references :child_profile, null: false, foreign_key: true, index: false
       t.integer :kind, null: false
       t.integer :amount_cents, null: false
       t.integer :frequency, null: false
