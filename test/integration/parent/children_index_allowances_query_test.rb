@@ -32,6 +32,6 @@ class Parent::ChildrenIndexAllowancesQueryTest < ActionDispatch::IntegrationTest
   end
 
   def allowance_query?(payload)
-    payload[:name] != "SCHEMA" && payload[:sql].match?(/\ballowances\b/)
+    payload[:name] != "SCHEMA" && payload[:sql].match?(/\b(allowances|allowance_periods)\b/)
   end
 end
