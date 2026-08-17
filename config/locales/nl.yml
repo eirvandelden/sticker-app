@@ -103,6 +103,7 @@ nl:
     parent:
       allowances:
         created: Zakgeld/kleedgeld ingesteld
+        destroyed: Zakgeld/kleedgeld uitgeschakeld
         updated: Instellingen opgeslagen
       child_profiles:
         updated: Instellingen opgeslagen
@@ -139,6 +140,7 @@ nl:
       frequency_weekly: Wekelijks
       nibud_suggestion: 'Nibud-advies: %{amount}'
       save: Opslaan
+      turn_off: Uitschakelen
     child_profile:
       edit:
         avatar_label: Kies een nieuwe avatar

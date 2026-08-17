@@ -121,13 +121,15 @@
             <label><%= t("parent.allowances.amount_label") %></label>
             <%= form.number_field :amount_cents, min: 1, required: true %>
             <% if nibud %>
-              <small><%= t("parent.allowances.nibud_suggestion", amount: number_to_currency(nibud / 100.0)) %></small>
+              <small><%= t("parent.allowances.nibud_suggestion", amount: nibud) %></small>
             <% end %>
           </fieldset>
           <nav>
             <%= form.submit t("parent.allowances.save") %>
           </nav>
         <% end %>
+        <%= button_to t("parent.allowances.turn_off"), parent_child_allowance_path(@child, allowance),
+                      method: :delete, class: "button-danger" %>
       <% else %>
         <% nibud_weekly  = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :weekly) %>
         <% nibud_monthly = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :monthly) %>
@@ -143,10 +145,10 @@
             <%= form.number_field "allowance[amount_cents]", min: 1, required: true,
                                   placeholder: nibud_weekly || nibud_monthly %>
             <% if nibud_weekly %>
-              <small><%= t("parent.allowances.nibud_suggestion", amount: number_to_currency(nibud_weekly / 100.0)) %> (<%= t("parent.allowances.frequency_weekly").downcase %>)</small>
+              <small><%= t("parent.allowances.nibud_suggestion", amount: nibud_weekly) %> (<%= t("parent.allowances.frequency_weekly").downcase %>)</small>
             <% end %>
             <% if nibud_monthly %>
-              <small><%= t("parent.allowances.nibud_suggestion", amount: number_to_currency(nibud_monthly / 100.0)) %> (<%= t("parent.allowances.frequency_monthly").downcase %>)</small>
+              <small><%= t("parent.allowances.nibud_suggestion", amount: nibud_monthly) %> (<%= t("parent.allowances.frequency_monthly").downcase %>)</small>
             <% end %>
           </fieldset>
           <fieldset>

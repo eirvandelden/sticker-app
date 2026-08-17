@@ -26,6 +26,11 @@ module Parent
       end
     end
 
+    def destroy
+      @child.allowances.find(params[:id]).destroy
+      redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.destroyed")
+    end
+
     private
 
     def set_child
