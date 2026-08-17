@@ -103,6 +103,7 @@ it:
     parent:
       allowances:
         created: Indennita configurata
+        destroyed: Indennita disattivata
         updated: Impostazioni salvate
       child_profiles:
         updated: Impostazioni salvate
@@ -139,6 +140,7 @@ it:
       frequency_weekly: Settimanale
       nibud_suggestion: 'Suggerimento Nibud: %{amount}'
       save: Salva
+      turn_off: Disattiva
     child_profile:
       edit:
         avatar_label: Scegli un nuovo avatar

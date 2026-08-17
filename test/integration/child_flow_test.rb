@@ -74,4 +74,40 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "main", count: 1
   end
+
+  # Scenario 14: child with zakgeld owed sees how many times they're owed
+  test "child dashboard shows zakgeld as owed when a period is unpaid" do
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_select "p", text: /Pocket money.*1 payment still owed/
+  end
+
+  # Scenario 15: child with an allowance up to date sees no owed count
+  test "child dashboard shows kleedgeld as up to date when nothing is owed" do
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_select "p", text: /Clothing allowance.*Up to date/
+  end
+
+  # Scenario 16: child with no allowances sees no allowance section at all
+  test "child dashboard shows no allowance section when none are configured" do
+    child_without_allowances = users(:user_two)
+    sign_in_as child_without_allowances
+
+    get child_dashboard_path
+
+    assert_select "p", text: /Pocket money/, count: 0
+    assert_select "p", text: /Clothing allowance/, count: 0
+  end
+
+  # Scenario 17: zakgeld and kleedgeld owed counts are shown distinctly, not merged
+  test "child dashboard shows zakgeld and kleedgeld owed counts independently" do
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_select "p", text: /Pocket money.*1 payment still owed/
+    assert_select "p", text: /Clothing allowance.*Up to date/
+  end
 end

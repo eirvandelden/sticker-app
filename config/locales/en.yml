@@ -103,6 +103,7 @@ en:
     parent:
       allowances:
         created: Allowance configured
+        destroyed: Allowance turned off
         updated: Settings saved
       child_profiles:
         updated: Settings saved
@@ -139,6 +140,7 @@ en:
       frequency_weekly: Weekly
       nibud_suggestion: 'Nibud suggestion: %{amount}'
       save: Save
+      turn_off: Turn off
     child_profile:
       edit:
         avatar_label: Choose a new avatar

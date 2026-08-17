@@ -100,5 +100,36 @@ module Parent
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly", due_day: 5 } }
       assert_response :redirect
     end
+
+    test "turning off an allowance removes it" do
+      allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                                    frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
+
+      assert_difference -> { Allowance.count }, -1 do
+        delete parent_child_allowance_path(@child, allowance)
+      end
+      assert_redirected_to edit_parent_child_path(@child)
+    end
+
+    test "turning off an allowance also removes its owed periods" do
+      allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                                    frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
+      allowance.allowance_periods.create!(due_on: Date.today)
+
+      assert_difference -> { AllowancePeriod.count }, -1 do
+        delete parent_child_allowance_path(@child, allowance)
+      end
+    end
+
+    test "turning off one allowance leaves the child's other allowance untouched" do
+      zakgeld = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                                  frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
+      kleedgeld = Allowance.create!(child_profile: @child, kind: :kleedgeld, amount_cents: 3000,
+                                    frequency: :monthly, due_day: 1, next_due_on: Date.today + 30)
+
+      delete parent_child_allowance_path(@child, zakgeld)
+
+      assert Allowance.exists?(kleedgeld.id)
+    end
   end
 end
