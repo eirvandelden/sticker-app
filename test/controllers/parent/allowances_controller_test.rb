@@ -43,6 +43,18 @@ module Parent
       assert_response :unprocessable_entity
     end
 
+    test "unrecognized kind re-renders instead of crashing" do
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "bogus", amount_cents: 500, frequency: "weekly", due_day: 5 } }
+      assert_response :unprocessable_entity
+    end
+
+    test "unrecognized frequency re-renders instead of crashing" do
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "bogus", due_day: 5 } }
+      assert_response :unprocessable_entity
+    end
+
     test "updating an allowance amount" do
       allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
                                     frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
@@ -50,6 +62,19 @@ module Parent
             params: { allowance: { amount_cents: 750 } }
       assert_redirected_to edit_parent_child_path(@child)
       assert_equal 750, allowance.reload.amount_cents
+    end
+
+    test "updating an allowance leaves its kind, frequency and due day untouched" do
+      allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                                    frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
+      patch parent_child_allowance_path(@child, allowance),
+            params: { allowance: { amount_cents: 750, kind: "kleedgeld", frequency: "monthly", due_day: 31 } }
+
+      allowance.reload
+      assert_equal 750, allowance.amount_cents
+      assert_equal "zakgeld", allowance.kind
+      assert_equal "weekly", allowance.frequency
+      assert_equal 5, allowance.due_day
     end
 
     test "invalid update re-render shows why the allowance was not saved" do

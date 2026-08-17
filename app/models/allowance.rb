@@ -8,6 +8,18 @@ class Allowance < ApplicationRecord
   validates :kind, :amount_cents, :frequency, :due_day, :next_due_on, presence: true
   validates :kind, uniqueness: { scope: :child_profile_id }
 
+  def kind=(value)
+    super
+  rescue ArgumentError
+    nil
+  end
+
+  def frequency=(value)
+    super
+  rescue ArgumentError
+    nil
+  end
+
   def owed_periods
     allowance_periods.to_a.reject(&:given?)
   end

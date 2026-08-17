@@ -18,7 +18,7 @@ module Parent
     def update
       allowance = @child.allowances.find(params[:id])
 
-      if allowance.update(allowance_params)
+      if allowance.update(amount_params)
         redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.updated")
       else
         @invalid_allowance = allowance
@@ -34,6 +34,10 @@ module Parent
 
     def allowance_params
       params.expect(allowance: [ :kind, :amount_cents, :frequency, :due_day ])
+    end
+
+    def amount_params
+      params.expect(allowance: [ :amount_cents ])
     end
   end
 end

@@ -26,6 +26,22 @@ class AllowanceTest < ActiveSupport::TestCase
     assert_not duplicate.valid?
   end
 
+  test "assigning an unrecognized kind is rejected instead of raising" do
+    allowance = Allowance.new(child_profile: @child)
+
+    allowance.kind = "bogus"
+
+    assert_nil allowance.kind
+  end
+
+  test "assigning an unrecognized frequency is rejected instead of raising" do
+    allowance = Allowance.new(child_profile: @child)
+
+    allowance.frequency = "bogus"
+
+    assert_nil allowance.frequency
+  end
+
   test "two different kinds allowed for same child" do
     Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
                       frequency: :weekly, due_day: 5, next_due_on: Date.today)
