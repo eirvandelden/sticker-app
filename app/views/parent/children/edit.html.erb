@@ -89,6 +89,18 @@
     <% end %>
   </article>
 
+  <% if @invalid_allowance && @invalid_allowance.kind.nil? %>
+    <article>
+      <aside role="alert">
+        <ul>
+          <% @invalid_allowance.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </aside>
+    </article>
+  <% end %>
+
   <% [ :zakgeld, :kleedgeld ].each do |kind| %>
     <% allowance = @invalid_allowance&.kind&.to_sym == kind ? @invalid_allowance : @child.allowances.find_by(kind: kind) %>
     <article>

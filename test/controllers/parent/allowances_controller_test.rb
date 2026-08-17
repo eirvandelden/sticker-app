@@ -49,6 +49,13 @@ module Parent
       assert_response :unprocessable_entity
     end
 
+    test "unrecognized kind re-render shows why the allowance was not saved" do
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "bogus", amount_cents: 500, frequency: "weekly", due_day: 5 } }
+
+      assert_select "aside[role=alert]", text: /Kind/
+    end
+
     test "unrecognized frequency re-renders instead of crashing" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "bogus", due_day: 5 } }
