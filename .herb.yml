@@ -2,3 +2,4 @@ linter:
   exclude:
     - "public/**/*"
     - "node_modules/**/*"
+    - "vendor/**/*"
