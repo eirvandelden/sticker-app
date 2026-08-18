@@ -30,6 +30,14 @@ module Parent
       assert_response :unprocessable_entity
     end
 
+    test "invalid params re-render keeps the frequency and due day the parent typed" do
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "zakgeld", amount_cents: "", frequency: "monthly", due_day: 17 } }
+
+      assert_select "select[name='allowance[frequency]'] option[selected][value=monthly]"
+      assert_select "input[name='allowance[due_day]'][value='17']"
+    end
+
     test "invalid params re-render shows why the allowance was not saved" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: "", frequency: "weekly", due_day: 5 } }

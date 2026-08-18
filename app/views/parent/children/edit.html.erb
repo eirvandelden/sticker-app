@@ -133,16 +133,17 @@
       <% else %>
         <% nibud_weekly  = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :weekly) %>
         <% nibud_monthly = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :monthly) %>
-        <%= form_with url: parent_child_allowances_path(@child), method: :post do |form| %>
+        <%= form_with model: (allowance || @child.allowances.build(kind: kind)),
+                      url: parent_child_allowances_path(@child), method: :post do |form| %>
           <fieldset>
             <label><%= t("parent.allowances.frequency_label") %></label>
-            <%= form.select "allowance[frequency]",
+            <%= form.select :frequency,
                             [ [ t("parent.allowances.frequency_weekly"), "weekly" ],
                               [ t("parent.allowances.frequency_monthly"), "monthly" ] ] %>
           </fieldset>
           <fieldset>
             <label><%= t("parent.allowances.amount_label") %></label>
-            <%= form.number_field "allowance[amount_cents]", min: 1, required: true,
+            <%= form.number_field :amount_cents, min: 1, required: true,
                                   placeholder: nibud_weekly || nibud_monthly %>
             <% if nibud_weekly %>
               <small><%= t("parent.allowances.nibud_suggestion", amount: nibud_weekly) %> (<%= t("parent.allowances.frequency_weekly").downcase %>)</small>
@@ -153,9 +154,9 @@
           </fieldset>
           <fieldset>
             <label><%= t("parent.allowances.due_day_label") %></label>
-            <%= form.number_field "allowance[due_day]", min: 0, max: 31, required: true %>
+            <%= form.number_field :due_day, min: 0, max: 31, required: true %>
           </fieldset>
-          <%= form.hidden_field "allowance[kind]", value: kind %>
+          <%= form.hidden_field :kind %>
           <nav>
             <%= form.submit t("parent.allowances.save") %>
           </nav>
