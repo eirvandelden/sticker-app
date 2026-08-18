@@ -1,0 +1,11 @@
+{
+  "name": "sticker-app",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "git@github.com:eirvandelden/sticker-app.git",
+  "author": "Etienne van Delden de la Haije <etienne@vandelden.family>",
+  "license": "MIT",
+  "devDependencies": {
+    "@herb-tools/linter": "^0.10.3"
+  }
+}

@@ -19,3 +19,19 @@ jobs:
           ruby-version: current
           install-gems: true
       - run: bundle exec ruby ./bin/check_i18n_normalized
+
+  erb-lint:
+    name: erb lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: spinel-coop/setup-rv@main
+        with:
+          ruby-version: current
+          install-gems: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: yarn install --frozen-lockfile
+      - run: bin/erb_lint --lint-all --allow-no-files
+      - run: npx @herb-tools/linter

@@ -58,6 +58,11 @@ group :development, :test do
   gem "rubocop", "~> 1.89", require: false
   gem "rubocop-rails-omakase", require: false
   gem "rubocop-capybara", require: false
+
+  # HTML+ERB linter [https://herb-tools.dev]
+  gem "herb", require: false
+  # ERB linter for templates that aren't HTML [https://github.com/Shopify/erb-lint]
+  gem "erb_lint", require: false
 end
 
 group :development do
