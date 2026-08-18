@@ -5,11 +5,12 @@
     <div class="flex align-center gap">
       <% if Current.user != user %>
         <%= translation_button(:transfer_session) %>
-        <strong id="session_transfer_label" class="txt-align-start">Share to get them back into their account</strong>
+        <% transfer_label_text = "Share to get them back into their account" %>
       <% else %>
         <%= translation_button(:transfer_session_self) %>
-        <strong id="session_transfer_label" class="txt-align-start">Link to automatically log in on another device</strong>
+        <% transfer_label_text = "Link to automatically log in on another device" %>
       <% end %>
+      <strong id="session_transfer_label" class="txt-align-start"><%= transfer_label_text %></strong>
     </div>
     <span class="flex align-center gap margin-inline">
       <input type="text" class="input fill-white" id="session_transfer_url" value="<%= url %>" aria-labelledby="session_transfer_label" autocomplete="off" readonly>
@@ -19,7 +20,7 @@
   <div class="flex align-center gap">
     <div data-controller="dialog" class="flex-inline">
       <%= tag.button class: "btn", data: { action: "dialog#open" } do %>
-        <%= image_tag "qr-code.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black" %>
+        <%= image_tag "qr-code.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black", alt: "" %>
         <span class="for-screen-reader">Show auto-login QR code</span>
       <% end %>
 
@@ -28,7 +29,7 @@
 
         <form method="dialog" class="flex justify-center">
           <button class="btn panel__close" title="Close (esc)">
-            <%= image_tag "remove.svg", aria: { hidden: true }, size: 24 %>
+            <%= image_tag "remove.svg", aria: { hidden: true }, size: 24, alt: "" %>
             <span class="for-screen-reader">Close (esc)</span>
           </button>
         </form>
@@ -36,12 +37,12 @@
     </div>
 
     <%= button_to_copy_to_clipboard(url) do %>
-      <%= image_tag "copy-paste.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black" %>
+      <%= image_tag "copy-paste.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black", alt: "" %>
       <span class="for-screen-reader">Copy auto-login link</span>
     <% end %>
 
     <%= web_share_button(url, "Your sign-in link", "This is your own private sign-in URL, DO NOT SHARE IT. Use it to sign-in on another device or if you get locked out.") do %>
-      <%= image_tag "share.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black" %>
+      <%= image_tag "share.svg", aria: { hidden: "true" }, size: 24, class: "colorize--black", alt: "" %>
       <span class="for-screen-reader">Share auto-login link</span>
     <% end %>
   </div>

@@ -47,8 +47,10 @@
       <p><%= t("child.dashboard.goal", goal: card.goal) %></p>
     <% end %>
 
-    <p><%= t("child.dashboard.completed", count: child_profile.sticker_cards.where.not(completed_at: nil).count) %></p>
+    <% completed_message = t("child.dashboard.completed", count: child_profile.sticker_cards.where.not(completed_at: nil).count) %>
   <% else %>
-    <p><%= t("child.dashboard.no_card") %></p>
+    <% completed_message = t("child.dashboard.no_card") %>
   <% end %>
+
+  <p><%= completed_message %></p>
 </section>
