@@ -1,0 +1,4 @@
+---
+glob: "**/*.erb"
+exclude:
+  - "**/node_modules/**/*"
