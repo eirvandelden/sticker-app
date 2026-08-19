@@ -13,6 +13,10 @@ module Parent
         @invalid_allowance = allowance
         render "parent/children/edit", status: :unprocessable_entity
       end
+    rescue ActiveRecord::RecordNotUnique
+      allowance.errors.add(:kind, :taken)
+      @invalid_allowance = allowance
+      render "parent/children/edit", status: :unprocessable_entity
     end
 
     def update

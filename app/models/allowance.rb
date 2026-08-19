@@ -30,7 +30,12 @@ class Allowance < ApplicationRecord
     return if next_due_on > Date.today
     return if allowance_periods.exists?(due_on: next_due_on)
 
-    allowance_periods.create!(due_on: next_due_on)
+    begin
+      allowance_periods.create!(due_on: next_due_on)
+    rescue ActiveRecord::RecordNotUnique
+      return
+    end
+
     update!(next_due_on: next_occurrence_of(due_day, after: next_due_on))
   end
 
