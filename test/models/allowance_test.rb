@@ -18,6 +18,13 @@ class AllowanceTest < ActiveSupport::TestCase
     assert allowance.errors[:next_due_on].any?
   end
 
+  test "rejects a zero or negative amount" do
+    allowance = Allowance.new(child_profile: @child, kind: :zakgeld, amount_cents: 0,
+                              frequency: :weekly, due_day: 5, next_due_on: Date.today)
+    assert_not allowance.valid?
+    assert allowance.errors[:amount_cents].any?
+  end
+
   test "one allowance per child per kind" do
     Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
                       frequency: :weekly, due_day: 5, next_due_on: Date.today)

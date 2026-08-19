@@ -7,6 +7,7 @@ class Allowance < ApplicationRecord
 
   validates :kind, :amount_cents, :frequency, :due_day, :next_due_on, presence: true
   validates :kind, uniqueness: { scope: :child_profile_id }
+  validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
 
   def kind=(value)
     super
