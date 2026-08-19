@@ -135,6 +135,20 @@ class AllowanceTest < ActiveSupport::TestCase
     end
   end
 
+  test "grant_due_period! does not create a second period when a race slips past the exists? check" do
+    today = Date.today
+    allowance = Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                                  frequency: :weekly, due_day: today.wday, next_due_on: today)
+    allowance.allowance_periods.create!(due_on: today)
+
+    # Simulates a second worker whose exists? check ran before the first worker's period committed.
+    allowance.allowance_periods.define_singleton_method(:exists?) { |*| false }
+
+    assert_no_difference -> { AllowancePeriod.count } do
+      allowance.grant_due_period!
+    end
+  end
+
   # --- next_occurrence_of (invalid day) ---
 
   test "next_occurrence_of returns nil instead of hanging when due_day is blank" do

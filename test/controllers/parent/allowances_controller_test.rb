@@ -102,6 +102,22 @@ module Parent
       assert_select "aside[role=alert]", text: /Amount cents/
     end
 
+    test "double-submitting the same allowance shows an error instead of crashing" do
+      Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                        frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
+
+      # Simulates two near-simultaneous submits both passing the app-level uniqueness
+      # check before either has inserted, leaving only the database's unique index to reject it.
+      Allowance.define_method(:valid?) { |*| true }
+
+      post parent_child_allowances_path(@child),
+           params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly", due_day: 5 } }
+
+      assert_response :unprocessable_entity
+    ensure
+      Allowance.remove_method(:valid?)
+    end
+
     test "requires parent login" do
       delete session_path
       post parent_child_allowances_path(@child),
