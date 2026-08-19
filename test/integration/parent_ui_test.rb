@@ -49,7 +49,15 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     get parent_children_path
     assert_response :success
     assert_select "article progress", minimum: 1
-    assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: 2)
+    assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
+  end
+
+  test "parent dashboard progress shows the goal and failure count separately, not merged" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+
+    assert_select "##{dom_id(@profile, :parent_card)} p", text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
   end
 
   test "parent dashboard wraps sticker and penalty buttons in semantic footer" do

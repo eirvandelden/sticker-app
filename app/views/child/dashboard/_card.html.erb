@@ -8,19 +8,14 @@
     <% required = card.required_stickers %>
     <% new_stickers = card.stickers.positive.where("created_at > ?", last_viewed).count if last_viewed %>
 
-    <p>
-      <%= earned %>/<%= required %>
-      <% if card.negative_count > 0 %>
-        <span class="penalty-count">+<%= card.negative_count %></span>
-      <% end %>
-    </p>
+    <p><%= earned %>/<%= card.progress_total_label %></p>
 
     <% if new_stickers.to_i > 0 %>
       <p><strong><%= t("child.dashboard.new_stickers", count: new_stickers) %></strong></p>
     <% end %>
 
     <progress value="<%= earned %>" max="<%= required %>"
-              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
+              aria-label="<%= t("child.dashboard.earned", current: earned, total: card.progress_total_label) %>"></progress>
 
     <article class="stickers">
       <% all_stickers = [] %>

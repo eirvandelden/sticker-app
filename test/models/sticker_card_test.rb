@@ -107,6 +107,21 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_includes stream_targets(streams), dom_id(child, :parent_card)
   end
 
+  test "progress total label is just the goal when there are no failures" do
+    child = create_child(goal: 5)
+    card = child.active_sticker_card
+
+    assert_equal "5", card.progress_total_label
+  end
+
+  test "progress total label shows the goal and failure count separately" do
+    child = create_child(goal: 5)
+    card = child.active_sticker_card
+    2.times { card.stickers.create!(kind: :negative) }
+
+    assert_equal "5+2", card.progress_total_label
+  end
+
   test "card is open once completed and not yet rewarded" do
     child = create_child(goal: 1)
     card = child.active_sticker_card

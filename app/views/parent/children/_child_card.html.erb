@@ -5,8 +5,8 @@
   <% needed = card.required_stickers %>
 
   <progress value="<%= total_stickers %>" max="<%= needed %>"
-            aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: needed) %>"></progress>
-  <p><%= t("parent.dashboard.progress", current: total_stickers, total: needed) %></p>
+            aria-label="<%= t("parent.dashboard.progress", current: total_stickers, total: card.progress_total_label) %>"></progress>
+  <p><%= t("parent.dashboard.progress", current: total_stickers, total: card.progress_total_label) %></p>
 
   <% if card.goal.present? %>
     <p><%= t("parent.dashboard.goal", goal: card.goal) %></p>

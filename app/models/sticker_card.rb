@@ -26,6 +26,12 @@ class StickerCard < ApplicationRecord
     sticker_goal + negative_count
   end
 
+  def progress_total_label
+    return sticker_goal.to_s if negative_count.zero?
+
+    "#{sticker_goal}+#{negative_count}"
+  end
+
   def completed?
     positive_count >= required_stickers
   end
