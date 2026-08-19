@@ -8,6 +8,7 @@ class Allowance < ApplicationRecord
   validates :kind, :amount_cents, :frequency, :due_day, :next_due_on, presence: true
   validates :kind, uniqueness: { scope: :child_profile_id }
   validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
+  validate :due_day_matches_frequency
 
   def kind=(value)
     super
@@ -44,6 +45,13 @@ class Allowance < ApplicationRecord
   end
 
   private
+
+  def due_day_matches_frequency
+    return if due_day.nil? || frequency.nil?
+    return if valid_due_day?(due_day)
+
+    errors.add(:due_day, :invalid)
+  end
 
   def valid_due_day?(day)
     return false unless day.is_a?(Integer)
