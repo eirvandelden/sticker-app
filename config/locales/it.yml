@@ -42,6 +42,7 @@ it:
         delete: Elimina
         edit: Modifica
         email: Email
+        name: Nome
         new_user: Nuovo Utente
         role: Ruolo
         title: Gestione Utenti

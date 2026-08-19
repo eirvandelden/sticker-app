@@ -12,6 +12,13 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "admin user list shows each user's name" do
+    sign_in_as @admin
+    get admin_users_path
+    assert_response :success
+    assert_select "td", text: users(:parent).name
+  end
+
   # Scenario 16: Admin creates a new parent user
   test "admin creates a new parent user" do
     sign_in_as @admin

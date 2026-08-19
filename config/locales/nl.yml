@@ -42,6 +42,7 @@ nl:
         delete: Verwijderen
         edit: Bewerken
         email: E-mail
+        name: Naam
         new_user: Nieuwe gebruiker
         role: Rol
         title: Gebruikersbeheer

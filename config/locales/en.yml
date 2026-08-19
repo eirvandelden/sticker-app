@@ -42,6 +42,7 @@ en:
         delete: Delete
         edit: Edit
         email: Email
+        name: Name
         new_user: New User
         role: Role
         title: User Management
