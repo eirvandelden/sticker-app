@@ -17,8 +17,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.string "name", null: false
     t.bigint "record_id", null: false
     t.string "record_type", null: false
-    t.index [ "blob_id" ], name: "index_active_storage_attachments_on_blob_id"
-    t.index [ "record_type", "record_id", "name", "blob_id" ], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
@@ -30,13 +30,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.string "key", null: false
     t.text "metadata"
     t.string "service_name", null: false
-    t.index [ "key" ], name: "index_active_storage_blobs_on_key", unique: true
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
-    t.index [ "blob_id", "variation_digest" ], name: "index_active_storage_variant_records_uniqueness", unique: true
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "allowance_periods", force: :cascade do |t|
@@ -45,7 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.date "due_on", null: false
     t.boolean "given", default: false, null: false
     t.datetime "updated_at", null: false
-    t.index [ "allowance_id", "due_on" ], name: "index_allowance_periods_on_allowance_id_and_due_on", unique: true
+    t.index ["allowance_id", "due_on"], name: "index_allowance_periods_on_allowance_id_and_due_on", unique: true
   end
 
   create_table "allowances", force: :cascade do |t|
@@ -57,7 +57,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.integer "kind", null: false
     t.date "next_due_on", null: false
     t.datetime "updated_at", null: false
-    t.index [ "child_profile_id", "kind" ], name: "index_allowances_on_child_profile_id_and_kind", unique: true
+    t.index ["child_profile_id", "kind"], name: "index_allowances_on_child_profile_id_and_kind", unique: true
   end
 
   create_table "appkit_push_subscriptions", force: :cascade do |t|
@@ -68,8 +68,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.integer "user_id", null: false
-    t.index [ "endpoint" ], name: "index_appkit_push_subscriptions_on_endpoint", unique: true
-    t.index [ "user_id" ], name: "index_appkit_push_subscriptions_on_user_id"
+    t.index ["endpoint"], name: "index_appkit_push_subscriptions_on_endpoint", unique: true
+    t.index ["user_id"], name: "index_appkit_push_subscriptions_on_user_id"
   end
 
   create_table "child_profiles", force: :cascade do |t|
@@ -79,7 +79,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index [ "user_id" ], name: "index_child_profiles_on_user_id"
+    t.index ["user_id"], name: "index_child_profiles_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -90,8 +90,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.integer "user_id", null: false
-    t.index [ "token" ], name: "index_sessions_on_token", unique: true
-    t.index [ "user_id" ], name: "index_sessions_on_user_id"
+    t.index ["token"], name: "index_sessions_on_token", unique: true
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "sticker_cards", force: :cascade do |t|
@@ -104,8 +104,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.boolean "reward_given"
     t.integer "sticker_goal", default: 10, null: false
     t.datetime "updated_at", null: false
-    t.index [ "child_profile_id" ], name: "index_sticker_cards_on_child_profile_id"
-    t.index [ "completed_at" ], name: "index_sticker_cards_on_completed_at"
+    t.index ["child_profile_id"], name: "index_sticker_cards_on_child_profile_id"
+    t.index ["completed_at"], name: "index_sticker_cards_on_completed_at"
   end
 
   create_table "stickers", force: :cascade do |t|
@@ -116,7 +116,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
     t.string "note"
     t.integer "sticker_card_id", null: false
     t.datetime "updated_at", null: false
-    t.index [ "sticker_card_id" ], name: "index_stickers_on_sticker_card_id"
+    t.index ["sticker_card_id"], name: "index_stickers_on_sticker_card_id"
   end
 
   create_table "users", force: :cascade do |t|
