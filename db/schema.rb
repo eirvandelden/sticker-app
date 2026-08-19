@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_19_084422) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -45,7 +45,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_15_152051) do
     t.date "due_on", null: false
     t.boolean "given", default: false, null: false
     t.datetime "updated_at", null: false
-    t.index [ "allowance_id" ], name: "index_allowance_periods_on_allowance_id"
+    t.index [ "allowance_id", "due_on" ], name: "index_allowance_periods_on_allowance_id_and_due_on", unique: true
   end
 
   create_table "allowances", force: :cascade do |t|
