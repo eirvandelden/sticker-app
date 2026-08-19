@@ -16,7 +16,6 @@ it:
         view: Visualizza
     nav:
       back_to_site: Torna al sito
-      dashboard: Dashboard
       users: Utenti
     users:
       create:
@@ -123,6 +122,7 @@ it:
     it: Italiano
     nl: Olandese
   navigation:
+    home: Home
     preferences: Preferenze
   parent:
     actions:

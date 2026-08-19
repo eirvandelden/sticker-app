@@ -152,6 +152,10 @@ search:
 ignore_unused:
   - errors.messages.invalid_content_type
   - errors.messages.file_size_too_large
+  # Rendered only inside the appkit gem's shared nav partial, invisible to a scan of this app's own views.
+  - common.logout
+  - navigation.home
+  - navigation.preferences
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

@@ -16,7 +16,6 @@ nl:
         view: Bekijken
     nav:
       back_to_site: Terug naar site
-      dashboard: Dashboard
       users: Gebruikers
     users:
       create:
@@ -123,6 +122,7 @@ nl:
     it: Italiaans
     nl: Nederlands
   navigation:
+    home: Startpagina
     preferences: Voorkeuren
   parent:
     actions:

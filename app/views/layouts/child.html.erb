@@ -24,14 +24,9 @@
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <%= render "appkit/shared/skip_link" %>
     <header>
-      <nav data-controller="nav" data-action="click->nav#click">
-        <h2><%= t("app.title") %></h2>
-        <ul>
-          <li><%= link_to t("child.dashboard.profile_link"), edit_user_profile_path(Current.user) %></li>
-          <li><%= link_to t("navigation.preferences"), edit_preferences_path %></li>
-          <li><%= button_to t("common.logout"), session_path, method: :delete %></li>
-        </ul>
-      </nav>
+      <%= render layout: "appkit/shared/nav", locals: { home_path: child_dashboard_path } do %>
+        <li><%= link_to t("child.dashboard.profile_link"), edit_user_profile_path(Current.user) %></li>
+      <% end %>
     </header>
     <%= render "appkit/shared/flashes" %>
     <main id="main">
