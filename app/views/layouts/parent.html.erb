@@ -27,18 +27,13 @@
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <%= render "appkit/shared/skip_link" %>
     <header>
-      <nav data-controller="nav" data-action="click->nav#click">
-        <h2><%= t("app.title") %></h2>
-        <ul>
-          <% if Current.user.admin? %>
-            <li><%= link_to t("admin.nav.dashboard"), admin_root_path, "aria-current": (current_page?(admin_root_path) ? "page" : nil) %></li>
-            <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
-            <li><%= link_to t("admin.nav.back_to_site"), root_path %></li>
-          <% end %>
-          <li><%= link_to t("navigation.preferences"), edit_preferences_path %></li>
-          <li><%= button_to t("common.logout"), session_path, method: :delete %></li>
-        </ul>
-      </nav>
+      <% home_path = Current.user.admin? ? admin_root_path : parent_children_path %>
+      <%= render layout: "appkit/shared/nav", locals: { home_path: home_path } do %>
+        <% if Current.user.admin? %>
+          <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
+          <li><%= link_to t("admin.nav.back_to_site"), root_path %></li>
+        <% end %>
+      <% end %>
     </header>
     <%= render "appkit/shared/flashes" %>
     <main id="main">
