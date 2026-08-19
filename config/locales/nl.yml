@@ -157,7 +157,6 @@ nl:
       update:
         success: Avatar succesvol bijgewerkt
     dashboard:
-      card_completed: Kaart vol — beloning uitstaat
       goal: 'Spaart voor: %{goal}'
       open_cards:
         one: "%{count} kaart klaar voor beloning!"

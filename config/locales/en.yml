@@ -157,7 +157,6 @@ en:
       update:
         success: Avatar updated successfully
     dashboard:
-      card_completed: Card completed — awaiting reward
       goal: 'Saving for: %{goal}'
       open_cards:
         one: "%{count} card ready to reward!"

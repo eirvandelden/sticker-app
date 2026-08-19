@@ -17,6 +17,10 @@ class ChildProfile < ApplicationRecord
     sticker_cards.where.not(completed_at: nil).where(reward_given: [ nil, false ]).order(completed_at: :asc).first
   end
 
+  def open_sticker_cards_count
+    sticker_cards.count(&:open?)
+  end
+
   def display_sticker_card
     active_sticker_card
   end

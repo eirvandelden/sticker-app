@@ -22,6 +22,28 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?]", parent_child_reward_path(child_id: child_profiles(:two))
   end
 
+  test "parent dashboard tells the parent how many of a child's cards are ready to reward" do
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+
+    assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
+      text: /#{I18n.t("parent.dashboard.open_cards", count: 1)}/
+    assert_select "##{dom_id(@profile, :parent_card)}",
+      text: /#{I18n.t("parent.dashboard.open_cards", count: 1)}/, count: 0
+  end
+
+  test "parent dashboard shows the count when a child has more than one card ready to reward" do
+    child_profiles(:two).sticker_cards.create!(completed_at: 2.days.ago, reward_given: false)
+
+    sign_in_as @parent
+    get parent_children_path
+    assert_response :success
+
+    assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
+      text: /#{I18n.t("parent.dashboard.open_cards", count: 2)}/
+  end
+
   test "parent dashboard shows a progress bar for each child card" do
     sign_in_as @parent
     get parent_children_path

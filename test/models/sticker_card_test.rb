@@ -107,6 +107,31 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_includes stream_targets(streams), dom_id(child, :parent_card)
   end
 
+  test "card is open once completed and not yet rewarded" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+
+    assert card.reload.open?
+  end
+
+  test "card is not open once rewarded" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+    card.reload.update!(reward_given: true)
+
+    assert_not card.open?
+  end
+
+  test "card is not open while still in progress" do
+    child = create_child(goal: 2)
+    card = child.sticker_cards.create!
+    card.stickers.create!(kind: :positive)
+
+    assert_not card.open?
+  end
+
   test "reward cannot be marked if card is incomplete" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!

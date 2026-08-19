@@ -3,12 +3,6 @@
     <h1><%= t("parent.dashboard.title") %></h1>
   </header>
 
-  <% if @open_cards_count.to_i > 0 %>
-    <article role="alert">
-      <p><strong><%= t("parent.dashboard.open_cards", count: @open_cards_count) %></strong></p>
-    </article>
-  <% end %>
-
   <% @children.each do |child| %>
     <article data-controller="confetti"
              data-confetti-completion-flag-id-value="<%= dom_id(child, :completion_flag) %>">

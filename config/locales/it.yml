@@ -157,7 +157,6 @@ it:
       update:
         success: Avatar aggiornato con successo
     dashboard:
-      card_completed: Scheda completata — in attesa del premio
       goal: 'Risparmia per: %{goal}'
       open_cards:
         one: "%{count} scheda pronta per il premio!"

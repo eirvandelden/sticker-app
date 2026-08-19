@@ -19,7 +19,7 @@
   <% end %>
 
   <% if rewardable_card %>
-    <p><%= t("parent.dashboard.card_completed") %></p>
+    <p><%= t("parent.dashboard.open_cards", count: child.open_sticker_cards_count) %></p>
     <%= button_to t("parent.actions.mark_rewarded"), parent_child_reward_path(child),
                   method: :post, class: "button-success" %>
   <% end %>

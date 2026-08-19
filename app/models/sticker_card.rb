@@ -30,6 +30,10 @@ class StickerCard < ApplicationRecord
     positive_count >= required_stickers
   end
 
+  def open?
+    completed_at.present? && !reward_given?
+  end
+
   def override_goal!(new_goal)
     update!(goal: new_goal, goal_overridden: true)
   end
