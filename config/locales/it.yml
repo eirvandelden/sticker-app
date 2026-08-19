@@ -15,7 +15,6 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
-      back_to_site: Torna al sito
       users: Utenti
     users:
       create:
