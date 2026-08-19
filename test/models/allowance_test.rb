@@ -25,6 +25,20 @@ class AllowanceTest < ActiveSupport::TestCase
     assert allowance.errors[:amount_cents].any?
   end
 
+  test "rejects a due day outside the week for a weekly allowance" do
+    allowance = Allowance.new(child_profile: @child, kind: :zakgeld, amount_cents: 500,
+                              frequency: :weekly, due_day: 15, next_due_on: Date.today)
+    assert_not allowance.valid?
+    assert allowance.errors[:due_day].any?
+  end
+
+  test "rejects a due day outside the month for a monthly allowance" do
+    allowance = Allowance.new(child_profile: @child, kind: :kleedgeld, amount_cents: 3000,
+                              frequency: :monthly, due_day: 32, next_due_on: Date.today)
+    assert_not allowance.valid?
+    assert allowance.errors[:due_day].any?
+  end
+
   test "one allowance per child per kind" do
     Allowance.create!(child_profile: @child, kind: :zakgeld, amount_cents: 500,
                       frequency: :weekly, due_day: 5, next_due_on: Date.today)
