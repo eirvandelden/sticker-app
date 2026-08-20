@@ -56,6 +56,7 @@ en:
         created_at: Created
         edit: Edit
         email: Email
+        name: Name
         role: Role
         title: User Details
       update:
