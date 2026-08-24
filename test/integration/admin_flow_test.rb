@@ -16,7 +16,10 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
     get admin_users_path
     assert_response :success
-    assert_select "td", text: users(:parent).name
+
+    assert_select "tr", text: /#{Regexp.escape(users(:parent).email)}/ do
+      assert_select "td", text: users(:parent).name
+    end
   end
 
   test "admin user detail page shows the user's name" do

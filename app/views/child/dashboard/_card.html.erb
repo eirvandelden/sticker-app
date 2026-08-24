@@ -15,7 +15,7 @@
     <% end %>
 
     <progress value="<%= earned %>" max="<%= required %>"
-              aria-label="<%= t("child.dashboard.earned", current: earned, total: card.progress_total_label) %>"></progress>
+              aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
 
     <article class="stickers">
       <% all_stickers = [] %>

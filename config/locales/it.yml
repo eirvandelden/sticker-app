@@ -160,10 +160,10 @@ it:
         success: Avatar aggiornato con successo
     dashboard:
       goal: 'Risparmia per: %{goal}'
-      open_cards:
+      progress: 'Progresso: %{current} / %{total} adesivi'
+      rewardable_cards:
         one: "%{count} scheda pronta per il premio!"
         other: "%{count} schede pronte per il premio!"
-      progress: 'Progresso: %{current} / %{total} adesivi'
       title: Dashboard Genitore
     history:
       back: "← Indietro"

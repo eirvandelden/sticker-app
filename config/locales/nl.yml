@@ -160,10 +160,10 @@ nl:
         success: Avatar succesvol bijgewerkt
     dashboard:
       goal: 'Spaart voor: %{goal}'
-      open_cards:
+      progress: 'Voortgang: %{current} / %{total} stickers'
+      rewardable_cards:
         one: "%{count} kaart klaar voor beloning!"
         other: "%{count} kaarten klaar voor beloning!"
-      progress: 'Voortgang: %{current} / %{total} stickers'
       title: Ouder Dashboard
     history:
       back: "← Terug"

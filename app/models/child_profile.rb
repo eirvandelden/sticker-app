@@ -14,11 +14,14 @@ class ChildProfile < ApplicationRecord
   end
 
   def rewardable_sticker_card
-    sticker_cards.where.not(completed_at: nil).where(reward_given: [ nil, false ]).order(completed_at: :asc).first
+    sticker_cards.rewardable.order(completed_at: :asc).first
   end
 
-  def open_sticker_cards_count
-    sticker_cards.count(&:open?)
+  # In-memory count against the preloaded association: cheap on parent/children#index,
+  # which eager-loads sticker_cards, but only correct if the caller hasn't already
+  # completed a card on this same child_profile earlier in the request.
+  def rewardable_sticker_cards_count
+    sticker_cards.count(&:rewardable?)
   end
 
   def display_sticker_card

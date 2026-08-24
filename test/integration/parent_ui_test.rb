@@ -28,20 +28,22 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
-      text: /#{I18n.t("parent.dashboard.open_cards", count: 1)}/
-    assert_select "##{dom_id(@profile, :parent_card)}",
-      text: /#{I18n.t("parent.dashboard.open_cards", count: 1)}/, count: 0
+      text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 1))}/
+    assert_select "##{dom_id(@profile, :parent_card)}" do
+      assert_select "p", text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 1))}/, count: 0
+    end
   end
 
   test "parent dashboard shows the count when a child has more than one card ready to reward" do
-    child_profiles(:two).sticker_cards.create!(completed_at: 2.days.ago, reward_given: false)
+    card = sticker_cards(:two)
+    card.required_stickers.times { card.stickers.create!(kind: :positive) }
 
     sign_in_as @parent
     get parent_children_path
     assert_response :success
 
     assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
-      text: /#{I18n.t("parent.dashboard.open_cards", count: 2)}/
+      text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 2))}/
   end
 
   test "parent dashboard shows a progress bar for each child card" do
@@ -49,7 +51,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     get parent_children_path
     assert_response :success
     assert_select "article progress", minimum: 1
-    assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
+    assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: 2)
   end
 
   test "parent dashboard progress shows the goal and failure count separately, not merged" do

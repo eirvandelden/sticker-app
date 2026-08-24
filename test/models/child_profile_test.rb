@@ -88,21 +88,24 @@ class ChildProfileTest < ActiveSupport::TestCase
     assert_equal false, new_card.goal_overridden
   end
 
-  test "open sticker cards count is zero when nothing awaits reward" do
-    user = User.create!(name: "No Open Cards Child", email: "no-open-cards@example.com", password: "password", role: :child)
+  test "rewardable sticker cards count is zero when nothing awaits reward" do
+    user = User.create!(name: "No Rewardable Cards Child", email: "no-rewardable-cards@example.com", password: "password", role: :child)
     profile = user.child_profile
 
-    assert_equal 0, profile.open_sticker_cards_count
+    assert_equal 0, profile.rewardable_sticker_cards_count
   end
 
-  test "open sticker cards count reflects every completed, unrewarded card" do
-    user = User.create!(name: "Two Open Cards Child", email: "two-open-cards@example.com", password: "password", role: :child)
+  test "rewardable sticker cards count reflects every completed, unrewarded card" do
+    user = User.create!(name: "Two Rewardable Cards Child", email: "two-rewardable-cards@example.com", password: "password", role: :child)
     profile = user.child_profile
-    profile.sticker_cards.destroy_all
-    profile.sticker_cards.create!(completed_at: 2.days.ago, reward_given: false)
-    profile.sticker_cards.create!(completed_at: 1.day.ago, reward_given: false)
+    profile.update!(sticker_goal: 1)
 
-    assert_equal 2, profile.open_sticker_cards_count
+    # Each sticker is given in its own request against a freshly loaded child_profile,
+    # the way the real app does it — reusing one in-memory profile across completions
+    # would read the association's stale, preloaded cards instead.
+    2.times { ChildProfile.find(profile.id).active_sticker_card.stickers.create!(kind: :positive) }
+
+    assert_equal 2, ChildProfile.find(profile.id).rewardable_sticker_cards_count
   end
 
   test "display sticker card returns active card when completed card awaits reward" do
