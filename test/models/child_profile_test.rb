@@ -100,12 +100,9 @@ class ChildProfileTest < ActiveSupport::TestCase
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
 
-    # Each sticker is given in its own request against a freshly loaded child_profile,
-    # the way the real app does it — reusing one in-memory profile across completions
-    # would read the association's stale, preloaded cards instead.
-    2.times { ChildProfile.find(profile.id).active_sticker_card.stickers.create!(kind: :positive) }
+    2.times { profile.active_sticker_card.stickers.create!(kind: :positive) }
 
-    assert_equal 2, ChildProfile.find(profile.id).rewardable_sticker_cards_count
+    assert_equal 2, profile.rewardable_sticker_cards_count
   end
 
   test "display sticker card returns active card when completed card awaits reward" do

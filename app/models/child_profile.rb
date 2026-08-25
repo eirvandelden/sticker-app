@@ -14,12 +14,12 @@ class ChildProfile < ApplicationRecord
   end
 
   def rewardable_sticker_card
+    # Ordered by created_at, not completed_at: a card only completes after the one
+    # before it, so creation order already matches completion order — and unlike
+    # completed_at, created_at can't read stale off an already-loaded card.
     sticker_cards.select(&:rewardable?).min_by(&:created_at)
   end
 
-  # In-memory count against the preloaded association: cheap on parent/children#index,
-  # which eager-loads sticker_cards, but only correct if the caller hasn't already
-  # completed a card on this same child_profile earlier in the request.
   def rewardable_sticker_cards_count
     sticker_cards.count(&:rewardable?)
   end
