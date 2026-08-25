@@ -3,7 +3,6 @@ class StickerCard < ApplicationRecord
   has_many :stickers, dependent: :destroy
 
   before_validation :assign_sticker_goal, on: :create
-  scope :rewardable, -> { where.not(completed_at: nil).where(reward_given: [ nil, false ]) }
 
   validates :sticker_goal, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :only_complete_cards_can_be_rewarded
@@ -37,7 +36,7 @@ class StickerCard < ApplicationRecord
   end
 
   def rewardable?
-    completed_at.present? && !reward_given?
+    completed? && !reward_given?
   end
 
   def override_goal!(new_goal)

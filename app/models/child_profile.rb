@@ -14,7 +14,7 @@ class ChildProfile < ApplicationRecord
   end
 
   def rewardable_sticker_card
-    sticker_cards.rewardable.order(completed_at: :asc).first
+    sticker_cards.select(&:rewardable?).min_by(&:created_at)
   end
 
   # In-memory count against the preloaded association: cheap on parent/children#index,
