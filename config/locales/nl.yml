@@ -15,7 +15,6 @@ nl:
         total_users: Totaal gebruikers
         view: Bekijken
     nav:
-      back_to_site: Terug naar site
       users: Gebruikers
     users:
       create:
@@ -43,6 +42,7 @@ nl:
         delete: Verwijderen
         edit: Bewerken
         email: E-mail
+        name: Naam
         new_user: Nieuwe gebruiker
         role: Rol
         title: Gebruikersbeheer
@@ -56,6 +56,7 @@ nl:
         created_at: Aangemaakt
         edit: Bewerken
         email: E-mail
+        name: Naam
         role: Rol
         title: Gebruikersdetails
       update:
@@ -158,12 +159,11 @@ nl:
       update:
         success: Avatar succesvol bijgewerkt
     dashboard:
-      card_completed: Kaart vol — beloning uitstaat
       goal: 'Spaart voor: %{goal}'
-      open_cards:
+      progress: 'Voortgang: %{current} / %{total} stickers'
+      rewardable_cards:
         one: "%{count} kaart klaar voor beloning!"
         other: "%{count} kaarten klaar voor beloning!"
-      progress: 'Voortgang: %{current} / %{total} stickers'
       title: Ouder Dashboard
     history:
       back: "← Terug"

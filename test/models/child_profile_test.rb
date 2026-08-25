@@ -88,6 +88,23 @@ class ChildProfileTest < ActiveSupport::TestCase
     assert_equal false, new_card.goal_overridden
   end
 
+  test "rewardable sticker cards count is zero when nothing awaits reward" do
+    user = User.create!(name: "No Rewardable Cards Child", email: "no-rewardable-cards@example.com", password: "password", role: :child)
+    profile = user.child_profile
+
+    assert_equal 0, profile.rewardable_sticker_cards_count
+  end
+
+  test "rewardable sticker cards count reflects every completed, unrewarded card" do
+    user = User.create!(name: "Two Rewardable Cards Child", email: "two-rewardable-cards@example.com", password: "password", role: :child)
+    profile = user.child_profile
+    profile.update!(sticker_goal: 1)
+
+    2.times { profile.active_sticker_card.stickers.create!(kind: :positive) }
+
+    assert_equal 2, profile.rewardable_sticker_cards_count
+  end
+
   test "display sticker card returns active card when completed card awaits reward" do
     user = User.create!(name: "Display Card Child", email: "display-card@example.com", password: "password", role: :child)
     profile = user.child_profile

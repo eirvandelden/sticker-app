@@ -15,7 +15,6 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
-      back_to_site: Torna al sito
       users: Utenti
     users:
       create:
@@ -43,6 +42,7 @@ it:
         delete: Elimina
         edit: Modifica
         email: Email
+        name: Nome
         new_user: Nuovo Utente
         role: Ruolo
         title: Gestione Utenti
@@ -56,6 +56,7 @@ it:
         created_at: Creato
         edit: Modifica
         email: Email
+        name: Nome
         role: Ruolo
         title: Dettagli Utente
       update:
@@ -158,12 +159,11 @@ it:
       update:
         success: Avatar aggiornato con successo
     dashboard:
-      card_completed: Scheda completata — in attesa del premio
       goal: 'Risparmia per: %{goal}'
-      open_cards:
+      progress: 'Progresso: %{current} / %{total} adesivi'
+      rewardable_cards:
         one: "%{count} scheda pronta per il premio!"
         other: "%{count} schede pronte per il premio!"
-      progress: 'Progresso: %{current} / %{total} adesivi'
       title: Dashboard Genitore
     history:
       back: "← Indietro"

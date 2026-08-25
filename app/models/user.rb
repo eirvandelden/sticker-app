@@ -77,8 +77,4 @@ class User < ApplicationRecord
 
     errors.add(:avatar, :file_size_too_large)
   end
-
-  def deactivated_email
-    email&.gsub(/@/, "-deactivated-#{SecureRandom.uuid}@")
-  end
 end

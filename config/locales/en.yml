@@ -15,7 +15,6 @@ en:
         total_users: Total Users
         view: View
     nav:
-      back_to_site: Back to Site
       users: Users
     users:
       create:
@@ -43,6 +42,7 @@ en:
         delete: Delete
         edit: Edit
         email: Email
+        name: Name
         new_user: New User
         role: Role
         title: User Management
@@ -56,6 +56,7 @@ en:
         created_at: Created
         edit: Edit
         email: Email
+        name: Name
         role: Role
         title: User Details
       update:
@@ -158,12 +159,11 @@ en:
       update:
         success: Avatar updated successfully
     dashboard:
-      card_completed: Card completed — awaiting reward
       goal: 'Saving for: %{goal}'
-      open_cards:
+      progress: 'Progress: %{current} / %{total} stickers'
+      rewardable_cards:
         one: "%{count} card ready to reward!"
         other: "%{count} cards ready to reward!"
-      progress: 'Progress: %{current} / %{total} stickers'
       title: Parent Dashboard
     history:
       back: "← Back"

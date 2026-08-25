@@ -10,7 +10,7 @@ module Child
       @last_viewed = session[:last_card_viewed_at]
       session[:last_card_viewed_at] = Time.current
       @recent_stickers = recent_stickers_since_last_visit
-      @completed_card_ids = @child_profile.sticker_cards.open.pluck(:id)
+      @completed_card_ids = @child_profile.sticker_cards.select(&:rewardable?).map(&:id)
     end
 
     private

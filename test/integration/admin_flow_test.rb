@@ -12,6 +12,23 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "admin user list shows each user's name" do
+    sign_in_as @admin
+    get admin_users_path
+    assert_response :success
+
+    assert_select "tr", text: /#{Regexp.escape(users(:parent).email)}/ do
+      assert_select "td", text: users(:parent).name
+    end
+  end
+
+  test "admin user detail page shows the user's name" do
+    sign_in_as @admin
+    get admin_user_path(users(:parent))
+    assert_response :success
+    assert_select "dd", text: users(:parent).name
+  end
+
   # Scenario 16: Admin creates a new parent user
   test "admin creates a new parent user" do
     sign_in_as @admin
@@ -62,11 +79,11 @@ class AdminFlowTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{edit_preferences_path}']"
   end
 
-  test "admin layout nav renders a link back to the site" do
+  test "admin layout nav has no stale link back to the sign-in page" do
     sign_in_as @admin
     get admin_root_path
     assert_response :success
-    assert_select "a[href='#{root_path}']", text: I18n.t("admin.nav.back_to_site")
+    assert_select "nav a[href='#{root_path}']", count: 0
   end
 
   test "admin pages are not cached by Turbo" do

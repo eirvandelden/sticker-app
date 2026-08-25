@@ -14,7 +14,14 @@ class ChildProfile < ApplicationRecord
   end
 
   def rewardable_sticker_card
-    sticker_cards.where.not(completed_at: nil).where(reward_given: [ nil, false ]).order(completed_at: :asc).first
+    # Ordered by created_at, not completed_at: a card only completes after the one
+    # before it, so creation order already matches completion order — and unlike
+    # completed_at, created_at can't read stale off an already-loaded card.
+    sticker_cards.select(&:rewardable?).min_by(&:created_at)
+  end
+
+  def rewardable_sticker_cards_count
+    sticker_cards.count(&:rewardable?)
   end
 
   def display_sticker_card

@@ -2,7 +2,6 @@ module Parent
   class ChildrenController < ApplicationController
     before_action :ensure_parent
     before_action :set_child, only: [ :edit, :update ]
-    before_action :set_open_cards_count, only: :index
 
     def index
       @children = ChildProfile.includes(:sticker_cards, { allowances: :allowance_periods }, user: { avatar_attachment: :blob })
@@ -23,10 +22,6 @@ module Parent
 
     def set_child
       @child = ChildProfile.includes(:user).find(params[:id])
-    end
-
-    def set_open_cards_count
-      @open_cards_count = StickerCard.open.count
     end
 
     def child_user_params

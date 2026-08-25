@@ -107,6 +107,57 @@ class StickerCardTest < ActiveSupport::TestCase
     assert_includes stream_targets(streams), dom_id(child, :parent_card)
   end
 
+  test "progress total label is just the goal when there are no failures" do
+    child = create_child(goal: 5)
+    card = child.active_sticker_card
+
+    assert_equal "5", card.progress_total_label
+  end
+
+  test "progress total label shows the goal and failure count separately" do
+    child = create_child(goal: 5)
+    card = child.active_sticker_card
+    2.times { card.stickers.create!(kind: :negative) }
+
+    assert_equal "5+2", card.progress_total_label
+  end
+
+  test "card is rewardable once completed and not yet rewarded" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+
+    assert card.reload.rewardable?
+  end
+
+  test "card is not rewardable once rewarded" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+    card.reload.update!(reward_given: true)
+
+    assert_not card.rewardable?
+  end
+
+  test "card is not rewardable while still in progress" do
+    child = create_child(goal: 2)
+    card = child.sticker_cards.create!
+    card.stickers.create!(kind: :positive)
+
+    assert_not card.rewardable?
+  end
+
+  test "a penalty on a full card takes it off the ready-to-reward list" do
+    child = create_child(goal: 1)
+    card = child.active_sticker_card
+    card.stickers.create!(kind: :positive)
+    assert card.reload.rewardable?
+
+    card.stickers.create!(kind: :negative)
+
+    assert_not card.reload.rewardable?
+  end
+
   test "reward cannot be marked if card is incomplete" do
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
