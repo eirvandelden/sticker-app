@@ -1,8 +1,7 @@
 require "test_helper"
 
-# Capybara's 2-second default, and the 5 seconds that replaced it, have both been
-# too short under CI load: a cold run that takes twice as long as a warm one still
-# flakes the sessions/preferences/realtime system tests.
+# A cold CI runner takes about twice as long as a warm one, which is long enough
+# to outrun Capybara's default and flake the sessions/preferences/realtime tests.
 Capybara.default_max_wait_time = 10
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
