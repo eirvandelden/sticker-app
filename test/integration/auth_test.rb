@@ -1,8 +1,23 @@
 require "test_helper"
 
 class AuthTest < ActionDispatch::IntegrationTest
+  test "visitor who is not signed in sees the login form at the front door" do
+    get root_path
+
+    assert_response :success
+    assert_select "form[action=?]", session_path
+  end
+
   test "parent logs in with valid credentials and is redirected to children dashboard" do
     post session_path, params: { email_address: users(:parent).email, password: "password" }
+    assert_redirected_to parent_children_path
+  end
+
+  test "signed in parent visiting the front door lands on the children list" do
+    sign_in_as users(:parent), follow_redirect: false
+
+    get root_path
+
     assert_redirected_to parent_children_path
   end
 
@@ -18,6 +33,14 @@ class AuthTest < ActionDispatch::IntegrationTest
     get parent_children_path
 
     assert_session_cookie_expires_in_one_year
+  end
+
+  test "signed in child visiting the front door lands on the child dashboard" do
+    sign_in_as users(:user), follow_redirect: false
+
+    get root_path
+
+    assert_redirected_to child_dashboard_path
   end
 
   test "child login persists the session cookie for one year" do

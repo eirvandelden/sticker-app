@@ -26,6 +26,12 @@ class ApplicationController < ActionController::Base
     after_login_path_for(Current.user)
   end
 
+  # Appkit sends already-signed-in visitors of the login page back to root_url,
+  # but root_url *is* the login page here, so that bounces forever.
+  def redirect_signed_in_user_to_root
+    redirect_to after_login_path_for(Current.user) if signed_in?
+  end
+
   def after_login_path_for(user)
     return child_dashboard_path if user.child?
 
