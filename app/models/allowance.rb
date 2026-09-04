@@ -5,7 +5,11 @@ class Allowance < ApplicationRecord
   enum :kind, { zakgeld: 0, kleedgeld: 1 }
   enum :frequency, { weekly: 0, monthly: 1 }
 
-  validates :kind, :amount_cents, :frequency, :due_day, :next_due_on, presence: true
+  validates :kind, presence: true
+  validates :amount_cents, presence: true
+  validates :frequency, presence: true
+  validates :due_day, presence: true
+  validates :next_due_on, presence: true
   validates :kind, uniqueness: { scope: :child_profile_id }
   validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
   validate :due_day_matches_frequency

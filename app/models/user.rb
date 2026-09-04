@@ -24,7 +24,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validate :acceptable_avatar
 
-  after_create :ensure_child_profile, if: :child?
+  after_create :provision_child_profile
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
@@ -38,7 +38,6 @@ class User < ApplicationRecord
   end
 
   private
-
   def acceptable_avatar
     return unless avatar.attached?
 
@@ -77,4 +76,10 @@ class User < ApplicationRecord
 
     errors.add(:avatar, :file_size_too_large)
   end
+
+    def provision_child_profile
+      return unless child?
+
+      ensure_child_profile
+    end
 end
