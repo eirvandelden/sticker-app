@@ -47,7 +47,8 @@ class Users::ProfilesAvatarTest < ActionDispatch::IntegrationTest
   test "child cannot change their name via profile" do
     sign_in_as @child
     original_name = @child.name
-    patch user_profile_path(@child), params: { user: { name: "Hacked Name", avatar: fixture_file_upload("avatar.png", "image/png") } }
+    patch user_profile_path(@child),
+params: { user: { name: "Hacked Name", avatar: fixture_file_upload("avatar.png", "image/png") } }
 
     assert_equal original_name, @child.reload.name
   end

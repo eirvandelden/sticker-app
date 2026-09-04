@@ -19,14 +19,16 @@ module Parent
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly", due_day: 5 } }
       allowance = @child.allowances.find_by(kind: :zakgeld)
+
       assert_not_nil allowance.next_due_on
-      assert allowance.next_due_on >= Date.today
+      assert_operator allowance.next_due_on, :>=, Date.today
       assert_equal 5, allowance.next_due_on.wday
     end
 
     test "invalid params re-render with unprocessable entity" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: "", frequency: "weekly", due_day: 5 } }
+
       assert_response :unprocessable_entity
     end
 
@@ -48,12 +50,14 @@ module Parent
     test "missing due_day re-renders instead of hanging" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly" } }
+
       assert_response :unprocessable_entity
     end
 
     test "unrecognized kind re-renders instead of crashing" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "bogus", amount_cents: 500, frequency: "weekly", due_day: 5 } }
+
       assert_response :unprocessable_entity
     end
 
@@ -67,6 +71,7 @@ module Parent
     test "unrecognized frequency re-renders instead of crashing" do
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "bogus", due_day: 5 } }
+
       assert_response :unprocessable_entity
     end
 
@@ -75,6 +80,7 @@ module Parent
                                     frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
       patch parent_child_allowance_path(@child, allowance),
             params: { allowance: { amount_cents: 750 } }
+
       assert_redirected_to edit_parent_child_path(@child)
       assert_equal 750, allowance.reload.amount_cents
     end
@@ -86,6 +92,7 @@ module Parent
             params: { allowance: { amount_cents: 750, kind: "kleedgeld", frequency: "monthly", due_day: 31 } }
 
       allowance.reload
+
       assert_equal 750, allowance.amount_cents
       assert_equal "zakgeld", allowance.kind
       assert_equal "weekly", allowance.frequency
@@ -122,6 +129,7 @@ module Parent
       delete session_path
       post parent_child_allowances_path(@child),
            params: { allowance: { kind: "zakgeld", amount_cents: 500, frequency: "weekly", due_day: 5 } }
+
       assert_response :redirect
     end
 

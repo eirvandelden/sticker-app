@@ -46,6 +46,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     end
 
     created_user = User.find_by!(email: "created@example.com")
+
     assert_redirected_to admin_user_path(created_user)
   end
 
@@ -89,6 +90,7 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     get admin_users_path
+
     assert_redirected_to root_path
   end
 end

@@ -4,8 +4,8 @@ class ChildProfile < ApplicationRecord
   has_many :allowances, dependent: :destroy
 
   after_create :provision_initial_sticker_card
-  after_update :sync_active_card_sticker_goal, if: :saved_change_to_sticker_goal?
-  after_update :sync_active_card_goal, if: :saved_change_to_goal?
+  after_update :sync_active_card_sticker_goal
+  after_update :sync_active_card_goal
 
   validates :sticker_goal, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
@@ -62,16 +62,20 @@ class ChildProfile < ApplicationRecord
 
   private
 
+  def provision_initial_sticker_card
+    sticker_cards.create!
+  end
+
   def sync_active_card_sticker_goal
+    return unless saved_change_to_sticker_goal?
+
     active_sticker_card.update!(sticker_goal: sticker_goal)
   end
 
   def sync_active_card_goal
+    return unless saved_change_to_goal?
+
     card = active_sticker_card
     card.update!(goal: goal) unless card.goal_overridden?
-  end
-
-  def provision_initial_sticker_card
-    sticker_cards.create!
   end
 end

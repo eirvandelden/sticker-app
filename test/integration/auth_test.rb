@@ -10,6 +10,7 @@ class AuthTest < ActionDispatch::IntegrationTest
 
   test "parent logs in with valid credentials and is redirected to children dashboard" do
     post session_path, params: { email_address: users(:parent).email, password: "password" }
+
     assert_redirected_to parent_children_path
   end
 
@@ -59,6 +60,7 @@ class AuthTest < ActionDispatch::IntegrationTest
 
   test "parent login fails with wrong password and re-renders the login form" do
     post session_path, params: { email_address: users(:parent).email, password: "wrong" }
+
     assert_response :unauthorized
   end
 
@@ -73,16 +75,19 @@ class AuthTest < ActionDispatch::IntegrationTest
 
   test "child logs in with valid credentials and is redirected to dashboard" do
     post session_path, params: { email_address: users(:user).email, password: "password" }
+
     assert_redirected_to child_dashboard_path
   end
 
   test "child login fails with wrong password and re-renders the login form" do
     post session_path, params: { email_address: users(:user).email, password: "wrong" }
+
     assert_response :unauthorized
   end
 
   test "admin logs in with valid credentials and is redirected to parent children" do
     post session_path, params: { email_address: users(:admin).email, password: "password" }
+
     assert_redirected_to parent_children_path
   end
 
@@ -113,6 +118,7 @@ class AuthTest < ActionDispatch::IntegrationTest
     original_locale = I18n.default_locale
     I18n.default_locale = :nl
     get new_session_path
+
     assert_response :success
     assert_select "title", text: I18n.t("app.title", locale: :nl)
     assert_not response.body.include?("<title>Sign in"), "Title is hardcoded English, should use i18n"

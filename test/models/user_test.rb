@@ -3,16 +3,19 @@ require "test_helper"
 class UserTest < ActiveSupport::TestCase
   test "creating a child user auto-creates a child profile" do
     user = User.create!(name: "New Child", email: "newchild@example.com", password: "password", role: :child)
-    assert user.child_profile.present?, "Expected child_profile to be created automatically"
+
+    assert_predicate user.child_profile, :present?, "Expected child_profile to be created automatically"
   end
 
   test "creating a child user auto-creates an initial sticker card" do
     user = User.create!(name: "New Child 2", email: "newchild2@example.com", password: "password", role: :child)
-    assert user.child_profile.sticker_cards.any?, "Expected at least one sticker_card to be created"
+
+    assert_predicate user.child_profile.sticker_cards, :any?, "Expected at least one sticker_card to be created"
   end
 
   test "creating a parent user does not create a child profile" do
     user = User.create!(name: "New Parent", email: "newparent@example.com", password: "password", role: :parent)
+
     assert_nil user.child_profile
   end
 
@@ -22,9 +25,9 @@ class UserTest < ActiveSupport::TestCase
     user.reload
 
     assert_difference -> { ChildProfile.count }, +1 do
-      assert user.ensure_child_profile.persisted?
+      assert_predicate user.ensure_child_profile, :persisted?
     end
 
-    assert user.child_profile.sticker_cards.any?
+    assert_predicate user.child_profile.sticker_cards, :any?
   end
 end

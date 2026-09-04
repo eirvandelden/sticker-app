@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 require "test_helper"
 
 class I18nTest < ActiveSupport::TestCase
   def test_locales_are_present
-    assert File.exist?(Rails.root.join("config/locales/en.yml"))
-    assert File.exist?(Rails.root.join("config/locales/nl.yml"))
-    assert File.exist?(Rails.root.join("config/locales/it.yml"))
+    assert_path_exists Rails.root.join("config/locales/en.yml")
+    assert_path_exists Rails.root.join("config/locales/nl.yml")
+    assert_path_exists Rails.root.join("config/locales/it.yml")
   end
 
   def test_default_locale_is_english

@@ -17,6 +17,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_preferences_path
     follow_redirect!
+
     assert_response :success
     assert_equal "it", @user.reload.locale
     assert_select 'html[lang="it"]'
@@ -42,6 +43,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
   test "child can access preferences edit page" do
     sign_in_as(@user)
     get edit_preferences_path
+
     assert_response :success
   end
 
@@ -62,6 +64,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     test "parent can access preferences edit page" do
       sign_in_as(@parent)
       get edit_preferences_path
+
       assert_response :success
       assert_select "h1", text: I18n.t("appkit.preferences.edit.title")
       assert_select "form[data-turbo=false]"
@@ -98,6 +101,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     test "admin can access preferences edit page" do
       sign_in_as(@admin)
       get edit_preferences_path
+
       assert_response :success
     end
 

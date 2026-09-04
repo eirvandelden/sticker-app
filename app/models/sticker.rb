@@ -7,13 +7,15 @@ class Sticker < ApplicationRecord
 
   enum :kind, { positive: 0, negative: 1 }
 
-  before_validation :assign_random_emoji, if: -> { positive? && emoji.blank? }
+  before_validation :assign_random_emoji
   after_create :check_card_completion
   after_create_commit :broadcast_sticker_added
 
   private
 
   def assign_random_emoji
+    return unless positive? && emoji.blank?
+
     self.emoji = EMOJI_POOL.sample
   end
 

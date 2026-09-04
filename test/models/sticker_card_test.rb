@@ -8,6 +8,7 @@ class StickerCardTest < ActiveSupport::TestCase
     child = create_child(goal: 3)
     card = child.sticker_cards.create!
     card.stickers.create!(kind: :positive)
+
     assert_not card.completed?
   end
 
@@ -15,7 +16,8 @@ class StickerCardTest < ActiveSupport::TestCase
     child = create_child(goal: 2)
     card = child.sticker_cards.create!
     2.times { card.stickers.create!(kind: :positive) }
-    assert card.completed?
+
+    assert_predicate card, :completed?
   end
 
   test "card stores child profile goal when created" do
@@ -32,7 +34,8 @@ class StickerCardTest < ActiveSupport::TestCase
 
     child.update!(sticker_goal: 2)
 
-    assert card.reload.update(reward_given: true), card.errors.full_messages.to_sentence
+    assert card.reload.update(reward_given: true),
+      "expected the card to save, got: #{card.errors.full_messages.to_sentence}"
   end
 
   test "negative stickers increase requirement" do
@@ -40,9 +43,11 @@ class StickerCardTest < ActiveSupport::TestCase
     card = child.sticker_cards.create!
     card.stickers.create!(kind: :negative)
     2.times { card.stickers.create!(kind: :positive) }
+
     assert_not card.completed?
     card.stickers.create!(kind: :positive)
-    assert card.completed?
+
+    assert_predicate card, :completed?
   end
 
   test "new card is created automatically when goal is reached" do
@@ -127,7 +132,7 @@ class StickerCardTest < ActiveSupport::TestCase
     card = child.active_sticker_card
     card.stickers.create!(kind: :positive)
 
-    assert card.reload.rewardable?
+    assert_predicate card.reload, :rewardable?
   end
 
   test "card is not rewardable once rewarded" do
@@ -151,7 +156,8 @@ class StickerCardTest < ActiveSupport::TestCase
     child = create_child(goal: 1)
     card = child.active_sticker_card
     card.stickers.create!(kind: :positive)
-    assert card.reload.rewardable?
+
+    assert_predicate card.reload, :rewardable?
 
     card.stickers.create!(kind: :negative)
 
@@ -164,6 +170,7 @@ class StickerCardTest < ActiveSupport::TestCase
     card.stickers.create!(kind: :positive)
 
     card.reward_given = true
+
     assert_not card.valid?
     assert_includes card.errors[:reward_given], "can't be set unless the card is completed"
   end
@@ -171,7 +178,8 @@ class StickerCardTest < ActiveSupport::TestCase
   private
 
   def create_child(goal:)
-    user = User.create!(name: "Test Child", email: "test_child_#{SecureRandom.hex(4)}@example.com", password: "password", role: :child)
+    user = User.create!(name: "Test Child", email: "test_child_#{SecureRandom.hex(4)}@example.com",
+password: "password", role: :child)
     user.child_profile.tap { |p| p.update!(sticker_goal: goal) }
   end
 

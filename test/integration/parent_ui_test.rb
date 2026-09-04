@@ -9,6 +9,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent logs in and sees sticker and penalty buttons" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "form[action=?]", parent_child_sticker_path(child_id: @profile)
     assert_select "form[action=?]", parent_child_penalty_path(child_id: @profile)
@@ -17,6 +18,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent sees reward button after completed card starts next card" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     # profile_two has a completed_unrewarded card — reward button should appear
     assert_select "form[action=?]", parent_child_reward_path(child_id: child_profiles(:two))
@@ -25,6 +27,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent dashboard tells the parent how many of a child's cards are ready to reward" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
 
     assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
@@ -40,6 +43,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
 
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
 
     assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
@@ -49,6 +53,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent dashboard shows a progress bar for each child card" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "article progress", minimum: 1
     assert_select "article progress[aria-label=?]", I18n.t("parent.dashboard.progress", current: 0, total: 2)
@@ -57,14 +62,17 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent dashboard progress shows the goal and failure count separately, not merged" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
 
-    assert_select "##{dom_id(@profile, :parent_card)} p", text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
+    assert_select "##{dom_id(@profile, :parent_card)} p",
+text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
   end
 
   test "parent dashboard wraps sticker and penalty buttons in semantic footer" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "article > footer" do
       assert_select "form", minimum: 2
@@ -75,6 +83,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
   test "parent dashboard has a single main landmark" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "main", count: 1
   end

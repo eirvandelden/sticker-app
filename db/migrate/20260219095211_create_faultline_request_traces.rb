@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateFaultlineRequestTraces < ActiveRecord::Migration[8.0]
   def change
     create_table :faultline_request_traces do |t|

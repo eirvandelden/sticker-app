@@ -14,9 +14,10 @@ module Parent
       newer = allowance.allowance_periods.create!(due_on: 1.week.ago.to_date, given: false)
 
       post parent_child_allowance_payments_path(@child), params: { kind: "zakgeld" }
+
       assert_redirected_to parent_children_path
 
-      assert older.reload.given?
+      assert_predicate older.reload, :given?
       assert_not newer.reload.given?
     end
 
@@ -29,7 +30,7 @@ module Parent
 
       post parent_child_allowance_payments_path(@child), params: { kind: "zakgeld" }
 
-      assert first.reload.given?
+      assert_predicate first.reload, :given?
       assert_not second.reload.given?
       assert_not third.reload.given?
     end
@@ -45,7 +46,7 @@ module Parent
       post parent_child_allowance_payments_path(@child), params: { kind: "kleedgeld" }
 
       assert_not zakgeld_period.reload.given?
-      assert kleedgeld_period.reload.given?
+      assert_predicate kleedgeld_period.reload, :given?
     end
 
     test "no action taken when no owed periods exist" do
@@ -53,12 +54,14 @@ module Parent
                         frequency: :weekly, due_day: 5, next_due_on: Date.today + 7)
 
       post parent_child_allowance_payments_path(@child), params: { kind: "zakgeld" }
+
       assert_redirected_to parent_children_path
     end
 
     test "requires parent login" do
       delete session_path
       post parent_child_allowance_payments_path(@child), params: { kind: "zakgeld" }
+
       assert_response :redirect
     end
   end

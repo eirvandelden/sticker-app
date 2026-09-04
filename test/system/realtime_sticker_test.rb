@@ -68,6 +68,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       sign_in_parent observer_parent
       visit parent_children_path
       wait_for_turbo_stream_connection
+
       within_child_article(child_user) do
         assert_selector "progress[value='2']", wait: 5
       end
@@ -90,6 +91,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     child_user, _profile = child_with_completed_card
 
     visit session_transfer_path(child_user.transfer_id)
+
     assert_current_path child_dashboard_path, wait: 10
 
     assert_selector "[data-confetti-celebrated='true']", wait: 5
@@ -100,10 +102,12 @@ class RealtimeStickerTest < ApplicationSystemTestCase
     child_user, _profile = child_with_completed_card
 
     visit session_transfer_path(child_user.transfer_id)
+
     assert_current_path child_dashboard_path, wait: 10
     assert_selector "[data-confetti-celebrated='true']", wait: 5
 
     visit child_dashboard_path
+
     assert_no_selector "[data-confetti-celebrated='true']"
   end
 
@@ -142,6 +146,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
 
     using_session(:child) do
       visit session_transfer_path(child_user.transfer_id)
+
       assert_current_path child_dashboard_path, wait: 10
       assert_selector "progress", wait: 5
       wait_for_turbo_stream_connection
@@ -156,6 +161,7 @@ class RealtimeStickerTest < ApplicationSystemTestCase
       assert_selector "[data-confetti-celebrated='true']", wait: 10
 
       visit child_dashboard_path
+
       assert_no_selector "[data-confetti-celebrated='true']"
     end
   end

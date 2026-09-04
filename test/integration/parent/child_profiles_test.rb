@@ -24,6 +24,7 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { sticker_goal: 5 } }
+
     assert_redirected_to edit_parent_child_path(@profile)
     assert_equal 5, @profile.reload.sticker_goal
   end
@@ -32,12 +33,14 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { sticker_goal: 0 } }
+
     assert_response :unprocessable_entity
   end
 
   test "child cannot access child settings page" do
     sign_in_as @child
     get edit_parent_child_path(@profile)
+
     assert_redirected_to root_path
   end
 
@@ -64,6 +67,7 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { goal: "New bike" } }
+
     assert_redirected_to edit_parent_child_path(@profile)
     assert_equal "New bike", @profile.reload.goal
   end
@@ -72,6 +76,7 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { goal: "New bike" } }
+
     assert_equal "New bike", @profile.active_sticker_card.reload.goal
   end
 
@@ -82,6 +87,7 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { goal: "New bike" } }
+
     assert_equal "€2,50", card.reload.goal
   end
 
@@ -98,6 +104,7 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
     patch parent_child_child_profile_path(@profile),
           params: { child_profile: { sticker_goal: 7 } }
+
     assert_redirected_to edit_parent_child_path(@profile)
     assert_equal 7, @profile.reload.sticker_goal
   end
