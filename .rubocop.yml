@@ -1,6 +1,8 @@
-# Omakase Ruby styling for Rails
+---
+# The rules shared by every personal Ruby project. This is a Rails app whose system tests
+# drive a browser, so it stacks those two layers on top.
 inherit_gem:
-  rubocop-rails-omakase: rubocop.yml
-
-inherit_from:
-  - .rubocop_todo.yml
+  rubocop-eirvandelden:
+    - config/default.yml
+    - config/rails.yml
+    - config/capybara.yml
