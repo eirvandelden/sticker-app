@@ -6,6 +6,7 @@ class SessionsTest < ApplicationSystemTestCase
     fill_in "Email", with: users(:parent).email
     fill_in "Password", with: "password"
     click_button "Sign in"
+
     assert_current_path parent_children_path
   end
 
@@ -14,6 +15,7 @@ class SessionsTest < ApplicationSystemTestCase
     fill_in "Email", with: users(:parent).email
     fill_in "Password", with: "wrong"
     click_button "Sign in"
+
     assert_text I18n.t("appkit.sessions.rejection")
     assert_current_path new_session_path
   end

@@ -4,7 +4,8 @@ module Parent
     before_action :set_child, only: [ :edit, :update ]
 
     def index
-      @children = ChildProfile.includes(:sticker_cards, { allowances: :allowance_periods }, user: { avatar_attachment: :blob })
+      @children = ChildProfile.includes(:sticker_cards, { allowances: :allowance_periods },
+user: { avatar_attachment: :blob })
     end
 
     def edit

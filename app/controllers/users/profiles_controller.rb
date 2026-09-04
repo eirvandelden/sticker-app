@@ -20,12 +20,12 @@ class Users::ProfilesController < ApplicationController
 
   private
 
-  def ensure_current_user
-    redirect_to root_path unless @user.current?
-  end
-
   def ensure_profile_viewer
     redirect_to root_path if Current.user.child? && !@user.current?
+  end
+
+  def ensure_current_user
+    redirect_to root_path unless @user.current?
   end
 
   def user_params

@@ -6,7 +6,8 @@ class ChildProfileTest < ActiveSupport::TestCase
     # letting us test the ChildProfile callback in isolation.
     user = User.create!(name: "Test Parent", email: "testparent@example.com", password: "password", role: :parent)
     profile = ChildProfile.create!(user: user)
-    assert profile.sticker_cards.any?, "Expected at least one sticker_card to be created"
+
+    assert_predicate profile.sticker_cards, :any?, "Expected at least one sticker_card to be created"
   end
 
   test "active sticker card provisions one for legacy profiles" do
@@ -15,7 +16,7 @@ class ChildProfileTest < ActiveSupport::TestCase
     profile.sticker_cards.destroy_all
 
     assert_difference -> { profile.sticker_cards.count }, +1 do
-      assert profile.active_sticker_card.persisted?
+      assert_predicate profile.active_sticker_card, :persisted?
     end
   end
 
@@ -42,7 +43,8 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "changing sticker goal updates only the active unfinished card" do
-    user = User.create!(name: "Active Goal Change", email: "active-goal-change@example.com", password: "password", role: :child)
+    user = User.create!(name: "Active Goal Change", email: "active-goal-change@example.com", password: "password",
+role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
 
@@ -67,7 +69,8 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "updating default goal does not change active card goal when card goal was overridden" do
-    user = User.create!(name: "Goal Override Child", email: "goal-override@example.com", password: "password", role: :child)
+    user = User.create!(name: "Goal Override Child", email: "goal-override@example.com", password: "password",
+role: :child)
     profile = user.child_profile
     card = profile.active_sticker_card
     card.update!(goal: "€2,50", goal_overridden: true)
@@ -78,25 +81,28 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "new card inherits default goal from child profile" do
-    user = User.create!(name: "Goal Inherit Child", email: "goal-inherit@example.com", password: "password", role: :child)
+    user = User.create!(name: "Goal Inherit Child", email: "goal-inherit@example.com", password: "password",
+role: :child)
     profile = user.child_profile
     profile.update!(goal: "New bike")
 
     new_card = profile.sticker_cards.create!
 
     assert_equal "New bike", new_card.goal
-    assert_equal false, new_card.goal_overridden
+    assert_not new_card.goal_overridden
   end
 
   test "rewardable sticker cards count is zero when nothing awaits reward" do
-    user = User.create!(name: "No Rewardable Cards Child", email: "no-rewardable-cards@example.com", password: "password", role: :child)
+    user = User.create!(name: "No Rewardable Cards Child", email: "no-rewardable-cards@example.com",
+password: "password", role: :child)
     profile = user.child_profile
 
     assert_equal 0, profile.rewardable_sticker_cards_count
   end
 
   test "rewardable sticker cards count reflects every completed, unrewarded card" do
-    user = User.create!(name: "Two Rewardable Cards Child", email: "two-rewardable-cards@example.com", password: "password", role: :child)
+    user = User.create!(name: "Two Rewardable Cards Child", email: "two-rewardable-cards@example.com",
+password: "password", role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
 
@@ -106,7 +112,8 @@ class ChildProfileTest < ActiveSupport::TestCase
   end
 
   test "display sticker card returns active card when completed card awaits reward" do
-    user = User.create!(name: "Display Card Child", email: "display-card@example.com", password: "password", role: :child)
+    user = User.create!(name: "Display Card Child", email: "display-card@example.com", password: "password",
+role: :child)
     profile = user.child_profile
     profile.update!(sticker_goal: 1)
     completed_card = profile.active_sticker_card

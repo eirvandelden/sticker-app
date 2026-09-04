@@ -8,6 +8,7 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:parent))
 
     post parent_child_sticker_path(child_id: child_profiles(:one)), params: { emoji_mode: "random" }
+
     assert_response :unprocessable_entity
   end
 
@@ -15,9 +16,11 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:parent))
 
     get parent_children_path
+
     assert_response :success
 
     delete session_path, headers: { "X-CSRF-Token" => session[:_csrf_token] }
+
     assert_response :redirect
   end
 
@@ -25,12 +28,15 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     transfer_id = users(:user).transfer_id
 
     get session_transfer_path(transfer_id)
+
     assert_response :success
 
     token = css_select("form input[name='authenticity_token']").first["value"]
-    assert token.present?, "expected the auto-submit form to carry a real CSRF token"
+
+    assert_predicate token, :present?, "expected the auto-submit form to carry a real CSRF token"
 
     put session_transfer_path(transfer_id), params: { authenticity_token: token }
+
     assert_redirected_to child_dashboard_path
   end
 

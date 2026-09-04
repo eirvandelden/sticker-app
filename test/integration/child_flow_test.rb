@@ -11,6 +11,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
   test "child views dashboard showing active sticker card and progress" do
     sign_in_as @child
     get child_dashboard_path
+
     assert_response :success
     assert_select "article.stickers"
     assert_select "progress[aria-label=?]", I18n.t("child.dashboard.earned", current: 0, total: 2)
@@ -71,6 +72,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
   test "child dashboard has a single main landmark" do
     sign_in_as @child
     get child_dashboard_path
+
     assert_response :success
     assert_select "main", count: 1
   end

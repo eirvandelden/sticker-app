@@ -63,18 +63,18 @@ class StickerCard < ApplicationRecord
     end
   end
 
+  def mark_completion_time
+    if completed? && completed_at.nil?
+      self.completed_at = Time.current
+    end
+  end
+
   # TODO: split into 2
   def create_new_card_if_just_completed
     if saved_change_to_updated_at? &&
        completed? &&
        child_profile.sticker_cards.where("created_at > ?", created_at).none?
       child_profile.sticker_cards.create!
-    end
-  end
-
-  def mark_completion_time
-    if completed? && completed_at.nil?
-      self.completed_at = Time.current
     end
   end
 

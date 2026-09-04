@@ -15,6 +15,7 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
   test "parent views list of children" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
   end
 
@@ -55,7 +56,8 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     # card_three has 2 positive stickers, goal is 3 — one more completes it
     post parent_child_sticker_path(child_id: @profile_three),
          params: { emoji_mode: "random" }
-    assert @card_three.reload.completed?, "Expected card to be marked completed"
+
+    assert_predicate @card_three.reload, :completed?, "Expected card to be marked completed"
     assert_not_nil @card_three.reload.completed_at
   end
 
@@ -72,8 +74,9 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
   test "parent marks completed card reward as given" do
     sign_in_as @parent
     post parent_child_reward_path(child_id: @profile_two)
+
     assert_redirected_to parent_children_path
-    assert @completed_card.reload.reward_given?,
+    assert_predicate @completed_card.reload, :reward_given?,
            "Expected reward_given to be true after marking reward"
   end
 
@@ -81,6 +84,7 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
   test "parent views sticker history for a child" do
     sign_in_as @parent
     get parent_child_history_path(child_id: @profile_one)
+
     assert_response :success
   end
 end
@@ -94,6 +98,7 @@ class AdminNavTest < ActionDispatch::IntegrationTest
   test "admin sees admin navigation link on parent dashboard" do
     sign_in_as @admin
     get parent_children_path
+
     assert_response :success
     assert_select "a[href='#{admin_root_path}']"
   end
@@ -101,6 +106,7 @@ class AdminNavTest < ActionDispatch::IntegrationTest
   test "parent does not see admin navigation link" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "a[href='#{admin_root_path}']", count: 0
   end
@@ -108,6 +114,7 @@ class AdminNavTest < ActionDispatch::IntegrationTest
   test "parent dashboard renders a link to preferences" do
     sign_in_as @parent
     get parent_children_path
+
     assert_response :success
     assert_select "a[href='#{edit_preferences_path}']"
   end
@@ -122,6 +129,7 @@ class ParentHappyFlowTest < ActionDispatch::IntegrationTest
 
   test "parent logs in, sees children, gives sticker and penalty" do
     sign_in_as @parent
+
     assert_response :success
 
     assert_select "article h2", minimum: 1
@@ -147,6 +155,7 @@ class AdminParentFlowTest < ActionDispatch::IntegrationTest
 
   test "admin logs in, sees parent dashboard, gives sticker and penalty" do
     sign_in_as @admin
+
     assert_response :success
     assert_select "a[href='#{admin_root_path}']"
     assert_select "article h2", minimum: 1

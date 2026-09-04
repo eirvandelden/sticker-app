@@ -13,6 +13,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     assert_field "user_color_scheme", with: "dark"
     click_button I18n.t("appkit.preferences.edit.submit", locale: :en)
+
     assert_current_path edit_preferences_path
 
     assert_selector 'html[data-color-scheme="dark"]', visible: :all
@@ -46,6 +47,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     body_background = page.evaluate_script(
       "getComputedStyle(document.body).getPropertyValue('--color-bg-0')"
     )
+
     assert_equal html_background, body_background
   end
 
@@ -56,9 +58,11 @@ class PreferencesSystemTest < ApplicationSystemTestCase
     sign_in parent
 
     open_preferences
+
     assert_selector 'html[data-theme="solunized-dark"]', visible: :all
 
     emulate_color_scheme "light"
+
     assert_selector 'html[data-theme="solunized-light"]', visible: :all
   ensure
     emulate_color_scheme "no-preference"
@@ -75,6 +79,7 @@ class PreferencesSystemTest < ApplicationSystemTestCase
 
     def open_preferences
       visit edit_preferences_path
+
       assert_current_path edit_preferences_path
       assert_selector "select#user_color_scheme"
     end

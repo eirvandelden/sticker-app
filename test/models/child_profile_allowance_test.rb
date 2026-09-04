@@ -8,6 +8,7 @@ class ChildProfileAllowanceTest < ActiveSupport::TestCase
   test "child profile can have allowances" do
     allowance = Allowance.create!(child_profile: @profile, kind: :zakgeld, amount_cents: 500,
                                   frequency: :weekly, due_day: 5, next_due_on: Date.today)
+
     assert_includes @profile.allowances, allowance
   end
 
@@ -22,6 +23,7 @@ class ChildProfileAllowanceTest < ActiveSupport::TestCase
   test "zakgeld returns the zakgeld allowance" do
     allowance = Allowance.create!(child_profile: @profile, kind: :zakgeld, amount_cents: 500,
                                   frequency: :weekly, due_day: 5, next_due_on: Date.today)
+
     assert_equal allowance, @profile.zakgeld
   end
 
@@ -32,6 +34,7 @@ class ChildProfileAllowanceTest < ActiveSupport::TestCase
   test "kleedgeld returns the kleedgeld allowance" do
     allowance = Allowance.create!(child_profile: @profile, kind: :kleedgeld, amount_cents: 3000,
                                   frequency: :monthly, due_day: 1, next_due_on: Date.today)
+
     assert_equal allowance, @profile.kleedgeld
   end
 
@@ -41,11 +44,12 @@ class ChildProfileAllowanceTest < ActiveSupport::TestCase
 
   test "birthdate can be stored on child profile" do
     @profile.update!(birthdate: Date.new(2014, 3, 15))
+
     assert_equal Date.new(2014, 3, 15), @profile.reload.birthdate
   end
 
   test "birthdate is optional" do
     assert_nil @profile.birthdate
-    assert @profile.valid?
+    assert_predicate @profile, :valid?
   end
 end
