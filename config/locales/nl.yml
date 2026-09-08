@@ -15,7 +15,7 @@ nl:
         total_users: Totaal gebruikers
         view: Bekijken
     nav:
-      root: Beheer
+      overview: Overzicht
       users: Gebruikers
     users:
       create:

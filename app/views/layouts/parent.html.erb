@@ -29,7 +29,7 @@
     <header>
       <%= render layout: "appkit/shared/nav", locals: { home_path: parent_children_path } do %>
         <% if Current.user.admin? %>
-          <li><%= nav_tab t("admin.nav.root"), admin_root_path %></li>
+          <li><%= nav_tab t("admin.nav.overview"), admin_root_path %></li>
           <li><%= nav_section_tab t("admin.nav.users"), admin_users_path %></li>
         <% end %>
       <% end %>
