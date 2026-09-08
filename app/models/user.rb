@@ -24,7 +24,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validate :acceptable_avatar
 
-  after_create :provision_child_profile
+  after_save :provision_child_profile
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
