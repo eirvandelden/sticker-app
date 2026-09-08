@@ -8,8 +8,13 @@ module ApplicationHelper
     link_to label, path, "aria-current": ("page" if current_page?(path))
   end
 
-  # Stays the current tab on the pages nested under it, unlike nav_tab.
   def nav_section_tab(label, path)
-    link_to label, path, "aria-current": ("page" if request.path.start_with?(path))
+    link_to label, path, "aria-current": ("page" if within_section?(path))
+  end
+
+  private
+
+  def within_section?(path)
+    request.path == path || request.path.start_with?("#{path}/")
   end
 end
