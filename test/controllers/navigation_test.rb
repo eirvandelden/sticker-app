@@ -46,7 +46,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
     get admin_root_path
 
     assert_select "nav ul li a[href=?][aria-current=?]", admin_root_path, "page"
-    assert_select "nav ul li a[href=?][aria-current]", admin_users_path, count: 0
+    assert_select "nav ul li a[aria-current]", count: 1
   end
 
   test "the user list tab stays marked as the current page while editing one user" do
@@ -55,6 +55,6 @@ class NavigationTest < ActionDispatch::IntegrationTest
     get edit_admin_user_path(users(:parent))
 
     assert_select "nav ul li a[href=?][aria-current=?]", admin_users_path, "page"
-    assert_select "nav ul li a[href=?][aria-current]", admin_root_path, count: 0
+    assert_select "nav ul li a[aria-current]", count: 1
   end
 end
