@@ -15,7 +15,7 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
-      overview: Amministrazione
+      root: Amministrazione
       users: Utenti
     users:
       create:
