@@ -15,6 +15,7 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
+      dashboard: Amministrazione
       users: Utenti
     users:
       create:

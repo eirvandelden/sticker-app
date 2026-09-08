@@ -109,6 +109,7 @@ class AdminNavTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "a[href='#{admin_root_path}']", count: 0
+    assert_select "a[href='#{admin_users_path}']", count: 0
   end
 
   test "parent dashboard renders a link to preferences" do
