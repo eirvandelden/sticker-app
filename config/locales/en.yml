@@ -15,6 +15,7 @@ en:
         total_users: Total Users
         view: View
     nav:
+      root: Admin
       users: Users
     users:
       create:

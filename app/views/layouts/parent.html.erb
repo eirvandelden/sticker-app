@@ -27,10 +27,10 @@
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <%= render "appkit/shared/skip_link" %>
     <header>
-      <% home_path = Current.user.admin? ? admin_root_path : parent_children_path %>
-      <%= render layout: "appkit/shared/nav", locals: { home_path: home_path } do %>
+      <%= render layout: "appkit/shared/nav", locals: { home_path: parent_children_path } do %>
         <% if Current.user.admin? %>
-          <li><%= link_to t("admin.nav.users"), admin_users_path, "aria-current": (request.path.start_with?("/admin/users") ? "page" : nil) %></li>
+          <li><%= nav_tab t("admin.nav.root"), admin_root_path %></li>
+          <li><%= nav_section_tab t("admin.nav.users"), admin_users_path %></li>
         <% end %>
       <% end %>
     </header>

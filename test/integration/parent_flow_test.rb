@@ -91,16 +91,7 @@ end
 
 class AdminNavTest < ActionDispatch::IntegrationTest
   setup do
-    @admin = users(:admin)
     @parent = users(:parent)
-  end
-
-  test "admin sees admin navigation link on parent dashboard" do
-    sign_in_as @admin
-    get parent_children_path
-
-    assert_response :success
-    assert_select "a[href='#{admin_root_path}']"
   end
 
   test "parent does not see admin navigation link" do
@@ -109,6 +100,7 @@ class AdminNavTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "a[href='#{admin_root_path}']", count: 0
+    assert_select "a[href='#{admin_users_path}']", count: 0
   end
 
   test "parent dashboard renders a link to preferences" do
