@@ -90,7 +90,6 @@ en:
     logout: "Logout 🐿️"
   errors:
     admin_required: Admin access required
-    child_profile_required: Child profile not found
     child_required: Child access required
     messages:
       file_size_too_large: must be smaller than 5 MB

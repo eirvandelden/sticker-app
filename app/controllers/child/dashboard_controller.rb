@@ -3,8 +3,7 @@ module Child
     before_action :ensure_child
 
     def show
-      @child_profile = Current.user.child_profile
-      return redirect_to root_path, alert: t("errors.child_profile_required") unless @child_profile
+      @child_profile = Current.user.ensure_child_profile
 
       @card = @child_profile.sticker_cards.order(created_at: :desc).first
       @last_viewed = session[:last_card_viewed_at]

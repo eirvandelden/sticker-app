@@ -19,6 +19,14 @@ class UserTest < ActiveSupport::TestCase
     assert_nil user.child_profile
   end
 
+  test "a parent who is made a child gets a child profile" do
+    user = users(:parent)
+
+    user.update!(role: :child)
+
+    assert_predicate user.child_profile, :present?
+  end
+
   test "child user provisions missing child profile" do
     user = User.create!(name: "Legacy Child", email: "legacychild@example.com", password: "password", role: :child)
     user.child_profile.destroy!

@@ -10,6 +10,19 @@ class SessionsTest < ApplicationSystemTestCase
     assert_current_path parent_children_path
   end
 
+  test "a signed in parent opening the front door lands on the children list" do
+    visit new_session_path
+    fill_in "Email", with: users(:parent).email
+    fill_in "Password", with: "password"
+    click_button "Sign in"
+
+    assert_current_path parent_children_path
+
+    visit root_path
+
+    assert_current_path parent_children_path
+  end
+
   test "login form rejects wrong password" do
     visit new_session_path
     fill_in "Email", with: users(:parent).email

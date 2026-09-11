@@ -90,7 +90,6 @@ it:
     logout: "Esci 🐿️"
   errors:
     admin_required: Accesso admin richiesto
-    child_profile_required: Profilo bambino non trovato
     child_required: Accesso bambino richiesto
     messages:
       file_size_too_large: deve essere inferiore a 5 MB

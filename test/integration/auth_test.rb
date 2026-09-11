@@ -20,6 +20,10 @@ class AuthTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_redirected_to parent_children_path
+
+    follow_redirect!
+
+    assert_response :success
   end
 
   test "parent login persists the session cookie for one year" do
@@ -42,6 +46,10 @@ class AuthTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_redirected_to child_dashboard_path
+
+    follow_redirect!
+
+    assert_response :success
   end
 
   test "child login persists the session cookie for one year" do

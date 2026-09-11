@@ -7,6 +7,16 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     @card    = sticker_cards(:one)
   end
 
+  test "a child whose sticker profile went missing still reaches their own page" do
+    @profile.destroy!
+    sign_in_as @child, follow_redirect: false
+
+    get root_path
+    follow_redirect!
+
+    assert_response :success
+  end
+
   # Scenario 13: Child views dashboard with sticker card
   test "child views dashboard showing active sticker card and progress" do
     sign_in_as @child
