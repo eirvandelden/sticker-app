@@ -4,20 +4,27 @@
   </header>
 
   <% @children.each do |child| %>
-    <article data-controller="confetti"
+    <article id="<%= dom_id(child, :dashboard_row) %>"
+             data-controller="confetti"
              data-confetti-completion-flag-id-value="<%= dom_id(child, :completion_flag) %>">
       <header>
         <% if child.user.avatar.attached? %>
           <%= image_tag child.user.avatar, size: "40x40", alt: child.user.name %>
         <% end %>
-        <h2><%= child.user.name %></h2>
+        <%= link_to parent_child_path(child) do %>
+          <h2><%= child.user.name %></h2>
+        <% end %>
       </header>
 
       <%= turbo_stream_from child %>
 
       <span id="<%= dom_id(child, :completion_flag) %>"></span>
 
-      <%= render "parent/children/child_card", child: child %>
+      <%= render "parent/children/sticker_progress", card: child.display_sticker_card %>
+
+      <% if child.rewardable_sticker_card %>
+        <p id="<%= dom_id(child, :reward_badge) %>"><%= t("parent.dashboard.rewardable_cards", count: child.rewardable_sticker_cards_count) %></p>
+      <% end %>
 
       <footer>
         <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
@@ -28,8 +35,6 @@
         <%= button_to t("parent.actions.give_penalty"), parent_child_penalty_path(child),
                       method: :post,
                       class: "button-danger" %>
-
-        <%= link_to t("parent.actions.view_history"), parent_child_history_path(child) %>
       </footer>
     </article>
   <% end %>

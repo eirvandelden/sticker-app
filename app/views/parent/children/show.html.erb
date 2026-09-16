@@ -1,0 +1,17 @@
+<div>
+  <header>
+    <% if @child.user.avatar.attached? %>
+      <%= image_tag @child.user.avatar, size: "40x40", alt: @child.user.name %>
+    <% end %>
+    <h1><%= @child.user.name %></h1>
+  </header>
+
+  <%= turbo_stream_from @child %>
+
+  <%= render "parent/children/child_card", child: @child %>
+
+  <nav>
+    <%= link_to t("parent.actions.view_history"), parent_child_history_path(@child) %>
+    <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
+  </nav>
+</div>

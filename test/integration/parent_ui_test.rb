@@ -15,9 +15,9 @@ class ParentUiTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?]", parent_child_penalty_path(child_id: @profile)
   end
 
-  test "parent sees reward button after completed card starts next card" do
+  test "parent sees reward button on child page after completed card starts next card" do
     sign_in_as @parent
-    get parent_children_path
+    get parent_child_path(child_profiles(:two))
 
     assert_response :success
     # profile_two has a completed_unrewarded card — reward button should appear
@@ -30,11 +30,9 @@ class ParentUiTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
+    assert_select "##{dom_id(child_profiles(:two), :reward_badge)}",
       text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 1))}/
-    assert_select "##{dom_id(@profile, :parent_card)}" do
-      assert_select "p", text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 1))}/, count: 0
-    end
+    assert_select "##{dom_id(@profile, :reward_badge)}", count: 0
   end
 
   test "parent dashboard shows the count when a child has more than one card ready to reward" do
@@ -46,7 +44,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "##{dom_id(child_profiles(:two), :parent_card)}",
+    assert_select "##{dom_id(child_profiles(:two), :reward_badge)}",
       text: /#{Regexp.escape(I18n.t("parent.dashboard.rewardable_cards", count: 2))}/
   end
 
@@ -65,7 +63,7 @@ class ParentUiTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "##{dom_id(@profile, :parent_card)} p",
+    assert_select "##{dom_id(@profile, :dashboard_row)} p",
 text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
   end
 
@@ -88,9 +86,9 @@ text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
     assert_select "main", count: 1
   end
 
-  test "parent dashboard shows card goal as read-only text" do
+  test "child page shows card goal as read-only text" do
     sign_in_as @parent
-    get parent_children_path
+    get parent_child_path(@profile)
 
     assert_response :success
     assert_select "##{dom_id(@profile, :parent_card)}" do
@@ -98,9 +96,9 @@ text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
     end
   end
 
-  test "parent dashboard shows inline override form for card goal" do
+  test "child page shows inline override form for card goal" do
     sign_in_as @parent
-    get parent_children_path
+    get parent_child_path(@profile)
 
     assert_response :success
     assert_select "form[action='#{parent_child_card_goal_path(@profile)}']" do
@@ -108,30 +106,19 @@ text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
     end
   end
 
-  test "parent dashboard shows nothing for goal when card goal is blank" do
+  test "child page shows nothing for goal when card goal is blank" do
     sticker_cards(:one).update_column(:goal, nil)
 
     sign_in_as @parent
-    get parent_children_path
+    get parent_child_path(@profile)
 
     assert_response :success
     assert_select "##{dom_id(@profile, :parent_card)} p", text: /Saving for/, count: 0
   end
 
-  test "each child's goal override field has its own id" do
-    other_profile = child_profiles(:two)
-
-    sign_in_as @parent
-    get parent_children_path
-
-    assert_response :success
-    assert_select "input[id='#{dom_id(@profile, :goal_field)}']", count: 1
-    assert_select "input[id='#{dom_id(other_profile, :goal_field)}']", count: 1
-  end
-
   test "goal override field has an associated label" do
     sign_in_as @parent
-    get parent_children_path
+    get parent_child_path(@profile)
 
     assert_response :success
     assert_select "label[for='#{dom_id(@profile, :goal_field)}']", text: I18n.t("parent.child_profile.edit.goal_label")
