@@ -1,0 +1,7 @@
+<div id="<%= dom_id(child, :dashboard_progress) %>">
+  <%= render "parent/children/sticker_progress", card: child.display_sticker_card %>
+
+  <% if child.rewardable_sticker_card %>
+    <p id="<%= dom_id(child, :reward_badge) %>"><%= t("parent.dashboard.rewardable_cards", count: child.rewardable_sticker_cards_count) %></p>
+  <% end %>
+</div>

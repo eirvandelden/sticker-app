@@ -1,0 +1,3 @@
+<progress value="<%= card.positive_count %>" max="<%= card.required_stickers %>"
+          aria-label="<%= t("parent.dashboard.progress", current: card.positive_count, total: card.required_stickers) %>"></progress>
+<p><%= t("parent.dashboard.progress", current: card.positive_count, total: card.progress_total_label) %></p>

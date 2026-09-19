@@ -49,6 +49,12 @@ class ChildProfile < ApplicationRecord
       partial: "parent/children/child_card",
       locals: { child: self }
     )
+    broadcast_replace_to(
+      self,
+      target: ActionView::RecordIdentifier.dom_id(self, :dashboard_progress),
+      partial: "parent/children/dashboard_progress",
+      locals: { child: self }
+    )
   end
 
   def broadcast_completion_flag(card_id:)

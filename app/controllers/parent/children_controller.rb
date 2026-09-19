@@ -1,11 +1,14 @@
 module Parent
   class ChildrenController < ApplicationController
     before_action :ensure_parent
-    before_action :set_child, only: [ :edit, :update ]
+    before_action :set_child, only: [ :show, :edit, :update ]
 
     def index
       @children = ChildProfile.includes(:sticker_cards, { allowances: :allowance_periods },
 user: { avatar_attachment: :blob })
+    end
+
+    def show
     end
 
     def edit
