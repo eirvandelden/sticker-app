@@ -20,11 +20,7 @@
 
       <span id="<%= dom_id(child, :completion_flag) %>"></span>
 
-      <%= render "parent/children/sticker_progress", card: child.display_sticker_card %>
-
-      <% if child.rewardable_sticker_card %>
-        <p id="<%= dom_id(child, :reward_badge) %>"><%= t("parent.dashboard.rewardable_cards", count: child.rewardable_sticker_cards_count) %></p>
-      <% end %>
+      <%= render "parent/children/dashboard_progress", child: child %>
 
       <footer>
         <%= button_to t("parent.actions.give_sticker"), parent_child_sticker_path(child),
