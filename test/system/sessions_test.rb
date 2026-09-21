@@ -1,19 +1,13 @@
 require "application_system_test_case"
 
 class SessionsTest < ApplicationSystemTestCase
-  test "parent logs in via the login form and is redirected to children dashboard" do
+  test "parent logs in via the login form, lands on the children list and stays there via the front door" do
     visit new_session_path
     fill_in "Email", with: users(:parent).email
     fill_in "Password", with: "password"
-    click_button "Sign in"
 
-    assert_current_path parent_children_path
-  end
+    assert_field "Email", with: users(:parent).email
 
-  test "a signed in parent opening the front door lands on the children list" do
-    visit new_session_path
-    fill_in "Email", with: users(:parent).email
-    fill_in "Password", with: "password"
     click_button "Sign in"
 
     assert_current_path parent_children_path
