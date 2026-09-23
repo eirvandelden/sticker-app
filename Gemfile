@@ -5,7 +5,7 @@ gem "rails", "~> 8.1"
 # Pin below json 3.0 until a Rails 8.1 release includes the backported fix for
 # https://github.com/rails/rails/issues/58685 (json 3.0 made JSON.parse options
 # keyword-only, breaking ActiveSupport::JSON.decode's positional call).
-gem "json", "< 3"
+gem "json", "< 4"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 gem "mvpa-css", github: "eirvandelden/mvpa.css"
