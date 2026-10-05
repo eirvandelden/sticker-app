@@ -1,5 +1,3 @@
-<!-- cSpell:ignore O'Saasy Etienne Delden Haije -->
-
 # O'Saasy License Agreement
 
 Copyright © 2026, Etienne van Delden-De la Haije.
