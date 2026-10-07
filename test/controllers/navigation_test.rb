@@ -57,4 +57,53 @@ class NavigationTest < ActionDispatch::IntegrationTest
     assert_select "nav ul li a[href=?][aria-current=?]", admin_users_path, "page"
     assert_select "nav ul li a[aria-current]", count: 1
   end
+
+  test "Home is marked as the current page on the children list" do
+    sign_in_as users(:parent)
+
+    get parent_children_path
+
+    assert_select "nav ul li:first-child a[href=?][aria-current=?]", parent_children_path, "page"
+  end
+
+  test "Home stays marked on a child's page, edit page and history" do
+    sign_in_as users(:parent)
+    child = child_profiles(:one)
+
+    [ parent_child_path(child), edit_parent_child_path(child), parent_child_history_path(child) ].each do |page|
+      get page
+
+      assert_response :success
+      assert_select "nav ul li:first-child a[href=?][aria-current=?]", parent_children_path, "page"
+    end
+  end
+
+  test "Home is not marked on settings, the admin overview or preferences" do
+    sign_in_as users(:admin)
+
+    [ parent_settings_path, admin_root_path, edit_preferences_path ].each do |page|
+      get page
+
+      assert_response :success
+      assert_select "nav ul li:first-child a[aria-current]", count: 0
+    end
+  end
+
+  test "child sees Home marked as the current page on the dashboard" do
+    sign_in_as users(:user)
+
+    get child_dashboard_path
+
+    assert_select "nav ul li:first-child a[href=?][aria-current=?]", child_dashboard_path, "page"
+  end
+
+  test "the Dutch nav shows appkit's wording" do
+    sign_in_as users(:dutch_admin)
+
+    get parent_children_path
+
+    assert_select "nav ul li:first-child a", text: "Home"
+    assert_select "nav a[href=?]", edit_preferences_path, text: "Voorkeuren"
+    assert_select "nav button", text: "Uitloggen"
+  end
 end
