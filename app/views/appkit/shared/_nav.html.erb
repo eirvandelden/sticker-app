@@ -1,0 +1,10 @@
+<%# Shadows appkit's nav partial. appkit hardcodes root_path as Home, which is the login page here. %>
+<nav>
+  <h2><%= Appkit.config.app_name.call %></h2>
+  <ul>
+    <li><%= nav_section_tab t("appkit.navigation.home"), home_path %></li>
+    <%= yield %>
+    <li><%= link_to t("appkit.navigation.preferences"), edit_preferences_path %></li>
+    <li><%= button_to t("appkit.navigation.logout"), session_path, method: :delete %></li>
+  </ul>
+</nav>
