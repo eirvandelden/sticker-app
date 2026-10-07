@@ -86,8 +86,6 @@ it:
       profile_link: Il mio profilo
       someone: Qualcuno
       title: La tua scheda adesivi
-  common:
-    logout: "Esci 🐿️"
   errors:
     admin_required: Accesso admin richiesto
     child_required: Accesso bambino richiesto
@@ -122,9 +120,6 @@ it:
     en: Inglese
     it: Italiano
     nl: Olandese
-  navigation:
-    home: Home
-    preferences: Preferenze
   parent:
     actions:
       give_penalty: "❌ Dai penalita"
