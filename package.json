@@ -6,6 +6,6 @@
   "author": "Etienne van Delden de la Haije <etienne@vandelden.family>",
   "license": "MIT",
   "devDependencies": {
-    "@herb-tools/linter": "^0.10.3"
+    "@herb-tools/linter": "^0.11.0"
   }
 }
