@@ -31,7 +31,7 @@ jobs:
           install-gems: true
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: bin/erb_lint --lint-all --allow-no-files
