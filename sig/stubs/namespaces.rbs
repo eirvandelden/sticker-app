@@ -1,3 +1,5 @@
+# Compact class names such as Admin::X need their namespace declared; Rails defines these modules at runtime.
+
 module Admin
 end
 

@@ -1,9 +1,0 @@
-interface _ModelQueries[Model]
-  def all: () -> untyped
-  def where: (*untyped, **untyped) -> untyped
-  def order: (*untyped) -> untyped
-  def includes: (*untyped) -> untyped
-  def count: () -> Integer
-  def find: (untyped) -> Model
-  def find_by: (**untyped) -> Model?
-end

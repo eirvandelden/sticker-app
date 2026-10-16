@@ -1,3 +1,5 @@
+# Appkit ships no RBS, and the RBS collection has no entry for it.
+
 module Appkit
   module SessionBehavior
   end

@@ -5,6 +5,7 @@ module Parent
     # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
+      # @type var card: untyped
       card = child.sticker_cards.order(created_at: :desc).first
 
       card.stickers.create!(

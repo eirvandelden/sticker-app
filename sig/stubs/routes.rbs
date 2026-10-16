@@ -1,3 +1,5 @@
+# The RBS collection has no route helpers, so the ones the app uses are declared here.
+
 interface _AppRoutes
   def root_path: () -> String
   def parent_children_path: () -> String

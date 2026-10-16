@@ -1,0 +1,12 @@
+# turbo-rails has no entry in the RBS collection, so the broadcast methods are declared here.
+
+module Turbo
+  module Broadcastable
+    def broadcast_replace_to: (*untyped, **untyped) -> void
+    def broadcast_append_to: (*untyped, **untyped) -> void
+  end
+end
+
+class ActiveRecord::Base
+  include Turbo::Broadcastable
+end
