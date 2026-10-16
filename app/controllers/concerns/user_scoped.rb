@@ -1,3 +1,4 @@
+# Loads the active user named in the request for the controller's actions.
 # @rbs module-self: ActionController::Base
 module UserScoped
   extend ActiveSupport::Concern
@@ -8,6 +9,7 @@ module UserScoped
   end
 
   private
+    # Loads the active user from the request.
     # @rbs () -> void
     def set_user
       @user = User.active.find(params[:user_id])
