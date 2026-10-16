@@ -1,8 +1,11 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents manage a child's allowances.
   class AllowancesController < ApplicationController
     before_action :ensure_parent
     before_action :set_child
 
+    # Adds an allowance for the child, or shows the form with errors.
     # @rbs () -> void
     def create
       allowance = @child.allowances.build(allowance_params)
@@ -20,6 +23,7 @@ module Parent
       render "parent/children/edit", status: :unprocessable_entity
     end
 
+    # Changes the amount of the child's allowance.
     # @rbs () -> void
     def update
       allowance = @child.allowances.find(params[:id])
@@ -32,6 +36,7 @@ module Parent
       end
     end
 
+    # Removes the child's allowance.
     # @rbs () -> void
     def destroy
       @child.allowances.find(params[:id]).destroy
@@ -40,16 +45,19 @@ module Parent
 
     private
 
+    # Loads the child profile from the request.
     # @rbs () -> void
     def set_child
       @child = ChildProfile.find(params[:child_id])
     end
 
+    # Permits the fields for a new allowance.
     # @rbs () -> ActionController::Parameters
     def allowance_params
       params.expect(allowance: [ :kind, :amount_cents, :frequency, :due_day ])
     end
 
+    # Permits only the amount of an existing allowance.
     # @rbs () -> ActionController::Parameters
     def amount_params
       params.expect(allowance: [ :amount_cents ])
