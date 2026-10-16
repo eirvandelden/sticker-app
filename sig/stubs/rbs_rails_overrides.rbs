@@ -1,0 +1,14 @@
+# Gaps in the generated rbs_rails types and the RBS collection, declared in the class body so they override the included module.
+
+class ActiveStorage::Attached::One
+  def blob: () -> ActiveStorage::Blob
+end
+
+class User
+  def attachment_changes: () -> Hash[String, untyped]
+end
+
+# The generated setter accepts only TimeWithZone, while Time.current is typed Time | TimeWithZone.
+class StickerCard
+  def completed_at=: (ActiveSupport::TimeWithZone | Time | nil) -> (ActiveSupport::TimeWithZone | Time | nil)
+end
