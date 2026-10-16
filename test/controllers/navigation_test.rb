@@ -109,4 +109,20 @@ class NavigationTest < ActionDispatch::IntegrationTest
     assert_select "nav a[href=?]", edit_preferences_path, text: "Voorkeuren"
     assert_select "nav button", text: "Uitloggen"
   end
+
+  test "the nav is headed with the app name" do
+    sign_in_as users(:parent)
+
+    get parent_children_path
+
+    assert_response :success
+    assert_select "nav h2", text: I18n.t("app.title")
+  end
+
+  test "the login page is headed with the app name" do
+    get new_session_path
+
+    assert_response :success
+    assert_select "h1", text: I18n.t("app.title")
+  end
 end
