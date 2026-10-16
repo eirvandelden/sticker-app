@@ -1,6 +1,8 @@
 class User < ApplicationRecord
-  include Role, Appkit::Transferable
-  include Appkit::Authenticatable, Appkit::UserTheming
+  include Appkit::Transferable
+  include Role
+  include Appkit::UserTheming
+  include Appkit::Authenticatable
 
   AVATAR_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
   MAX_AVATAR_SIZE = 5.megabytes
