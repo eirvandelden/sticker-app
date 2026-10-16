@@ -1,7 +1,10 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents give a child a penalty.
   class PenaltiesController < ApplicationController
     before_action :ensure_parent
 
+    # Adds a penalty to the child's newest card.
     # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
