@@ -2,6 +2,7 @@ module Parent
   class PenaltiesController < ApplicationController
     before_action :ensure_parent
 
+    # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
       card = child.sticker_cards.order(created_at: :desc).first

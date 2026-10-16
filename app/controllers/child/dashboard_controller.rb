@@ -2,6 +2,7 @@ module Child
   class DashboardController < ApplicationController
     before_action :ensure_child
 
+    # @rbs () -> void
     def show
       @child_profile = Current.user.ensure_child_profile
 
@@ -14,6 +15,7 @@ module Child
 
     private
 
+    # @rbs () -> untyped
     def recent_stickers_since_last_visit
       return [] unless @last_viewed && @card
 

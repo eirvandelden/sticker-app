@@ -3,6 +3,7 @@ module Parent
     before_action :ensure_parent
     before_action :set_child_profile
 
+    # @rbs () -> void
     def update
       if @child_profile.update(child_profile_params)
         redirect_to edit_parent_child_path(@child_profile), notice: t("flash.parent.child_profiles.updated")
@@ -14,10 +15,12 @@ module Parent
 
     private
 
+    # @rbs () -> void
     def set_child_profile
       @child_profile = ChildProfile.includes(:user).find(params[:child_id])
     end
 
+    # @rbs () -> ActionController::Parameters
     def child_profile_params
       params.expect(child_profile: [ :sticker_goal, :goal, :birthdate ])
     end

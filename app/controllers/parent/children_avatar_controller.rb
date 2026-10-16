@@ -3,6 +3,7 @@ module Parent
     before_action :ensure_parent
     before_action :set_child
 
+    # @rbs () -> void
     def update
       if @child.user.update(avatar_params)
         redirect_to edit_parent_child_path(@child), notice: t(".success")
@@ -13,10 +14,12 @@ module Parent
 
     private
 
+    # @rbs () -> void
     def set_child
       @child = ChildProfile.includes(:user).find(params[:child_id])
     end
 
+    # @rbs () -> ActionController::Parameters
     def avatar_params
       params.require(:user).permit(:avatar)
     end
