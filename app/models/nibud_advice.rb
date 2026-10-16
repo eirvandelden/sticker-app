@@ -1,3 +1,4 @@
+# Suggests a pocket money amount from the age of a child, following the NIBUD guideline.
 class NibudAdvice
   ZAKGELD_WEEKLY = [
     [ 4..5,   50 ],
@@ -13,6 +14,7 @@ class NibudAdvice
     [ 15..17, 4000 ]
   ].freeze
 
+  # Returns the NIBUD amount in cents for the child's age, or nil when the guideline has none.
   # @rbs (birthdate: Date?, kind: String | Symbol, frequency: String | Symbol) -> Integer?
   def self.suggested_amount_cents(birthdate:, kind:, frequency:)
     return nil if birthdate.nil?
@@ -25,6 +27,7 @@ class NibudAdvice
     row&.last
   end
 
+  # Returns the NIBUD amounts for a kind and frequency, or nil when the guideline has none.
   # @rbs (Symbol kind, Symbol frequency) -> Array[[Range[Integer], Integer]]?
   def self.table_for(kind, frequency)
     return ZAKGELD_WEEKLY   if kind == :zakgeld   && frequency == :weekly
@@ -34,6 +37,7 @@ class NibudAdvice
   end
   private_class_method :table_for
 
+  # Returns the number of whole years since the birthdate.
   # @rbs (Date birthdate) -> Integer
   def self.age_in_years(birthdate)
     today = Date.today
