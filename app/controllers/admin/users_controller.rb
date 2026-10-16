@@ -1,20 +1,25 @@
+# Lets administrators manage user accounts.
 class Admin::UsersController < Admin::BaseController
   before_action :set_user, only: [ :show, :edit, :update, :destroy ]
 
+  # Lists all users, newest first.
   # @rbs () -> void
   def index
     @users = User.all.order(created_at: :desc)
   end
 
+  # Shows one user.
   # @rbs () -> void
   def show
   end
 
+  # Builds a blank user for the form.
   # @rbs () -> void
   def new
     @user = User.new
   end
 
+  # Creates a user with the chosen role.
   # @rbs () -> void
   def create
     @user = User.new(user_params)
@@ -27,10 +32,12 @@ class Admin::UsersController < Admin::BaseController
     end
   end
 
+  # Shows the form to edit a user.
   # @rbs () -> void
   def edit
   end
 
+  # Updates a user and the chosen role.
   # @rbs () -> void
   def update
     @user.assign_attributes(user_params)
@@ -43,6 +50,7 @@ class Admin::UsersController < Admin::BaseController
     end
   end
 
+  # Deletes a user, except the signed-in administrator.
   # @rbs () -> void
   def destroy
     if @user == Current.user
@@ -55,16 +63,19 @@ class Admin::UsersController < Admin::BaseController
 
   private
 
+  # Loads the user from the request.
   # @rbs () -> void
   def set_user
     @user = User.find(params[:id])
   end
 
+  # Permits the user fields an administrator may set.
   # @rbs () -> ActionController::Parameters
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :locale, :name, :avatar)
   end
 
+  # Sets the requested role when it is a known role.
   # @rbs (User user) -> void
   def assign_role(user)
     role = params.dig(:user, :role).to_s
