@@ -2,6 +2,7 @@ module Parent
   class AllowancePaymentsController < ApplicationController
     before_action :ensure_parent
 
+    # @rbs () -> void
     def create
       child    = ChildProfile.find(params[:child_id])
       kind     = params[:kind]

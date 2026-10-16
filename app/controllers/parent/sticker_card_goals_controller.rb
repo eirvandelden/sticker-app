@@ -3,6 +3,7 @@ module Parent
     before_action :ensure_parent
     before_action :set_child
 
+    # @rbs () -> void
     def update
       @child.active_sticker_card.override_goal!(sticker_card_params[:goal])
 
@@ -14,10 +15,12 @@ module Parent
 
     private
 
+    # @rbs () -> void
     def set_child
       @child = ChildProfile.find(params[:child_id])
     end
 
+    # @rbs () -> ActionController::Parameters
     def sticker_card_params
       params.expect(sticker_card: [ :goal ])
     end

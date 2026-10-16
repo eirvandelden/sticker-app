@@ -1,0 +1,23 @@
+module Appkit
+  module SessionBehavior
+  end
+
+  module Transferable
+    def transfer_id: () -> String
+  end
+
+  module Authenticatable
+  end
+
+  module UserTheming
+  end
+
+  module Authentication
+    def signed_in?: () -> bool
+  end
+
+  class QrCodeLink
+    def initialize: (String) -> void
+    def signed: () -> String
+  end
+end

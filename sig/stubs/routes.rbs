@@ -1,0 +1,19 @@
+interface _AppRoutes
+  def root_path: () -> String
+  def parent_children_path: () -> String
+  def edit_parent_child_path: (untyped) -> String
+  def child_dashboard_path: () -> String
+  def admin_user_path: (untyped) -> String
+  def admin_users_path: () -> String
+  def user_profile_path: (untyped) -> String
+  def qr_code_path: (String) -> String
+  def session_transfer_url: (String) -> String
+end
+
+class ActionController::Base
+  include _AppRoutes
+end
+
+class ActionView::Base
+  include _AppRoutes
+end

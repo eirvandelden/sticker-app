@@ -3,17 +3,21 @@ module Parent
     before_action :ensure_parent
     before_action :set_child, only: [ :show, :edit, :update ]
 
+    # @rbs () -> void
     def index
       @children = ChildProfile.includes(:sticker_cards, { allowances: :allowance_periods },
 user: { avatar_attachment: :blob })
     end
 
+    # @rbs () -> void
     def show
     end
 
+    # @rbs () -> void
     def edit
     end
 
+    # @rbs () -> void
     def update
       if @child.user.update(child_user_params)
         redirect_to edit_parent_child_path(@child), notice: t(".success")
@@ -24,10 +28,12 @@ user: { avatar_attachment: :blob })
 
     private
 
+    # @rbs () -> void
     def set_child
       @child = ChildProfile.includes(:user).find(params[:id])
     end
 
+    # @rbs () -> ActionController::Parameters
     def child_user_params
       params.require(:user).permit(:name)
     end
