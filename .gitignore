@@ -164,3 +164,4 @@ yarn-debug.log*
 .claude/.cc-writes
 .claude/worktrees/
 .claude/scheduled_tasks.lock
+/.gem_rbs_collection/
