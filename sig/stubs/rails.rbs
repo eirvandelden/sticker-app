@@ -1,0 +1,26 @@
+class ApplicationRecord < ActiveRecord::Base
+  def id: () -> Integer
+  def created_at: () -> ActiveSupport::TimeWithZone
+  def updated_at: () -> ActiveSupport::TimeWithZone
+end
+
+class Rails::Application::Configuration
+  def git_revision: () -> String
+  def app_version: () -> String
+end
+
+module ApplicationCable
+  class Connection < ActionCable::Connection::Base
+    def current_user=: (User?) -> User?
+  end
+end
+
+class Current < ActiveSupport::CurrentAttributes
+  def self.user: () -> untyped
+  def self.user=: (User?) -> User?
+  def user: () -> untyped
+end
+
+module User::Role
+  def administrator?: () -> bool
+end

@@ -3,6 +3,7 @@ module Parent
     before_action :ensure_parent
     before_action :set_child
 
+    # @rbs () -> void
     def create
       allowance = @child.allowances.build(allowance_params)
       allowance.next_due_on = allowance.next_occurrence_of(allowance.due_day, after: Date.today - 1)
@@ -19,6 +20,7 @@ module Parent
       render "parent/children/edit", status: :unprocessable_entity
     end
 
+    # @rbs () -> void
     def update
       allowance = @child.allowances.find(params[:id])
 
@@ -30,6 +32,7 @@ module Parent
       end
     end
 
+    # @rbs () -> void
     def destroy
       @child.allowances.find(params[:id]).destroy
       redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.destroyed")
@@ -37,14 +40,17 @@ module Parent
 
     private
 
+    # @rbs () -> void
     def set_child
       @child = ChildProfile.find(params[:child_id])
     end
 
+    # @rbs () -> ActionController::Parameters
     def allowance_params
       params.expect(allowance: [ :kind, :amount_cents, :frequency, :due_day ])
     end
 
+    # @rbs () -> ActionController::Parameters
     def amount_params
       params.expect(allowance: [ :amount_cents ])
     end
