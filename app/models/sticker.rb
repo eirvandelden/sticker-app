@@ -1,3 +1,4 @@
+# Represents a positive sticker or a penalty on a sticker card.
 class Sticker < ApplicationRecord
   EMOJI_POOL = %w[⭐ 🌈 🐿️ 💎 🐶 🦄 🧸 🍭 🎈 🎨 🚀 🧁
 🍀 🐼]
@@ -13,6 +14,7 @@ class Sticker < ApplicationRecord
 
   private
 
+  # Gives a positive sticker a random emoji when it has none.
   # @rbs () -> void
   def assign_random_emoji
     return unless positive? && emoji.blank?
@@ -20,11 +22,13 @@ class Sticker < ApplicationRecord
     self.emoji = EMOJI_POOL.sample
   end
 
+  # Asks the card to check whether this sticker completed it.
   # @rbs () -> void
   def check_card_completion
     sticker_card.check_and_create_next_card_if_completed
   end
 
+  # Adds a notification to the child's dashboard and refreshes the cards over Action Cable.
   # @rbs () -> void
   def broadcast_sticker_added
     profile = sticker_card.child_profile
