@@ -142,3 +142,8 @@ Domain skills applied: rails-architecture, ruby-style, rails-testing, dependenci
 - The unsigned-method script accepted any `# @rbs` line, including `@rbs @ivar:` and `module-self`, so it did not prove a method type exists → fixed (replaced with an `RBS::InlineParser` check that counts only parsed method-type annotations and also reports parser diagnostics; verified with a probe file on 2026-10-16)
 - The YARD grep matched test e-mail addresses such as `newchild@example.com` as `@example`, and discovery and proof used different scopes → fixed (one comment-anchored `git grep` over all tracked `.rb` files, used for both the Context claim and the Proof line; it prints nothing today)
 - `rbs collection init` does not read `Gemfile.lock`; `rbs collection install` does → fixed (wording corrected, and step 1 records the resolved gem signature entries)
+
+## Decisions (Etienne, 2026-10-16)
+
+- Steep 2.1.0 is installed globally. Run `steep check` from the worktree.
+- Remove `Current#account` (it calls the missing `Account` constant and has no caller). Do not stub `Account` in `sig/`. Commit the removal on its own.
