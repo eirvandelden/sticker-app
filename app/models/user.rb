@@ -35,11 +35,9 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl it] }
 
-  # @rbs () -> ChildProfile?
+  # @rbs () -> ChildProfile
   def ensure_child_profile
-    return child_profile if child_profile.present?
-
-    create_child_profile!
+    child_profile || create_child_profile!
   end
 
   private
