@@ -69,6 +69,9 @@ group :development do
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Generates RBS signatures for the Active Record models [https://github.com/pocke/rbs_rails]
+  gem "rbs_rails", require: false
 end
 
 group :test do
