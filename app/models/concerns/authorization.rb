@@ -1,6 +1,5 @@
 # @rbs module-self: ActionController::Base
 module Authorization
-  # @rbs @user: User
   private
     # @rbs () -> void
     def ensure_can_administer
