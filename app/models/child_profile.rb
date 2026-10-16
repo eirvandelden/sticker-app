@@ -9,10 +9,12 @@ class ChildProfile < ApplicationRecord
 
   validates :sticker_goal, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
+  # @rbs () -> StickerCard
   def active_sticker_card
     sticker_cards.order(created_at: :desc).first || provision_initial_sticker_card
   end
 
+  # @rbs () -> StickerCard?
   def rewardable_sticker_card
     # Ordered by created_at, not completed_at: a card only completes after the one
     # before it, so creation order already matches completion order — and unlike
@@ -20,22 +22,27 @@ class ChildProfile < ApplicationRecord
     sticker_cards.select(&:rewardable?).min_by(&:created_at)
   end
 
+  # @rbs () -> Integer
   def rewardable_sticker_cards_count
     sticker_cards.count(&:rewardable?)
   end
 
+  # @rbs () -> StickerCard
   def display_sticker_card
     active_sticker_card
   end
 
+  # @rbs () -> Allowance?
   def zakgeld
     allowances.detect { |allowance| allowance.kind == "zakgeld" }
   end
 
+  # @rbs () -> Allowance?
   def kleedgeld
     allowances.detect { |allowance| allowance.kind == "kleedgeld" }
   end
 
+  # @rbs () -> void
   def broadcast_card_refresh
     broadcast_replace_to(
       self,
@@ -57,6 +64,7 @@ class ChildProfile < ApplicationRecord
     )
   end
 
+  # @rbs (card_id: Integer) -> void
   def broadcast_completion_flag(card_id:)
     broadcast_replace_to(
       self,
@@ -68,16 +76,19 @@ class ChildProfile < ApplicationRecord
 
   private
 
+  # @rbs () -> StickerCard
   def provision_initial_sticker_card
     sticker_cards.create!
   end
 
+  # @rbs () -> void
   def sync_active_card_sticker_goal
     return unless saved_change_to_sticker_goal?
 
     active_sticker_card.update!(sticker_goal: sticker_goal)
   end
 
+  # @rbs () -> void
   def sync_active_card_goal
     return unless saved_change_to_goal?
 

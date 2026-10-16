@@ -1,0 +1,15 @@
+class AllowancePeriod < ApplicationRecord
+  extend _ModelQueries[AllowancePeriod]
+  include GeneratedAttributeMethods
+  include GeneratedAssociationMethods
+
+  module GeneratedAttributeMethods
+    def due_on: () -> Date
+    def given: () -> bool
+    def given?: () -> bool
+  end
+
+  module GeneratedAssociationMethods
+    def allowance: () -> Allowance
+  end
+end

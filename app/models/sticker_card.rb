@@ -13,36 +13,44 @@ class StickerCard < ApplicationRecord
   after_save :broadcast_goal_change
 
   # TODO: refactor away
+  # @rbs () -> Integer
   def positive_count
     stickers.positive.count
   end
 
+  # @rbs () -> Integer
   def negative_count
     stickers.negative.count
   end
 
+  # @rbs () -> Integer
   def required_stickers
     sticker_goal + negative_count
   end
 
+  # @rbs () -> String
   def progress_total_label
     return sticker_goal.to_s if negative_count.zero?
 
     "#{sticker_goal}+#{negative_count}"
   end
 
+  # @rbs () -> bool
   def completed?
     positive_count >= required_stickers
   end
 
+  # @rbs () -> bool
   def rewardable?
     completed? && !reward_given?
   end
 
+  # @rbs (String? new_goal) -> void
   def override_goal!(new_goal)
     update!(goal: new_goal, goal_overridden: true)
   end
 
+  # @rbs () -> void
   def check_and_create_next_card_if_completed
     return unless completed?
     return if child_profile.sticker_cards.where("created_at > ?", created_at).any?
@@ -52,17 +60,20 @@ class StickerCard < ApplicationRecord
 
   private
 
+  # @rbs () -> void
   def assign_sticker_goal
     self.sticker_goal = child_profile.sticker_goal
     self.goal = child_profile.goal
   end
 
+  # @rbs () -> void
   def only_complete_cards_can_be_rewarded
     if reward_given? && !completed?
       errors.add(:reward_given, "can't be set unless the card is completed")
     end
   end
 
+  # @rbs () -> void
   def mark_completion_time
     if completed? && completed_at.nil?
       self.completed_at = Time.current
@@ -70,6 +81,7 @@ class StickerCard < ApplicationRecord
   end
 
   # TODO: split into 2
+  # @rbs () -> void
   def create_new_card_if_just_completed
     if saved_change_to_updated_at? &&
        completed? &&
@@ -78,6 +90,7 @@ class StickerCard < ApplicationRecord
     end
   end
 
+  # @rbs () -> void
   def broadcast_completion
     return unless saved_change_to_completed_at? && completed?
 
@@ -85,18 +98,21 @@ class StickerCard < ApplicationRecord
     child_profile.broadcast_completion_flag(card_id: id)
   end
 
+  # @rbs () -> void
   def broadcast_reward_given
     return unless saved_change_to_reward_given? && reward_given?
 
     child_profile.broadcast_card_refresh
   end
 
+  # @rbs () -> void
   def broadcast_goal_change
     return unless saved_change_to_goal?
 
     child_profile.broadcast_card_refresh
   end
 
+  # @rbs () -> void
   def complete_now
     return child_profile.sticker_cards.create! if completed_at?
 
