@@ -5,7 +5,7 @@ gem "rails", "~> 8.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 gem "mvpa-css", github: "eirvandelden/mvpa.css"
-gem "appkit", github: "eirvandelden/appkit", ref: "fd86991b8b6ac88cb9d991a9cc838ee717a0e6da"
+gem "appkit", github: "eirvandelden/appkit", ref: "d837929ea9b31920b3a74ea493ec93b522c179b1"
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
