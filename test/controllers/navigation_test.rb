@@ -63,6 +63,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
 
     get parent_children_path
 
+    assert_response :success
     assert_select "nav ul li:first-child a[href=?][aria-current=?]", parent_children_path, "page"
   end
 
@@ -94,6 +95,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
+    assert_response :success
     assert_select "nav ul li:first-child a[href=?][aria-current=?]", child_dashboard_path, "page"
   end
 
@@ -102,6 +104,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
 
     get parent_children_path
 
+    assert_response :success
     assert_select "nav ul li:first-child a", text: "Home"
     assert_select "nav a[href=?]", edit_preferences_path, text: "Voorkeuren"
     assert_select "nav button", text: "Uitloggen"
