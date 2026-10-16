@@ -1,7 +1,10 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents mark a child's reward as given.
   class RewardsController < ApplicationController
     before_action :ensure_parent
 
+    # Marks the child's oldest rewardable card as rewarded.
     # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
