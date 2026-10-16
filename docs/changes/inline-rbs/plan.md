@@ -214,3 +214,8 @@ Domain skills applied: ruby-style, rails-architecture, rails-testing, dependenci
 
 - The comment-only diff check covers `lib`, but the new `lib/tasks/rbs.rake` is code, so the check would print its lines → fixed (step 10 limits the check to `app` and names the rake file's own verification in step 2)
 - The comment-block check accepts `# @type` as a method block's last line, though it claims to require `# @rbs` → fixed (the last-line regex is now `@rbs` only; the unused `annotation` regex is gone)
+
+## Decisions (coordinator, 2026-10-16)
+
+- Keep `# @type var card: untyped` in `Parent::StickersController#create` and `Parent::PenaltiesController#create`. The intent excludes behaviour changes, and `child.active_sticker_card` would create a card where the code raises today.
+- Do not push. The `review-report-fresh` hook needs Etienne's `/review` first. Commit locally and report.
