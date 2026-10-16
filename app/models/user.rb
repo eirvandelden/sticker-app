@@ -10,10 +10,12 @@ class User < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:name) }
 
+  # @rbs () -> bool
   def current?
     self == Current.user
   end
 
+  # @rbs () -> bool
   def avatar_displayable?
     avatar.attached? && avatar.attachment.persisted?
   end
@@ -33,6 +35,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :locale, inclusion: { in: %w[en nl it] }
 
+  # @rbs () -> ChildProfile?
   def ensure_child_profile
     return child_profile if child_profile.present?
 
@@ -40,6 +43,7 @@ class User < ApplicationRecord
   end
 
   private
+  # @rbs () -> void
   def acceptable_avatar
     return unless avatar.attached?
 
@@ -47,12 +51,14 @@ class User < ApplicationRecord
     validate_avatar_size
   end
 
+  # @rbs () -> void
   def validate_avatar_content_type
     return if AVATAR_CONTENT_TYPES.include?(detected_avatar_content_type)
 
     errors.add(:avatar, :invalid_content_type)
   end
 
+  # @rbs () -> String?
   def detected_avatar_content_type
     io = avatar_upload_io
     Marcel::MimeType.for(io)
@@ -60,10 +66,12 @@ class User < ApplicationRecord
     io&.rewind if io.respond_to?(:rewind)
   end
 
+  # @rbs () -> untyped
   def avatar_upload_io
     pending_avatar_upload_io || StringIO.new(avatar.blob.download)
   end
 
+  # @rbs () -> untyped
   def pending_avatar_upload_io
     attachable = attachment_changes["avatar"]&.attachable
 
@@ -73,12 +81,14 @@ class User < ApplicationRecord
     attachable if attachable.respond_to?(:read)
   end
 
+  # @rbs () -> void
   def validate_avatar_size
     return if avatar.blob.byte_size <= MAX_AVATAR_SIZE
 
     errors.add(:avatar, :file_size_too_large)
   end
 
+    # @rbs () -> void
     def provision_child_profile
       return unless child?
 

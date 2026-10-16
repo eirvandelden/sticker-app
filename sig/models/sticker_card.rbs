@@ -1,0 +1,26 @@
+class StickerCard < ApplicationRecord
+  extend _ModelQueries[StickerCard]
+  include GeneratedAttributeMethods
+  include GeneratedAssociationMethods
+
+  module GeneratedAttributeMethods
+    def goal: () -> String?
+    def goal_overridden?: () -> bool
+    def reward_given?: () -> bool
+    def completed_at: () -> ActiveSupport::TimeWithZone?
+    def completed_at=: (ActiveSupport::TimeWithZone | Time | nil) -> (ActiveSupport::TimeWithZone | Time | nil)
+    def completed_at?: () -> bool
+    def sticker_goal: () -> Integer
+    def sticker_goal=: (Integer) -> Integer
+    def goal=: (String?) -> String?
+    def saved_change_to_updated_at?: () -> bool
+    def saved_change_to_completed_at?: () -> bool
+    def saved_change_to_reward_given?: () -> bool
+    def saved_change_to_goal?: () -> bool
+  end
+
+  module GeneratedAssociationMethods
+    def child_profile: () -> ChildProfile
+    def stickers: () -> untyped
+  end
+end

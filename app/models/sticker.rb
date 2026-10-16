@@ -13,16 +13,19 @@ class Sticker < ApplicationRecord
 
   private
 
+  # @rbs () -> void
   def assign_random_emoji
     return unless positive? && emoji.blank?
 
     self.emoji = EMOJI_POOL.sample
   end
 
+  # @rbs () -> void
   def check_card_completion
     sticker_card.check_and_create_next_card_if_completed
   end
 
+  # @rbs () -> void
   def broadcast_sticker_added
     profile = sticker_card.child_profile
     broadcast_append_to(
