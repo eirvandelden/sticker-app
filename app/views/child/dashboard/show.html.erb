@@ -12,9 +12,7 @@
     <span id="<%= dom_id(@child_profile, :completion_flag) %>"></span>
 
     <section id="<%= dom_id(@child_profile, :notifications) %>">
-      <% @recent_stickers.each do |s| %>
-        <%= render "child/dashboard/sticker_notification", sticker: s %>
-      <% end %>
+      <%= render partial: "child/dashboard/sticker_notification", collection: @recent_stickers, as: :sticker %>
     </section>
 
     <%= render "child/dashboard/card", child_profile: @child_profile, last_viewed: @last_viewed %>

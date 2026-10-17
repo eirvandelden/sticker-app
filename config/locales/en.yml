@@ -86,8 +86,6 @@ en:
       profile_link: My Profile
       someone: Someone
       title: Your Sticker Card
-  common:
-    logout: "Logout 🐿️"
   errors:
     admin_required: Admin access required
     child_required: Child access required
@@ -122,9 +120,6 @@ en:
     en: English
     it: Italian
     nl: Dutch
-  navigation:
-    home: Home
-    preferences: Preferences
   parent:
     actions:
       give_penalty: "❌ Give Penalty"

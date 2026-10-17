@@ -86,8 +86,6 @@ nl:
       profile_link: Mijn profiel
       someone: Iemand
       title: Jouw sticker kaart
-  common:
-    logout: "Uitloggen 🐿️"
   errors:
     admin_required: Admin toegang vereist
     child_required: Child toegang vereist
@@ -122,9 +120,6 @@ nl:
     en: Engels
     it: Italiaans
     nl: Nederlands
-  navigation:
-    home: Startpagina
-    preferences: Voorkeuren
   parent:
     actions:
       give_penalty: "❌ Geef Straf"
