@@ -6,15 +6,22 @@ class AppkitShadowsTest < ActiveSupport::TestCase
   end
 
   test "the nav differs from appkit's only in the Home link" do
-    appkit_only = appkit_lines("shared/_nav.html.erb") - app_lines("shared/_nav.html.erb")
-    app_only = app_lines("shared/_nav.html.erb") - appkit_lines("shared/_nav.html.erb")
+    app_nav = app_lines("shared/_nav.html.erb")
+    appkit_nav = appkit_lines("shared/_nav.html.erb")
+    home = app_nav.index { |line| line.strip == APP_HOME_LINE }
 
-    assert_equal [ %(<li><%= nav_section_tab t("appkit.navigation.home"), home_path %></li>) ], app_only.map(&:strip)
-    assert_equal 1, appkit_only.size
-    assert_includes appkit_only.first, "root_path"
+    assert home, "the app's nav has no Home line"
+    assert_includes appkit_nav[home], "root_path"
+    assert_equal without_line(appkit_nav, home), without_line(app_nav, home)
   end
 
   private
+
+  APP_HOME_LINE = %(<li><%= nav_section_tab t("appkit.navigation.home"), home_path %></li>)
+
+  def without_line(lines, index)
+    lines.reject.with_index { |_line, position| position == index }
+  end
 
   def appkit_lines(path)
     view_lines Appkit::Engine.root.join("app/views/appkit", path)
