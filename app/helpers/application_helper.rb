@@ -2,6 +2,8 @@
 # @rbs module-self: ActionView::Base
 # @rbs module-self: _RbsRailsPathHelpers
 module ApplicationHelper
+  # @type const Appkit::QrCodeLink: untyped
+
   # Returns the path of a QR code that signs the user in on another device.
   # QrCodeController expects an already-signed payload, not a raw URL.
   # @rbs (User user) -> String
