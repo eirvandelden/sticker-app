@@ -1,4 +1,4 @@
-# Suggests a pocket money amount from the age of a child, following the NIBUD guideline.
+# Suggests a pocket money or clothing money amount from the age of a child, following the NIBUD guideline.
 class NibudAdvice
   ZAKGELD_WEEKLY = [
     [ 4..5,   50 ],
