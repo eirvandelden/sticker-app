@@ -86,7 +86,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
       get page
 
       assert_response :success
-      assert_select "nav ul li:first-child a[aria-current]", count: 0
+      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
     end
   end
 
@@ -97,7 +97,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
       get page
 
       assert_response :success
-      assert_select "nav ul li:first-child a[aria-current]", count: 0
+      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
     end
   end
 
