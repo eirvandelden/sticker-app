@@ -19,8 +19,3 @@ class Current < ActiveSupport::CurrentAttributes
   def self.user=: (User?) -> User?
   def user: () -> untyped
 end
-
-# The concern's own enum; the generated User#administrator? is not visible under module-self ApplicationRecord.
-module User::Role
-  def administrator?: () -> bool
-end
