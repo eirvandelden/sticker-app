@@ -1,153 +1,139 @@
-# Plan: Inline RBS instead of YARD (round 2: summaries, descriptions, rbs_rails)
+# Plan: Inline RBS instead of YARD (round 3: no tracked signature files)
 
-From `intent.md` (2026-10-16, revised after delivery). Status: accepted.
+From `intent.md` (2026-10-16, revised 2026-10-17). Status: accepted.
 
 ## Context
 
-This is a personal Rails 8.1.4 app on Ruby 4.0.6, managed by `rv`. Branch `inline-rbs` already delivers the first version of the intent, in commits `4d5153c..50589d4`:
+This is a personal Rails 8.1.4 app on Ruby 4.0.6, managed by `rv`. Branch `inline-rbs` (pull request #180) already delivers rounds 1 and 2 of the intent, up to commit `f27e40b`:
 
-- `Steepfile` (`target :app`, `signature "sig"`, `check "app", "lib", inline: true`), `rbs_collection.yaml`, `rbs_collection.lock.yaml` and `/.gem_rbs_collection/` in `.gitignore`.
-- A `# @rbs` signature on each of the 119 `def` nodes in `app/` and `lib/`. `lib/` holds only an empty `lib/tasks/`.
-- Hand-written stubs: `sig/models/*.rbs` (6 files, 136 lines) and `sig/stubs/{active_record,appkit,namespaces,rails,routes}.rbs`.
-- A `steep` job in `.github/workflows/ci.yml`, and the `steep check` line in `AGENTS.md` (`CLAUDE.md` is a tracked symlink to it).
-- `Current#account` removed on Etienne's decision (2026-10-16, recorded in commit `48ae61b`), and the grouped `include` lines split. `steep check` exits 0, and review rounds 1 to 4 in `review.md` closed with no open finding.
+- `Steepfile` (`target :app`, `signature "sig"`, `check "app", "lib", inline: true`), `rbs_collection.yaml`, `rbs_collection.lock.yaml`, `/.gem_rbs_collection/` in `.gitignore`.
+- An inline `# @rbs` signature, a one-line description on every method, and a one-line summary on every class and module in `app/` and `lib/`.
+- `rbs_rails` 0.13.1 in `group :development`, and `lib/tasks/rbs.rake`, which defines `rbs_rails:all`, `rbs_rails:generate_rbs_for_models` and `rbs_rails:generate_rbs_for_path_helpers`.
+- 17 tracked files under `sig/`: 11 generated model files in `sig/rbs_rails/app/models/`, and 6 hand-written gap stubs in `sig/stubs/` (`appkit`, `namespaces`, `rails`, `rbs_rails_overrides`, `routes`, `turbo_rails`).
+- A `steep` job in `.github/workflows/ci.yml` that runs `steep check` on the tracked `sig/`.
 
-After delivery Etienne revised `intent.md`. This plan covers only the new work:
+On 2026-10-17 Etienne revised `intent.md`: no file under `sig/` is tracked, the model RBS is generated at check time by a rake task, and each hand-written gap stub is expressed inline, removed by another means, or reported. This plan covers only that change.
 
-1. A one-line summary comment above every class and module in `app/` and `lib/`.
-2. A one-line description above every method signature in `app/` and `lib/`.
-3. `rbs_rails` as a development gem, whose generated RBS replaces the hand-written `sig/models/*.rbs`.
-4. From the PR #180 review, passed on by the coordinator: an audit of each `sig/stubs/*.rbs` file against the RBS collection, keeping only real gaps with a header comment that names the gap.
+Facts measured on 2026-10-17, in throwaway copies under the session scratchpad (never in this worktree):
 
-Facts measured on 2026-10-16 in this worktree (`50589d4`):
+- RBS 4.2.0 inline syntax has no `# @rbs!` block. `docs/inline.md` of the gem lists `# @rbs` method types, `#:` on attributes and constants, `# @rbs @ivar:`, `# @rbs module-self:` and `# @rbs skip`, and nothing that declares a method without a `def` or that declares a foreign class.
+- A fresh `git clone` of this branch, with `sig/rbs_rails/` untracked and deleted and no `config/master.key`, runs `bin/rails db:prepare rbs_rails:all` without error. It regenerates the 11 model files byte-identical to the tracked ones (`diff -r` prints nothing), plus `sig/rbs_rails/path_helpers.rbs`.
+- The generated `path_helpers.rbs` declares `interface ::_RbsRailsPathHelpers` with every route helper, `qr_code_path` and `session_transfer_url` (Appkit engine routes) included, and includes it into `ActionController::Base` only, not `ActionView::Base`.
+- Each stub was removed and `steep check` rerun. The gaps and the inline means that cleared them:
 
-- Steep 2.1.0 is installed globally (`steep --version`).
-- 50 `class`/`module` nodes exist in `app/` and `lib/`, and none has a summary comment. The intent counts 44; the difference is the namespace reopenings (`module Parent` opens in 10 files, `module ApplicationCable` in 2, `module Authorization` in 2). This plan covers all 50 nodes, which satisfies "every class and module" under either count.
-- 114 of the 119 `def` nodes have no comment line other than `# @rbs`. The other 5 have only a "why" or `TODO` comment, which is not a description: `StickerCard#positive_count` and `#create_new_card_if_just_completed` (`TODO`), `ApplicationController#post_authenticating_url` and `#redirect_signed_in_user_to_root` (Appkit notes), `ApplicationHelper#transfer_qr_code_path` (QR note). All 119 need a description.
-- The YARD tag grep in `## Proof` prints nothing, over every tracked `.rb` file.
+  | Gap (stub) | Errors without it | Inline means | Result |
+  | --- | --- | --- | --- |
+  | `routes.rbs` | 26 | Generated `path_helpers.rbs`, plus a second `# @rbs module-self: _RbsRailsPathHelpers` on `ApplicationHelper` | 0 errors |
+  | `namespaces.rbs` (`Admin`, `Users`) | 4 | Nest the 4 compact `class Admin::X` / `class Users::X` controllers inside `module Admin` / `module Users`, as `module Parent` already is | 0 errors |
+  | `rails.rbs`: `User::Role#administrator?` | 1 | `# @type self: User` as the first line of `User::Role#can_administer?` | 0 errors |
+  | `rbs_rails_overrides.rbs`: `StickerCard#completed_at=` | 1 | `Time.zone.now` in place of `Time.current` in `StickerCard#mark_completion_time` | 0 errors |
+  | `appkit.rbs` | 3 fatal `RBS::UnknownTypeName`, then call sites | None. `# @rbs skip` above an `include Appkit::X` line removes that include from the RBS, but `transfer_id`, `signed_in?` and `Appkit::QrCodeLink` stay undeclared | Gap |
+  | `turbo_rails.rbs` | 5 | None | Gap |
+  | `rails.rbs`: `Current.user`, `.user=`, `#user` | 19 | None: `attribute` makes them at runtime | Gap |
+  | `rails.rbs`: `ApplicationCable::Connection#current_user=` | 1 | None: `identified_by` makes it at runtime | Gap |
+  | `rails.rbs`: `Rails::Application::Configuration#git_revision`, `#app_version` | 2 | None: set in `config/initializers/version.rb` | Gap |
+  | `rbs_rails_overrides.rbs`: `ActiveStorage::Attached::One#blob`, `User#attachment_changes` | 3 | None: the collection types them wrongly or not at all | Gap |
 
-A probe on 2026-10-16, in a throwaway copy of this tree under the session scratchpad (never in this worktree), proved the `rbs_rails` path:
-
-- `gem "rbs_rails", require: false` in `group :development`, installed with `bi`, adds only `rbs_rails (0.13.1)` to `Gemfile.lock`. Its dependencies `parser`, `prism` and `rbs (>= 1)` are already locked.
-- `bin/rails rbs_rails:generate_rbs_for_models`, through a `lib/tasks/rbs.rake` written in house style (below), passes `bin/rubocop` and generates 11 files, 4,818 lines, under `sig/rbs_rails/app/models/`. They cover the 7 app models that have a table, plus `ActiveStorage::{Attachment,Blob,VariantRecord}` and `Appkit::PushSubscription`. It skips `Transfer` (no table) and `ApplicationRecord` (abstract). A second run changes no file, and the gem's CLI `bundle exec rbs_rails models` writes the same output.
-- The generated `Allowance` types fix the four errors that the review found in the hand-written `sig/models/allowance.rbs`: `child_profile_id=: (::Integer) -> ::Integer` exists, `next_due_on` and `next_due_on=` both use `::Date`, `kind=` and `frequency=` take `(::Integer | ::String | ::Symbol)`, and `allowance_periods` returns `::AllowancePeriod::ActiveRecord_Associations_CollectionProxy`.
-- It needs a migrated development database (`check_db_migrations` is on by default). The worktree has only `storage/test.sqlite3`; `bin/rails db:prepare` creates `storage/development.sqlite3`, which `.gitignore` already ignores.
-- With `sig/models/` deleted, `steep check` reported 11 errors. The fixes listed under Design decisions cleared all 11. `steep check` then printed `No type error detected.`
-- Stub audit: each part of `sig/stubs/` was removed on its own, and `steep check` was run each time. Error counts without each part:
-
-  | Stub part | Errors without it | Verdict |
-  | --- | --- | --- |
-  | `active_record.rbs` (`_ModelQueries`, `ApplicationRecord` readers) | 0 | Duplicate of generated and collection types: delete. |
-  | `rails.rbs`: `ApplicationRecord#id`, `#created_at`, `#updated_at` | 0 | Duplicate of the generated readers: delete. |
-  | `rails.rbs`: `Rails::Application::Configuration#git_revision`, `#app_version` | 2 | Gap: app-specific config keys. Keep. |
-  | `rails.rbs`: `ApplicationCable::Connection#current_user=` | 1 | Gap: made at runtime by `identified_by`. Keep. |
-  | `rails.rbs`: `Current.user`, `.user=`, `#user` | 19 | Gap: made at runtime by `attribute`. Keep. |
-  | `rails.rbs`: `User::Role#administrator?` | 1 | Gap: the generated `User#administrator?` is not visible under `module-self: ApplicationRecord`, and `module-self: User` is a circular mix-in error. Keep. |
-  | `namespaces.rbs` (`module Admin`, `module Users`) | 4 | Gap: compact `class Admin::X` needs the namespace declared. Keep. |
-  | `routes.rbs` | 26 | Gap: the collection has no route helpers. Generated path helpers (`rbs_rails:generate_rbs_for_path_helpers`) still leave 2 errors, because they miss `qr_code_path` and `session_transfer_url` in `ActionView::Base`. Keep. |
-  | `appkit.rbs` | 3 | Gap: Appkit ships no RBS and has no collection entry. Keep. |
-  | `turbo_rails.rbs` (new) | 5 | Gap: turbo-rails has no collection entry. Keep. |
-- The type-error probe still fails Steep with two `Ruby::ArgumentTypeMismatch` diagnostics, but only under a full `steep check`. `steep check <one file>` does not load the inline signatures of the other files and reports `NoMethod` instead, so the Proof uses the full run.
-- `bin/rbs collection install --frozen` still passes with the old lockfile. A plain `bin/rbs collection install` adds the `rbs` and `optparse` entries and rewrites the YAML indentation. `steep check` stays clean with the new lockfile.
-- `RBS::InlineParser` (rbs 4.2.0) reads a description line, an extra comment line and then `# @rbs () -> Integer` above a `def` as a signed method. It reads a summary line followed by `# @rbs module-self: X` above a module as a `module-self` member. It reports no diagnostic for either.
+- With the four inline means applied, `routes.rbs` and `namespaces.rbs` deleted and the two blocks removed, the fresh clone ran `bin/rails db:prepare rbs_rails:all`, `bin/rbs collection install --frozen` and `steep check`, which printed `No type error detected.` In that copy `bin/rubocop` on the 7 changed files reported no offenses, and `bin/rails test test/integration/admin test/integration/users test/models` ran 115 tests, 0 failures.
+- `RBS::Prototype::Runtime` (`rbs prototype runtime`) is deprecated in rbs 4.2 (it prints a warning naming ruby/rbs#2841) and wrote an empty file for the Appkit, Turbo and `Current` constants. It is no way to generate the remaining gaps.
 
 ## Design decisions
 
-- **Comment block order.** Directly above each `class`, `module` and `def` sits one contiguous comment block, in this order: (1) the one-line summary or description, (2) any existing "why" or `TODO` comment, unchanged, (3) the existing `# @rbs` lines, last, directly above the `def`. For a module with `# @rbs module-self:`, the summary goes above that line. Never put a blank line inside the block; the inline parser attaches only a contiguous block.
-- **Wording.** Short, direct, present tense, one line under 120 characters, ending with a full stop. Classes and modules: "Represents a child's sticker card toward a reward." Methods: a verb phrase such as "Returns the newest sticker card, creating one if none exists." Never use patterns such as "Domain model for X", "This method ...", or restate the signature ("Takes an Integer and returns a Date"). Describe what the method does in domain terms; read the method body and `AGENTS.md` before writing each line. Controller actions describe the action ("Awards a positive sticker to the child's active card."). Callbacks name their trigger ("Copies the profile's sticker goal onto a new card."). Namespace reopenings get the same line in every file, for example `# Groups the controllers that parents use.` above each `module Parent`.
-- **Descriptions on every method, private ones included.** The dotfiles' `ruby-style` default is a summary per class, a signature per method, and other comments only for a non-obvious why. Etienne asked explicitly on 2026-10-16 for a one-line description above each method, and `intent.md` records it, so this plan keeps the descriptions. That request overrides the default for this repository.
-- **No other comment changes.** Existing "why" and `TODO` comments, including the comment inside `ChildProfile#rewardable_sticker_card`, stay word for word. No `@param`, `@return` or other YARD tag.
-- **`rbs_rails` replaces the hand-written model stubs.** Add `gem "rbs_rails", require: false` to the existing `group :development`, with a one-line comment in the Gemfile's style. Generate with `bundle exec rbs_rails models` into the default `sig/rbs_rails/`. Commit the generated files, because the CI `steep` job has no database to generate them from. Regenerate through a rake task, so the command is the usual `bin/rails` one after a migration. Write `lib/tasks/rbs.rake` by hand rather than with `bin/rails g rbs_rails:install`, whose template uses single quotes:
-
-  ```ruby
-  # Adds the rbs_rails tasks, which generate RBS for the Active Record models into sig/rbs_rails.
-  begin
-    require "rbs_rails/rake_task"
-
-    RbsRails::RakeTask.new
-  rescue LoadError
-    # rbs_rails is a development gem, so production has no such tasks.
-  end
-  ```
-
-  The `rescue LoadError` keeps `bin/rails -T` working where the development group is not installed. Do not add `.rbs_rails.rb` or `config/rbs_rails.rb`: the defaults work, and `config/` is out of scope. Do not generate path helpers; the stub audit shows they do not replace `sig/stubs/routes.rbs`.
-- **Hand-written stubs after the switch.** Follow the stub audit table in Context. Delete `sig/models/*.rbs` (all 6) and `sig/stubs/active_record.rbs`. Remove the `ApplicationRecord` block from `sig/stubs/rails.rbs`. `_ModelQueries` returned `untyped` from `all`, `where`, `order` and `includes`, which masked the collection's relation types; deleting it lets them through. Keep the other parts of `rails.rbs`, and `appkit.rbs`, `namespaces.rbs` and `routes.rbs`, with their declarations unchanged. Give every file in `sig/stubs/` a header: RBS `#` comment lines at the top that name the gap it fills, for example `# Appkit ships no RBS, and the RBS collection has no entry for it.` In `rails.rbs`, put a one-line comment above each block naming its gap (config keys, `identified_by`, `CurrentAttributes`, the concern's own enum). Add two files, each with such a header:
-  - `sig/stubs/turbo_rails.rbs`: `module Turbo::Broadcastable` with `broadcast_replace_to` and `broadcast_append_to`, both `(*untyped, **untyped) -> void`, included into `ActiveRecord::Base`. The RBS collection has no turbo-rails entry. These two methods were in `sig/models/child_profile.rbs` and `sig/models/sticker.rbs` before.
-  - `sig/stubs/rbs_rails_overrides.rbs`: gaps in the generated and collection types, declared in the class body so that they override an included module and never duplicate it: `ActiveStorage::Attached::One#blob: () -> ActiveStorage::Blob`, `User#attachment_changes: () -> Hash[String, untyped]`, and `StickerCard#completed_at=: (ActiveSupport::TimeWithZone | Time | nil) -> (ActiveSupport::TimeWithZone | Time | nil)`. The last one exists because the generated setter accepts only `TimeWithZone`, while `Time.current` is typed `Time | TimeWithZone`; the setter accepts both at runtime. Overriding the type keeps `app/models/sticker_card.rb` code unchanged.
-- **The nil card in two controllers.** `Parent::StickersController#create` and `Parent::PenaltiesController#create` call `card.stickers` on `child.sticker_cards.order(created_at: :desc).first`. The generated type is `StickerCard | nil`, so Steep reports `Ruby::NoMethod`. Every code fix changes what happens when a child has no card (today a `NoMethodError` and a 500), and the intent forbids behaviour changes. This plan therefore adds the behaviour-free Steep annotation `# @type var card: untyped` on the line above each `card =` assignment. It is a type annotation, not a `# steep:ignore`. The alternative, `card = child.active_sticker_card`, is typed `StickerCard` and matches the domain, but creates a card on that path instead of failing. It goes in the report as a `Decision needed:` line; this plan does not take it.
-- **Fallback.** If `rbs_rails` fails in this worktree in a way the probe did not show (generation error, or a Steep diagnostic that needs a behaviour change), revert the Gemfile change, keep the hand-written `sig/models/*.rbs`, add a header comment to each (`# Hand-written: rbs_rails <reason>.`), and report the reason. This is the intent's own fallback.
-- **RBS collection lockfile.** Refresh it with `bin/rbs collection install` (bundled rbs 4.2.0) after the Gemfile change, so it matches `Gemfile.lock`, and commit it on its own. The YAML indentation change in that diff is the tool's output; do not hand-edit it.
-- **Regeneration recipe.** Add one line to the `AGENTS.md` Commands block: `bin/rails rbs_rails:generate_rbs_for_models  # regenerate sig/rbs_rails after a migration`. Without it, nobody knows how the 4,818 committed lines are made. Edit `AGENTS.md`, never the `CLAUDE.md` symlink.
-- **No CI change.** The existing `steep` job reads the committed `sig/rbs_rails/`. A CI check that the generated files are fresh is not in the intent; it is listed as deferred in the report.
-- **Checks are commands, not committed files.** The summary and description checks below run from the repository root, as the existing unsigned-method check does. The intent lists no new script in scope.
+- **One generation command.** `bin/rbs collection install --frozen && bin/rails db:prepare rbs_rails:all` is the documented command line. The collection install is there because `.gem_rbs_collection/` is ignored, so a fresh clone has no library types without it. `rbs_rails:all` already exists through `lib/tasks/rbs.rake` and generates both the model RBS and the path helpers. `db:prepare` comes first because generation boots the app in development and needs a migrated `storage/development.sqlite3`; on a fresh clone that database does not exist. No wrapper task: two existing tasks on one command line need no new code.
+- **Who calls it.** The intent names local runs, "the tests setup" and the CI `steep` job. Local: the `AGENTS.md` Commands block documents the command above `steep check`. Tests setup: `bin/setup`, which developers run before the test suite, gets a `== Generating type signatures ==` section with `bin/rbs collection install --frozen` and `bin/rails rbs_rails:all`, placed after the `--reset` line so that a reset database is the one it reads; `test/` is out of scope, so `test_helper.rb` does not. CI: the `steep` job already runs `bin/rbs collection install --frozen`, and gets `bin/rails db:prepare rbs_rails:all` before `steep check`.
+- **`.gitignore`.** Add `/sig/` in the block under `/.gem_rbs_collection/`. `git rm -r --cached sig/rbs_rails` untracks the generated files and keeps them on disk.
+- **Inline means for four gaps**, from the table in Context:
+  - `ApplicationHelper` gets a second line, `# @rbs module-self: _RbsRailsPathHelpers`, under its existing `module-self: ActionView::Base`. At runtime every helper module is mixed into a view that has the route helpers, so the constraint is true. It refers to an interface that exists only after generation, which is fine: `steep check` without generation already fails on the missing model types.
+  - `app/controllers/admin/{base,dashboard,users}_controller.rb` and `app/controllers/users/profiles_controller.rb` change from compact `class Admin::X` to nested `module Admin` / `class X`, matching the `module Parent` files. Each new `module` line gets the same summary in every file of its namespace: `# Groups the controllers that administrators use.` and `# Groups the controllers for a user's own profile.`. The class summary and the body move in by two spaces, unchanged otherwise. `class UsersController < Admin::BaseController` keeps its explicit superclass. Constant lookup gains the `Admin` and `Users` lexical scopes; neither namespace defines a constant that shadows a top-level one (`app/controllers/admin/` and `app/controllers/users/` hold only these four controllers).
+  - `User::Role#can_administer?` gets `# @type self: User` as the first line of its body. It is a Steep annotation, the same kind the `included do` block of that file already uses.
+  - `StickerCard#mark_completion_time` uses `Time.zone.now` in place of `Time.current`. `Time.current` is `Time.zone ? Time.zone.now : Time.now`, and Rails always sets `Time.zone` from `config.time_zone` (default UTC), so the value is the same. The collection types `Time.zone.now` as `ActiveSupport::TimeWithZone`, which the generated setter accepts.
+- **The remaining gaps are a decision for Etienne.** Appkit, turbo-rails, `Current` attributes, `identified_by`, the two config keys and the two ActiveStorage methods have no inline RBS syntax. The intent says such a gap goes back to Etienne as one concrete question. This plan does all the work that does not depend on his answer, keeps the four remaining stub files tracked until he answers, and lists the steps for each answer under `## Blocked on Etienne's answer`. It does not pick an option.
+- **`lib/tasks/rbs.rake` header.** The first line now says the tasks generate RBS for the models and the route helpers into `sig/rbs_rails`, because `rbs_rails:all` now also produces `path_helpers.rbs`. No code change in that file.
+- **Comments in the nested controllers.** The existing summary and description lines stay word for word. The comment-block check from round 2 must still print `0 without summary` and `0 without description`.
 
 ## Integration points
 
-- `rbs_rails` 0.13.1 (new development gem, approved in `intent.md`); its CLI boots the app in development and reads the schema from `storage/development.sqlite3`.
-- Steep 2.1.0, global install locally and `gem install` in the existing CI `steep` job. Never in the Gemfile.
-- `ruby/gem_rbs_collection` through `rbs_collection.yaml`; the generated model RBS uses its `ActiveRecord::Base::ClassMethods` and `ActiveRecord::Relation::Methods` types.
-- `eirvandelden/appkit`: unchanged. Its `Appkit::PushSubscription` model gets generated RBS, and `sig/stubs/appkit.rbs` stays.
-- `rubocop-eirvandelden`: unchanged. Plain `#` comment lines pass it.
+- `rbs_rails` 0.13.1 (already in `group :development`): its rake tasks boot the app in development and read the schema of `storage/development.sqlite3`.
+- The CI `steep` job: `spinel-coop/setup-rv` with `install-gems: true` installs every Gemfile group, so `rbs_rails` is present there. The job's first green run on the pull request proves it.
+- Steep 2.1.0, global install locally and `gem install` in CI, unchanged.
+- `eirvandelden/appkit`: unchanged here. Its engine routes reach the generated `path_helpers.rbs`.
+- Rails routing: unchanged; nesting the controllers keeps the constant names `Admin::BaseController`, `Admin::DashboardController`, `Admin::UsersController` and `Users::ProfilesController`.
 
 ## Files that change
 
-- `Gemfile`, `Gemfile.lock`: add `rbs_rails` to `group :development` (the only gem change).
-- `rbs_collection.lock.yaml`: refreshed by `bin/rbs collection install`.
-- `sig/rbs_rails/app/models/**/*.rbs` (new, generated, 11 files).
-- `lib/tasks/rbs.rake` (new): the rbs_rails rake tasks.
-- `sig/models/*.rbs` (6 files) and `sig/stubs/active_record.rbs`: deleted.
-- `sig/stubs/rails.rbs`: `ApplicationRecord` block removed, gap comments added.
-- `sig/stubs/appkit.rbs`, `sig/stubs/namespaces.rbs`, `sig/stubs/routes.rbs`: header comment only.
-- `sig/stubs/turbo_rails.rbs`, `sig/stubs/rbs_rails_overrides.rbs` (new), as described above.
-- `app/controllers/parent/stickers_controller.rb`, `app/controllers/parent/penalties_controller.rb`: one `# @type var card: untyped` line each.
-- Every `.rb` file in `app/` (37 files): summary comments above each `class`/`module` and a description above each `def`. Comment lines only.
-- `AGENTS.md`: the regeneration line.
+- `.gitignore`: `/sig/`.
+- `sig/rbs_rails/app/models/**/*.rbs` (11 files): untracked, kept on disk.
+- `sig/stubs/routes.rbs`, `sig/stubs/namespaces.rbs`: deleted.
+- `sig/stubs/rails.rbs`: the `User::Role` block removed.
+- `sig/stubs/rbs_rails_overrides.rbs`: the `StickerCard#completed_at=` block and its comment removed.
+- `app/helpers/application_helper.rb`: the second `module-self` line.
+- `app/controllers/admin/base_controller.rb`, `app/controllers/admin/dashboard_controller.rb`, `app/controllers/admin/users_controller.rb`, `app/controllers/users/profiles_controller.rb`: nested modules.
+- `app/models/user/role.rb`: the `# @type self: User` line.
+- `app/models/sticker_card.rb`: `Time.zone.now`.
+- `lib/tasks/rbs.rake`: header comment.
+- `bin/setup`: a generation section that installs the RBS collection and runs `rbs_rails:all`.
+- `.github/workflows/ci.yml`: one step in the `steep` job (approved in `intent.md`).
+- `AGENTS.md`: the generation line replaces the round 2 regeneration line: `bin/rbs collection install --frozen && bin/rails db:prepare rbs_rails:all  # generate sig/ (untracked); rerun after a migration or a route change`, placed directly above `steep check`. Edit `AGENTS.md`, never the `CLAUDE.md` symlink. Both are tracked although `.gitignore` lists them.
 
 ## Order of work
 
-1. Walking skeleton: run the summary check and the description check from `## Proof`. Watch them fail with `50 without summary` and `118 without description` (measured 2026-10-16). The check counts 118, not 119, because the "why" comment above `ApplicationHelper#transfer_qr_code_path` is one full sentence. That method still gets a description line above its "why" comment. A sample file in the scratchpad confirmed that the check passes a description followed by a `TODO` and `# @rbs`, passes a summary followed by `# @rbs module-self:`, and fails a bare `#`. Run the unsigned-method check and watch it pass with `0 unsigned or invalid`.
-2. Add `rbs_rails` to the Gemfile and run `bi`. Confirm that `git diff Gemfile.lock` adds only the `rbs_rails` entries. Add `lib/tasks/rbs.rake`, run `bin/rails -T rbs_rails` (three tasks) and `bin/rubocop lib/tasks/rbs.rake`. Run `bundle exec bundle-audit check --update`. Commit (`chore: add rbs_rails for model signatures`).
-3. Run `bin/rails db:prepare` (development), then `bin/rails rbs_rails:generate_rbs_for_models`. Confirm the four `Allowance` types listed in Context in `sig/rbs_rails/app/models/allowance.rbs`. Delete `sig/models/`, `sig/stubs/active_record.rbs` and the `ApplicationRecord` block in `sig/stubs/rails.rbs`. Run `steep check` and confirm it reports the same 11 diagnostics as the probe (5 broadcast, 2 nil card, 2 `blob`, 1 `attachment_changes`, 1 `completed_at=`). If it reports others, fix each one with a stub only, or apply the fallback.
-4. Add `sig/stubs/turbo_rails.rbs`, `sig/stubs/rbs_rails_overrides.rbs`, the header and gap comments in `sig/stubs/`, and the two `# @type var card: untyped` lines. Run `steep check` until it exits 0. Run the type-error probe from `## Proof`. Run `bin/rails test test/models test/controllers/parent`. Commit generated files, deletions and stubs together (`chore: generate model RBS with rbs_rails`), because any split leaves `steep check` red.
-5. Run `bin/rbs collection install`, then `steep check` and `bin/rbs collection install --frozen`. Commit `rbs_collection.lock.yaml` on its own.
-6. Models: add summaries and descriptions to every file in `app/models/` (including `concerns/` and `user/`). Run the comment-block check on `app/models`, `steep check` and `bin/rubocop app/models`. Commit (`docs: describe models`).
-7. Controllers and concerns: the same for `app/controllers/` (check scope `app/controllers`), one commit per namespace (`admin`, `parent`, `child`, `users`, root controller and concerns).
-8. Channels, jobs and helpers: the same for `app/channels/`, `app/jobs/` and `app/helpers/`. Commit. The comment-block check with its default `app lib` now prints `0 without summary` and `0 without description`.
-9. Add the regeneration line to `AGENTS.md`. Commit.
-10. Full gate: every `## Proof` check, then `bin/rails test`, `bin/rails test:system`, `bin/rubocop`, `bin/brakeman`, `bundle exec bundle-audit check --update`, `bin/erb_lint --lint-all --allow-no-files`. Re-read the full diff against `50589d4`: every hunk in `app/` must be comment lines only (`git diff 50589d4 -- app | grep -E '^[+-][^+-]' | grep -vE '^[+-][[:space:]]*#'` prints nothing except the two `# @type` lines, which the second `grep` already removes). `lib/tasks/rbs.rake` is the one new code file outside `app/`; step 2 verifies it with `bin/rails -T rbs_rails` and `bin/rubocop`. Push, and confirm the CI `steep` job passes on the pull request.
+1. Walking skeleton: run the `sig/` tracking check from `## Proof` and watch it fail, printing the 17 tracked files.
+2. Add `/sig/` to `.gitignore` and run `git rm -r --cached sig/rbs_rails`. Run `bin/rails rbs_rails:all`, then `steep check` (exit 0, since `routes.rbs` still declares the helpers; if Steep reports a duplicate between `_AppRoutes` and `_RbsRailsPathHelpers`, move step 3's first commit ahead of this step). Commit (`chore: stop tracking the generated model RBS`).
+3. Inline the four gaps, one commit each, running `steep check` and the narrowest tests after each:
+   - `ApplicationHelper` module-self, delete `sig/stubs/routes.rbs` (`chore: type route helpers from the generated path helpers`). Tests: `bin/rails test test/helpers test/integration/users`.
+   - Nest the four controllers, delete `sig/stubs/namespaces.rbs` (`refactor: nest the Admin and Users controllers`). Tests: `bin/rails test test/integration/admin test/integration/users test/controllers`. Run `bin/rubocop` on the four files.
+   - `# @type self: User` in `User::Role`, remove the block from `sig/stubs/rails.rbs` (`chore: type User::Role#can_administer? inline`). Tests: `bin/rails test test/models`.
+   - `Time.zone.now` in `StickerCard`, remove the block from `sig/stubs/rbs_rails_overrides.rbs` (`chore: type the card completion time without an override`). Tests: `bin/rails test test/models/sticker_card_test.rb`.
+4. Wire the generation: the `bin/setup` line, the CI step, the `lib/tasks/rbs.rake` header and the `AGENTS.md` line. Run `bin/setup --skip-server` once to prove the line works. Commit (`chore: generate the model RBS before steep check`).
+5. Run the fresh-clone check from `## Proof`.
+6. Full gate: every `## Proof` check except the `sig/` tracking check, then `bin/rails test`, `bin/rails test:system`, `bin/rubocop`, `bin/brakeman`, `bundle exec bundle-audit check --update`, `bin/erb_lint --lint-all --allow-no-files`. Re-read the full diff against `f27e40b`: every hunk in `app/` is a comment line, the four nestings (indentation, `module`, `end` and the two summary lines), or the one `Time.zone.now` line. Push, and confirm the CI `steep` job passes on pull request #180.
+7. Stop. Report that the four remaining stub files wait for Etienne's answer, with the `Decision needed:` line below. Do not start `## Blocked on Etienne's answer` without that answer.
+
+## Blocked on Etienne's answer
+
+Decision needed: RBS 4.2 has no inline syntax for the last gaps (Appkit modules and methods, turbo-rails broadcasts, `Current` attributes, `identified_by :current_user`, the `git_revision` and `app_version` config keys, `ActiveStorage::Attached::One#blob` and `User#attachment_changes`); which option do you want?
+
+- **A. Keep the four stub files tracked as the one exception** (recommended): `.gitignore` gets `/sig/*` and `!/sig/stubs/`, and the acceptance criterion `git ls-files sig prints nothing` becomes "prints only `sig/stubs/`". About 60 lines stay tracked, each with a comment naming its gap. Type checking at every call site stays as it is today. Follow-ups outside this change can shrink it: Appkit types into the appkit gem's own `sig/`, turbo-rails and ActiveStorage into `ruby/gem_rbs_collection`.
+- **B. Remove the files and mark the call sites inline.** `# @rbs skip` above the five `include Appkit::X` lines (verified to clear the unknown-type errors), then a Steep annotation or a `#: untyped` assertion at about 33 call sites (19 of them `Current.user`). The acceptance criterion holds as written. Those call sites lose type checking, and every new call site needs the same marker.
+- **C. Move the Appkit types into the appkit gem first** (a separate pull request in `eirvandelden/appkit`, which `intent.md` puts out of scope), then A or B for the rest.
+
+Steps after the answer: for A, edit `.gitignore` and the acceptance check, add one sentence to `AGENTS.md`, commit. For B, one commit per gap file, each deleting the file and adding the markers, `steep check` and the narrowest tests green after each. For C, wait for the appkit release, bump it with `bundle update appkit` (a dependency change that needs its own approval), delete `sig/stubs/appkit.rbs`, then A or B.
 
 ## Out of scope
 
-- Any other Gemfile change, Steep in the bundle, `rbs-inline`, rbs_rails configuration files, and generated path helpers.
-- `rubocop-yard`, `rubocop-eirvandelden`, any RuboCop config edit, `# steep:ignore`, and Steep diagnostic level changes.
-- Comments or signatures in `test/`, `config/`, `db/`, views and the Appkit gem.
-- A CI freshness check for `sig/rbs_rails/`, and any other `.github/` edit.
-- Behaviour changes: the nil-card code change (see Design decisions), the `Transfer` stub, the unfinished allowance code, the shadowed `app/models/concerns/authorization.rb`, and the second `enum :role` in `User::Role`.
+- Any Gemfile change, Steep in the bundle, `rbs-inline`, an rbs_rails config file, a wrapper rake task.
+- `# steep:ignore`, Steep diagnostic level changes, any RuboCop config edit.
+- `test/`, `config/` (including `config/initializers/version.rb`), `db/`, views and the Appkit gem.
+- Other refactors: the nil card in `Parent::StickersController#create` and `Parent::PenaltiesController#create` keeps its `# @type var card: untyped`; the `Transfer` stub, the unfinished allowance code, the shadowed `app/models/concerns/authorization.rb`.
+- A CI check that generated RBS is fresh: generation now runs in CI, so it is always fresh there.
 
 ## Risks
 
-- **Stale generated RBS.** A future migration leaves `sig/rbs_rails/` out of date, and Steep then checks against old columns. Mitigation: the rake task and the `AGENTS.md` regeneration line. A CI freshness check is deferred.
-- **Overrides hide real types.** `rbs_rails_overrides.rbs` widens three types. Each is a known gap in generated or collection RBS, and each override is narrower than the `untyped` it replaces in the old hand stubs.
-- **`# @type var card: untyped`** removes checking from two local variables. Accepted until Etienne decides on `active_sticker_card`.
-- **Probe drift.** The probe ran in a copy; the worktree may still differ (another dev database state, another collection checkout). Mitigation: step 3 compares the diagnostics against the probe before any fix, and the fallback exists.
-- **Description quality.** A mechanical check proves a line exists, not that it is true. Mitigation: each line is written after reading the method body, and step 10 re-reads the diff.
-- **Comment block attachment.** A blank line between the description and `# @rbs` would detach nothing in Ruby but could split the RBS comment block. Mitigation: the unsigned-method check catches a detached signature.
-- Rejected: committing no generated RBS and generating it in CI (the CI job would need a database and a Rails boot, and the intent did not approve that `.github/` change); `config/rbs_rails.rb` (in `config/`, out of scope); the `Time.current` to `Time.zone.now` code edit (a code change where a type override suffices); `.first!` or `active_sticker_card` in the controllers (behaviour changes).
+- **CI cannot boot development.** The fresh clone without `config/master.key` generated the RBS locally, but CI may lack a native dependency or set `BUNDLE_WITHOUT`. Mitigation: the first CI run on the pull request is the proof; if it fails, read the log and fix the job step only.
+- **Local `steep check` without generation fails.** A developer who skips `bin/setup` gets unknown-type errors. Mitigation: the `AGENTS.md` line sits directly above `steep check`, and `bin/setup` generates.
+- **Stale local RBS after a migration or a route change.** `rbs_rails:all` generates both the model and the route-helper RBS, so the developer reruns the documented command after either; the `AGENTS.md` line says so. CI always regenerates.
+- **Nesting changes constant lookup.** A bare constant inside `module Admin` resolves `Admin::X` before `::X`. Mitigation: no `Admin::` or `Users::` constant exists beyond the four controllers, and the integration tests for both namespaces run in step 3.
+- **`Time.zone.now` versus `Time.current`.** They differ only when `Time.zone` is nil, which Rails never leaves it. Rejected alternative: keeping the override file block.
+- **A module-self on a generated interface** ties `ApplicationHelper` to rbs_rails output. Rejected alternative: keeping `routes.rbs`, a hand-written list that already drifted once.
+- Rejected: `rbs prototype runtime` at check time (deprecated, empty output); a homemade generator in the rake task that reflects on `Current` and Appkit (new code that needs its own tests, and its output is `untyped` anyway); hand-written stubs emitted by the rake task (a tracked stub in disguise); `.rb` files of fake class reopenings for Steep only (dead Ruby code, and a tracked stub in disguise).
 
 ## Proof
 
-The change adds no runtime behaviour, so no new Minitest test exists. The type checker, the check commands below and the existing suites are the proof. Step 1 runs the two new checks and watches them fail.
+The change adds no runtime behaviour, so no new Minitest test exists. The type checker, the commands below and the existing suites are the proof.
 
+- `git ls-files sig` prints nothing, and `sig/` is in `.gitignore` → check: `test -z "$(git ls-files sig)" && git check-ignore -q sig/rbs_rails/app/models/user.rbs && echo SIG-OK`. Fails in step 1 with 17 files, prints the 4 remaining stub files after step 6, and passes only after the blocked step (or, under option A, its revised form).
+- On a fresh clone, one documented command generates the model RBS, and `steep check` then exits 0 → check: `d=$(mktemp -d) && git clone -q --branch inline-rbs "$PWD" "$d/app" && cd "$d/app" && bin/rbs collection install --frozen && bin/rails db:prepare rbs_rails:all && steep check && echo FRESH-OK`, run after step 4's commit.
+- The CI `steep` job does the same → check: `gh pr checks 180` shows `steep` as pass, and `gh run view <run-id> --job <steep-job-id> --log` shows the `bin/rails db:prepare rbs_rails:all` step ran before `steep check`.
 - Running `steep check` in the repo exits 0 → check: `steep check && echo STEEP-OK` prints `No type error detected.` and then `STEEP-OK`.
-- A method called with the wrong argument type makes `steep check` fail → check: write `app/models/steep_probe.rb` with `class SteepProbe`, one method `# @rbs () -> void` / `def run` whose body is `Sticker.new.sticker_card = User.new` and `ChildProfile.new.broadcast_completion_flag(card_id: "one")`. Run the full `steep check` (not a single file). It must exit non-zero with exactly two `Ruby::ArgumentTypeMismatch` diagnostics, both in `steep_probe.rb`. Delete the file; never commit it.
-- No `@param`, `@return` or other YARD tag remains in `app/` or `lib/` → check: `git grep -nE '^[[:space:]]*#[[:space:]]*@!?[a-z]' -- '*.rb' ':!vendor' | grep -vE '#[[:space:]]*@(rbs|type)\b'` prints nothing (exit status 1). It flags any comment line that starts with an `@` tag or `@!` directive, so every YARD tag (`@param`, `@author`, `@!method`, ...) fails it, and only the RBS `@rbs` and Steep `@type` annotations pass. E-mail addresses in strings do not match, because the line must start with `#`.
+- A method called with the wrong argument type makes `steep check` fail → check: write `app/models/steep_probe.rb` with `class SteepProbe`, one method `# @rbs () -> void` / `def run` whose body is `Sticker.new.sticker_card = User.new` and `ChildProfile.new.broadcast_completion_flag(card_id: "one")`. Run the full `steep check`. It must exit non-zero with exactly two `Ruby::ArgumentTypeMismatch` diagnostics, both in `steep_probe.rb`. Run it as `trap 'rm -f app/models/steep_probe.rb' EXIT` in a subshell, so the file goes even when Steep fails; never commit it.
+- No YARD tag remains in `app/` or `lib/` → check: `git grep -nE '^[[:space:]]*#[[:space:]]*@!?[a-z]' -- '*.rb' ':!vendor' | grep -vE '#[[:space:]]*@(rbs|type)\b'` prints nothing.
 - Every method in `app/` and `lib/` has an inline RBS signature → check: the unsigned-method check prints `0 unsigned or invalid` and exits 0:
 
   ```sh
   bundle exec ruby -e 'require "rbs"; walk = ->(ds) { ds.flat_map { |d| d.respond_to?(:members) ? walk.(d.members) : [d] } }; m = Dir["{app,lib}/**/*.rb"].sort.flat_map { |f| s = File.read(f); pr = Prism.parse(s); r = RBS::InlineParser.parse(RBS::Buffer.new(name: f, content: s), pr); signed = walk.(r.declarations).grep(RBS::AST::Ruby::Members::DefMember).reject { |d| d.method_type.type_annotations.nil? }.map { |d| d.location.start_line }; r.diagnostics.map { |d| "#{f}: #{d.message}" } + pr.value.breadth_first_search_all { |n| n.is_a?(Prism::DefNode) }.reject { |n| signed.include?(n.location.start_line) }.map { |n| "#{f}:#{n.location.start_line} #{n.name}" } }; puts m; warn "#{m.size} unsigned or invalid"; exit(m.empty? ? 0 : 1)'
   ```
 
-- Every method in `app/` and `lib/` has a one-line description above its signature, and every class and module has a one-line summary → check: the comment-block check prints `0 without summary` and `0 without description` and exits 0. For each `def`, `class` and `module` node it reads the contiguous comment block directly above the node. The first line of that block must be one prose sentence: `# `, a capital letter, at least one more word, and a final full stop, and not a `TODO`, `NOTE` or fix-me marker. A bare `#`, an `@` tag and a multi-line "why" comment's opening line (which does not end in a full stop) all fail it. For a `def`, the last line of the block must start with `# @rbs`. It takes directories as arguments (default `app lib`), so steps 6 to 8 run it on one directory, for example `bundle exec ruby - app/models <<'RUBY'` with the same body.
+- Every method has a one-line description above its signature, and every class and module a one-line summary → check: the comment-block check prints `0 without summary` and `0 without description` and exits 0. For each `def`, `class` and `module` node it reads the contiguous comment block directly above the node; the first line must be one prose sentence (`# `, a capital, two or more words, a final full stop, not a `TODO`, `NOTE` or fix-me marker), and for a `def` the last line must start with `# @rbs`. The new `module Admin` and `module Users` lines are nodes it checks.
 
   ```sh
   bundle exec ruby - app lib <<'RUBY'
@@ -178,44 +164,27 @@ The change adds no runtime behaviour, so no new Minitest test exists. The type c
   exit(missing.values.all?(&:empty?) ? 0 : 1)
   RUBY
   ```
-
-- A pull request runs the Steep job in CI, and it passes → check: `gh pr checks` shows `steep` as pass on the pull request.
-- `bin/rails test`, `bin/rubocop` and `bin/brakeman` stay green → check: each exits 0. `bin/rails test:system`, `bin/erb_lint --lint-all --allow-no-files` and `bundle exec bundle-audit check --update` also stay green.
+- `bin/rails test`, `bin/rubocop` and `bin/brakeman` stay green → check: each exits 0, and so do `bin/rails test:system`, `bin/erb_lint --lint-all --allow-no-files` and `bundle exec bundle-audit check --update`.
 
 Per changed file, the unit tests expected:
 
-- `app/controllers/parent/stickers_controller.rb`, `app/controllers/parent/penalties_controller.rb` (one `# @type` comment each): the existing controller tests in `test/controllers/parent/` stay green.
-- Every other changed Ruby file gains comment lines only; the existing suite covers it, and the comment-only diff check in step 10 proves no code line changed.
-- `Gemfile` (`rbs_rails`, `require: false`): `bin/rails test` stays green, because the app never loads the gem.
+- `app/controllers/admin/*_controller.rb`, `app/controllers/users/profiles_controller.rb`: the existing `test/integration/admin/*` and `test/integration/users/*` tests stay green.
+- `app/models/sticker_card.rb`: the existing `test/models/sticker_card_test.rb` stays green.
+- `app/models/user/role.rb`, `app/helpers/application_helper.rb`: comment lines only; the existing suite covers them.
+- `bin/setup`: running `bin/setup --skip-server` exits 0 and leaves `sig/rbs_rails/path_helpers.rbs` and `.gem_rbs_collection/` on disk.
 
-Test setup: none new. The development database comes from `bin/rails db:prepare`. The probe file lives only for the Proof check.
+Test setup: none new. The development database comes from `bin/rails db:prepare`.
 
 ---
-Domain skills applied: ruby-style, rails-architecture, rails-testing, dependencies.
+Domain skills applied: rails-architecture, ruby-style, rails-testing.
 
 ## Critique
 
 ### Round 1 (codex exec -p terra)
 
-- The `Current#account` removal breaks "no behaviour change", and the step 10 diff base `50589d4` hides it → dismissed: Etienne decided the removal on 2026-10-16, recorded in commit `48ae61b`, and it shipped in the first delivery; this plan only covers the work after `50589d4`, so that base is deliberate. The Context section now names the decision and its commit.
-- `steep check; echo $?` succeeds even when Steep fails, because `echo` runs last → fixed (the check is now `steep check && echo STEEP-OK`)
-- The YARD grep allowlist misses tags such as `@author`, `@group`, `@macro` and `@!method` → fixed (the grep now flags every comment line that starts with an `@` tag or `@!` directive, except `@rbs` and `@type`; it prints nothing over all tracked `.rb` files today)
-- The comment-block check accepts a bare `#` or any non-annotation line as prose → fixed (the first line must be one sentence: `# `, a capital, two or more words and a final full stop, and not a TODO, NOTE or fix-me marker; rerun on 2026-10-16 it reports 50 and 118; two of the three "why" comments now count as missing, and the third is one full sentence, so step 1 names that method explicitly)
-- The per-directory checks in steps 6 to 8 cannot run, because the script hard-codes `{app,lib}` → fixed (the script takes directories as arguments, default `app lib`, and steps 6 to 8 name the directory)
-
-### Round 2 (coordinator, from the PR #180 review)
-
-- Replace `sig/models/*.rbs` with `rbs_rails` output, regenerated by a rake task, and keep the fallback → fixed (Design decisions add a house-style `lib/tasks/rbs.rake`, verified with `bin/rails -T` and `bin/rubocop` in the probe; the regeneration line uses `bin/rails rbs_rails:generate_rbs_for_models`; the fallback stays)
-- Check each `sig/stubs` file against the RBS collection and keep only real gaps, with a header that names the gap → fixed (Context adds a stub audit table measured in the probe: `active_record.rbs` and the `ApplicationRecord` block of `rails.rbs` are deleted as duplicates, every other part is a measured gap, and every stub file gets a header naming its gap; generated path helpers were tried and do not replace `routes.rbs`)
-- Fix the `Allowance` type errors (`child_profile_id` writer, `next_due_on` nullability, `kind=` and `frequency=` as `untyped`, `allowance_periods` as `untyped`) → fixed (the generated types correct all four, listed in Context, and step 3 confirms them before the old stubs go)
-- Keep the one-line method descriptions, because Etienne asked for them → fixed (the plan already required them; Design decisions now state that his 2026-10-16 request overrides the `ruby-style` default for this repository)
-
-### Round 3 (codex exec -p terra)
-
-- The comment-only diff check covers `lib`, but the new `lib/tasks/rbs.rake` is code, so the check would print its lines → fixed (step 10 limits the check to `app` and names the rake file's own verification in step 2)
-- The comment-block check accepts `# @type` as a method block's last line, though it claims to require `# @rbs` → fixed (the last-line regex is now `@rbs` only; the unused `annotation` regex is gone)
-
-## Decisions (coordinator, 2026-10-16)
-
-- Keep `# @type var card: untyped` in `Parent::StickersController#create` and `Parent::PenaltiesController#create`. The intent excludes behaviour changes, and `child.active_sticker_card` would create a card where the code raises today.
-- Do not push. The `review-report-fresh` hook needs Etienne's `/review` first. Commit locally and report.
+- The plan leaves four tracked `sig/stubs/*.rbs` files, so the `git ls-files sig` criterion still fails after step 6; resolve the decision before implementation → dismissed: `intent.md` says a gap that cannot be covered without a tracked file goes back to Etienne as one concrete question, and auto mode forbids guessing it. The plan states that question once, with options, and every step before it holds under each option.
+- Generation alone cannot make a fresh clone type-check, because `.gem_rbs_collection/` is ignored and neither `bin/setup` nor the documented command installs it → fixed (the documented command line and `bin/setup` now run `bin/rbs collection install --frozen` first, and the fresh-clone check runs the documented line in that order)
+- The `bin/setup` line after `db:prepare` runs before the `--reset` branch, so a reset run generates from the database before its reset → fixed (the generation section now comes after the `--reset` line)
+- The docs mention regeneration only after migrations, but `rbs_rails:all` also generates route helpers → fixed (the `AGENTS.md` line and the Risks entry say to rerun after a migration or a route change)
+- `gh pr checks 180` cannot show that the job log contains the generation step → fixed (the CI check now reads the steep job log with `gh run view --log`)
+- The two structural checks are only referenced through an older commit, and the probe file cleanup is not failure-safe → fixed (both checks are copied into `## Proof` verbatim, and the probe runs under a `trap` that deletes the file on exit)
