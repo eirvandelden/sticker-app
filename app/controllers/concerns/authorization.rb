@@ -1,6 +1,7 @@
 # Gives controllers the filters that restrict an action to administrators, parents or children.
 # @rbs module-self: ActionController::Base
 module Authorization
+  # @type const Current: untyped
   extend ActiveSupport::Concern
 
   private

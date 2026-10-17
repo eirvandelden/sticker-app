@@ -1,6 +1,7 @@
 # Adds the app revision and version to every response.
 # @rbs module-self: ActionController::Base
 module VersionHeaders
+  # @type const Rails: untyped
   extend ActiveSupport::Concern
 
   included do

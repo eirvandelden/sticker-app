@@ -2,6 +2,7 @@
 module Users
   # Shows and edits a user's profile.
   class ProfilesController < ApplicationController
+    # @type const Current: untyped
     include UserScoped
 
     before_action :ensure_profile_viewer, only: :show

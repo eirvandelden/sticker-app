@@ -2,6 +2,7 @@
 module Admin
   # Lets administrators manage user accounts.
   class UsersController < Admin::BaseController
+    # @type const Current: untyped
     before_action :set_user, only: [ :show, :edit, :update, :destroy ]
 
     # Lists all users, newest first.
