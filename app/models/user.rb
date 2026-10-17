@@ -1,6 +1,9 @@
 # Represents a family member who signs in as an administrator, parent or child.
 class User < ApplicationRecord
   # @type const Current: untyped
+  # @type const Appkit::Transferable: untyped
+  # @type const Appkit::UserTheming: untyped
+  # @type const Appkit::Authenticatable: untyped
   # @rbs skip
   include Appkit::Transferable
   include Role

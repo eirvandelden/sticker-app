@@ -1,6 +1,7 @@
 # Is the base class of the controllers and sets locale, layout and role-based access.
 class ApplicationController < ActionController::Base
   # @type const Current: untyped
+  # @type const Appkit::Authentication: untyped
   include VersionHeaders
   include Authorization
   # @rbs skip
