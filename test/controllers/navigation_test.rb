@@ -90,6 +90,17 @@ class NavigationTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "Home is not marked on settings or preferences for a parent" do
+    sign_in_as users(:parent)
+
+    [ parent_settings_path, edit_preferences_path ].each do |page|
+      get page
+
+      assert_response :success
+      assert_select "nav ul li:first-child a[aria-current]", count: 0
+    end
+  end
+
   test "child sees Home marked as the current page on the dashboard" do
     sign_in_as users(:user)
 
