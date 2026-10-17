@@ -23,6 +23,8 @@ bin/rails test            # unit/integration tests
 bin/rails test:system     # system tests (Capybara + Selenium)
 bin/rubocop               # lint
 bin/brakeman              # security scan
+steep check               # type check (inline RBS, also run in CI)
+bin/rails rbs_rails:generate_rbs_for_models  # regenerate sig/rbs_rails after a migration
 bin/importmap audit       # JS dependency audit
 bin/erb_lint --lint-all --allow-no-files   # ERB lint (also run in CI)
 npx @herb-tools/herb-lint                  # HTML/ERB structure lint (also run in CI, as `npx @herb-tools/linter`)

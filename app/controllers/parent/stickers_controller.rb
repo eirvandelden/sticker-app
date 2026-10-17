@@ -1,9 +1,14 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents award stickers and see the sticker history.
   class StickersController < ApplicationController
     before_action :ensure_parent
 
+    # Awards a positive sticker to the child's newest card.
+    # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
+      # @type var card: untyped
       card = child.sticker_cards.order(created_at: :desc).first
 
       emoji = params[:emoji_mode] == "choose" ? params[:emoji] : nil
@@ -21,6 +26,8 @@ module Parent
       end
     end
 
+    # Lists the child's latest 100 stickers, grouped by date.
+    # @rbs () -> void
     def index
       @child = ChildProfile.find(params[:child_id])
       @stickers = @child.sticker_cards

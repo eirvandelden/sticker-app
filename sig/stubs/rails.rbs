@@ -1,0 +1,26 @@
+# Gaps that neither the RBS collection nor rbs_rails fills: each block below names its gap.
+
+# App-specific configuration keys.
+class Rails::Application::Configuration
+  def git_revision: () -> String
+  def app_version: () -> String
+end
+
+# identified_by creates the setter at runtime.
+module ApplicationCable
+  class Connection < ActionCable::Connection::Base
+    def current_user=: (User?) -> User?
+  end
+end
+
+# CurrentAttributes creates these readers and writers from attribute at runtime.
+class Current < ActiveSupport::CurrentAttributes
+  def self.user: () -> untyped
+  def self.user=: (User?) -> User?
+  def user: () -> untyped
+end
+
+# The concern's own enum; the generated User#administrator? is not visible under module-self ApplicationRecord.
+module User::Role
+  def administrator?: () -> bool
+end
