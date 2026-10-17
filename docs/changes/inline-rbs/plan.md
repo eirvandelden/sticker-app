@@ -188,3 +188,10 @@ Domain skills applied: rails-architecture, ruby-style, rails-testing.
 - The docs mention regeneration only after migrations, but `rbs_rails:all` also generates route helpers → fixed (the `AGENTS.md` line and the Risks entry say to rerun after a migration or a route change)
 - `gh pr checks 180` cannot show that the job log contains the generation step → fixed (the CI check now reads the steep job log with `gh run view --log`)
 - The two structural checks are only referenced through an older commit, and the probe file cleanup is not failure-safe → fixed (both checks are copied into `## Proof` verbatim, and the probe runs under a `trap` that deletes the file on exit)
+
+## Decisions (Etienne, 2026-10-17)
+
+- Gap stubs: option B. Delete `appkit.rbs`, `turbo_rails.rbs`, `rails.rbs` and `rbs_rails_overrides.rbs`. No signature file stays in git, and `git ls-files sig` must print nothing.
+- Cover each gap inline: `# @rbs skip` on the Appkit includes (verified in the probe), and `#: untyped` or `# @type var`/`# @type self` markers at each remaining call site. Keep every marker behaviour-free, and keep the list of marked sites in the implement report.
+- Do not push. The `review-report-fresh` hook needs Etienne's `/review` first. Commit locally and report. Include the unpushed CI commit `f27e40b` in that review.
+- The CI `steep` job runs the one documented generation command before `steep check`, and keeps the `GEM_PATH` line from `f27e40b`.
