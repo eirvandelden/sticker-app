@@ -7,8 +7,3 @@ end
 class User
   def attachment_changes: () -> Hash[String, untyped]
 end
-
-# The generated setter accepts only TimeWithZone, while Time.current is typed Time | TimeWithZone.
-class StickerCard
-  def completed_at=: (ActiveSupport::TimeWithZone | Time | nil) -> (ActiveSupport::TimeWithZone | Time | nil)
-end

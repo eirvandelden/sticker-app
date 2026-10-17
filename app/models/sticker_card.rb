@@ -88,7 +88,7 @@ class StickerCard < ApplicationRecord
   # @rbs () -> void
   def mark_completion_time
     if completed? && completed_at.nil?
-      self.completed_at = Time.current
+      self.completed_at = Time.zone.now
     end
   end
 
