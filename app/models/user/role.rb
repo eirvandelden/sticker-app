@@ -11,6 +11,7 @@ module User::Role
   # Tells whether the user is an administrator.
   # @rbs () -> bool
   def can_administer?
+    # @type self: User
     administrator?
   end
 end
