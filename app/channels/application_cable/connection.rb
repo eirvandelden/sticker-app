@@ -7,7 +7,9 @@ module ApplicationCable
     # Identifies the connection by the verified user.
     # @rbs () -> void
     def connect
-      self.current_user = find_verified_user
+      # @type var connection: untyped
+      connection = self
+      connection.current_user = find_verified_user
     end
 
     private

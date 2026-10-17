@@ -1,7 +1,9 @@
 # Is the base class of the controllers and sets locale, layout and role-based access.
 class ApplicationController < ActionController::Base
+  # @type const Current: untyped
   include VersionHeaders
   include Authorization
+  # @rbs skip
   include Appkit::Authentication
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
@@ -40,7 +42,7 @@ class ApplicationController < ActionController::Base
   # but root_url *is* the login page here, so that bounces forever.
   # @rbs () -> void
   def redirect_signed_in_user_to_root
-    redirect_to after_login_path_for(Current.user) if signed_in?
+    redirect_to after_login_path_for(Current.user) if method(:signed_in?).call
   end
 
   # Returns the child dashboard for a child, and the children overview for everyone else.

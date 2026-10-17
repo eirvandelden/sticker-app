@@ -2,6 +2,7 @@
 module Child
   # Shows a child their sticker card and progress.
   class DashboardController < ApplicationController
+    # @type const Current: untyped
     before_action :ensure_child
 
     # Loads the child's active card, new stickers since the last visit and completed cards.

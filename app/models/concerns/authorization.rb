@@ -1,6 +1,7 @@
 # Gives controllers the checks that guard administrator and own-user actions.
 # @rbs module-self: ActionController::Base
 module Authorization
+  # @type const Current: untyped
   private
     # Responds with forbidden unless the current user can administer.
     # @rbs () -> void

@@ -1,8 +1,12 @@
 # Represents a family member who signs in as an administrator, parent or child.
 class User < ApplicationRecord
+  # @type const Current: untyped
+  # @rbs skip
   include Appkit::Transferable
   include Role
+  # @rbs skip
   include Appkit::UserTheming
+  # @rbs skip
   include Appkit::Authenticatable
 
   AVATAR_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
@@ -74,13 +78,17 @@ class User < ApplicationRecord
   # Returns a readable stream of the avatar, pending or stored.
   # @rbs () -> untyped
   def avatar_upload_io
-    pending_avatar_upload_io || StringIO.new(avatar.blob.download)
+    # @type var attachment: untyped
+    attachment = avatar
+    pending_avatar_upload_io || StringIO.new(attachment.blob.download)
   end
 
   # Returns a readable stream of an avatar that is attached but not yet saved.
   # @rbs () -> untyped
   def pending_avatar_upload_io
-    attachable = attachment_changes["avatar"]&.attachable
+    # @type var user: untyped
+    user = self
+    attachable = user.attachment_changes["avatar"]&.attachable
 
     return attachable[:io] if attachable.is_a?(Hash)
     return attachable.open if attachable.respond_to?(:open) && !attachable.is_a?(ActiveStorage::Blob)
@@ -91,7 +99,9 @@ class User < ApplicationRecord
   # Validates that the avatar is not larger than the maximum size.
   # @rbs () -> void
   def validate_avatar_size
-    return if avatar.blob.byte_size <= MAX_AVATAR_SIZE
+    # @type var attachment: untyped
+    attachment = avatar
+    return if attachment.blob.byte_size <= MAX_AVATAR_SIZE
 
     errors.add(:avatar, :file_size_too_large)
   end

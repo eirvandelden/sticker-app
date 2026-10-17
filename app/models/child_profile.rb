@@ -52,19 +52,21 @@ class ChildProfile < ApplicationRecord
   # Replaces the child's card and the parent's card and progress views over Action Cable.
   # @rbs () -> void
   def broadcast_card_refresh
-    broadcast_replace_to(
+    # @type var turbo: untyped
+    turbo = self
+    turbo.broadcast_replace_to(
       self,
       target: ActionView::RecordIdentifier.dom_id(self, :card),
       partial: "child/dashboard/card",
       locals: { child_profile: self }
     )
-    broadcast_replace_to(
+    turbo.broadcast_replace_to(
       self,
       target: ActionView::RecordIdentifier.dom_id(self, :parent_card),
       partial: "parent/children/child_card",
       locals: { child: self }
     )
-    broadcast_replace_to(
+    turbo.broadcast_replace_to(
       self,
       target: ActionView::RecordIdentifier.dom_id(self, :dashboard_progress),
       partial: "parent/children/dashboard_progress",
@@ -75,7 +77,9 @@ class ChildProfile < ApplicationRecord
   # Replaces the completion flag on the child's dashboard over Action Cable.
   # @rbs (card_id: Integer) -> void
   def broadcast_completion_flag(card_id:)
-    broadcast_replace_to(
+    # @type var turbo: untyped
+    turbo = self
+    turbo.broadcast_replace_to(
       self,
       target: ActionView::RecordIdentifier.dom_id(self, :completion_flag),
       partial: "child/dashboard/completion_flag",

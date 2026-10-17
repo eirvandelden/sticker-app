@@ -32,7 +32,9 @@ class Sticker < ApplicationRecord
   # @rbs () -> void
   def broadcast_sticker_added
     profile = sticker_card.child_profile
-    broadcast_append_to(
+    # @type var turbo: untyped
+    turbo = self
+    turbo.broadcast_append_to(
       profile,
       target: ActionView::RecordIdentifier.dom_id(profile, :notifications),
       partial: "child/dashboard/sticker_notification",

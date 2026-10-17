@@ -2,6 +2,7 @@
 module Parent
   # Lets parents give a child a penalty.
   class PenaltiesController < ApplicationController
+    # @type const Current: untyped
     before_action :ensure_parent
 
     # Adds a penalty to the child's newest card.

@@ -2,6 +2,7 @@
 module Parent
   # Lets parents award stickers and see the sticker history.
   class StickersController < ApplicationController
+    # @type const Current: untyped
     before_action :ensure_parent
 
     # Awards a positive sticker to the child's newest card.
