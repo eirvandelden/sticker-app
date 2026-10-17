@@ -37,7 +37,7 @@ class ChildProfile < ApplicationRecord
     active_sticker_card
   end
 
-  # Returns the weekly pocket money allowance, if any.
+  # Returns the pocket money (zakgeld) allowance, if any.
   # @rbs () -> Allowance?
   def zakgeld
     allowances.detect { |allowance| allowance.kind == "zakgeld" }
