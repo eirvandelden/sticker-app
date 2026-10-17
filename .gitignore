@@ -157,3 +157,4 @@ node_modules/
 .claude/worktrees/
 .claude/scheduled_tasks.lock
 /.gem_rbs_collection/
+/sig/
