@@ -41,6 +41,7 @@ class ApplicationController < ActionController::Base
   # Sends a signed-in visitor of the login page to their landing page.
   # Appkit sends already-signed-in visitors of the login page back to root_url,
   # but root_url *is* the login page here, so that bounces forever.
+  # signed_in? comes from Appkit, whose signature Steep cannot see yet. Drop the method call once Appkit ships its sig/.
   # @rbs () -> void
   def redirect_signed_in_user_to_root
     redirect_to after_login_path_for(Current.user) if method(:signed_in?).call
