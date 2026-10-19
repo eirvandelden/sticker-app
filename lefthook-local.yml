@@ -1,6 +1,6 @@
 pre-commit:
   commands:
-    # No package.json/yarn toolchain in this app — nothing for stylelint to run against.
+    # No stylesheet toolchain in this app — nothing for stylelint to run against.
     stylelint:
       skip: true
 
