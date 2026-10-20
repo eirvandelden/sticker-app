@@ -38,9 +38,11 @@ nl:
         role: Rol
       index:
         actions: Acties
+        cancel: Annuleren
         confirm_delete: Weet je zeker dat je deze gebruiker wilt verwijderen?
         created_at: Aangemaakt
         delete: Verwijderen
+        delete_ellipsis: Verwijderen…
         edit: Bewerken
         email: E-mail
         name: Naam
