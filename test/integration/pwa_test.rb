@@ -26,4 +26,38 @@ class PwaTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "link[rel=manifest][href=?]", manifest_path
   end
+
+  test "manifest and service worker load for a signed-out visitor" do
+    assert_pwa_endpoints_load
+  end
+
+  test "manifest and service worker load for a signed-in parent and child" do
+    [ users(:parent), users(:user) ].each do |user|
+      sign_in_as(user)
+
+      assert_pwa_endpoints_load
+      delete session_path
+    end
+  end
+
+  private
+
+  def assert_pwa_endpoints_load
+    get manifest_path
+
+    assert_response :success
+    assert_revalidating_cache_control
+
+    get service_worker_path
+
+    assert_response :success
+    assert_revalidating_cache_control
+    assert_includes response.body, "appkit-#{Appkit.revision}"
+  end
+
+  def assert_revalidating_cache_control
+    %w[max-age=0 private must-revalidate].each do |directive|
+      assert_includes response.headers["Cache-Control"], directive
+    end
+  end
 end
