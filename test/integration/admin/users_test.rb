@@ -28,6 +28,14 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     assert_select "dialog[data-dialog-target=dialog] form[action=?]", admin_user_path(@admin), count: 0
   end
 
+  test "user list marks the dialog opener and the confirming Delete" do
+    sign_in_as(@admin)
+    get admin_users_path
+
+    assert_select "dialog footer form button.button-danger", text: I18n.t("admin.users.index.delete")
+    assert_select "button[type=button][aria-haspopup=dialog]", text: I18n.t("admin.users.index.delete_ellipsis")
+  end
+
   test "user form ends in an action row with Cancel before Save" do
     sign_in_as(@admin)
 
