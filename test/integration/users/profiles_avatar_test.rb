@@ -96,4 +96,15 @@ params: { user: { name: "Hacked Name", avatar: fixture_file_upload("avatar.png",
     assert_redirected_to user_profile_path(@parent)
     assert @parent.reload.authenticate("new-secure-pass"), "Expected password to be updated"
   end
+
+  test "profile form ends in an action row with Cancel before Save" do
+    sign_in_as @parent
+    get edit_user_profile_path(@parent)
+
+    assert_response :success
+    assert_select "form > footer:last-child" do
+      assert_select "a[role=button].button-secondary"
+      assert_select "a[role=button] ~ input[type=submit], a[role=button] ~ button[type=submit]"
+    end
+  end
 end
