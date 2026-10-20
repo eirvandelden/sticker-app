@@ -17,7 +17,7 @@ Parents and children who use the app. The `Gemfile` and `Gemfile.lock` (appkit a
 
 ## Constraints
 
-- Approved permission: bump the appkit `ref` in `Gemfile` and refresh the lock for `appkit` and `mvpa-css` only. No gem is added or removed. No `bundle update` of all gems.
+- Approved permission: bump the appkit `ref` in `Gemfile` and refresh the lock for `appkit` and `mvpa-css` only. No gem is added or removed. Etienne approved (2026-10-20) the forced transitive bump of okcomputer 1.19.2 to 1.20.0, which appkit requires. No `bundle update` of all gems.
 - appkit needs Rails 8.1. The app already runs Rails 8.1.4.
 - Install gems with `bi`.
 - `db/schema.rb` is never edited by hand. It holds only what `bin/rails db:schema:dump` generates.
@@ -40,7 +40,7 @@ Parents and children who use the app. The `Gemfile` and `Gemfile.lock` (appkit a
 ## Acceptance criteria
 
 - `db/schema.rb` equals the output of a fresh schema dump, and a second dump changes nothing.
-- The Gemfile and lock name the latest appkit and mvpa-css commits, and no other gem changes.
+- The Gemfile and lock name the latest appkit and mvpa-css commits, and only okcomputer moves besides them (forced by appkit).
 - A parent who opens the app sees the push-enable button as a plain button and "Give sticker" and "Give penalty" as before.
 - Deleting a user or turning off an allowance still works and keeps a red delete button.
 - The manifest and service worker still load for a signed-in and a signed-out visitor.
