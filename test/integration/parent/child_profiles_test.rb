@@ -108,4 +108,22 @@ class Parent::ChildProfilesTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_parent_child_path(@profile)
     assert_equal 7, @profile.reload.sticker_goal
   end
+
+  test "every settings form ends in an action row" do
+    sign_in_as @parent
+    get edit_parent_child_path(child_profiles(:one))
+
+    assert_response :success
+    forms = css_select("article form")
+
+    assert_operator forms.size, :>=, 5
+    forms.each do |form|
+      next if form.at_css("input[name=_method][value=delete]")
+
+      last = form.element_children.last
+
+      assert_equal "footer", last.name, "form #{form['action']} does not end in an action row"
+      assert last.at_css("input[type=submit], button")
+    end
+  end
 end

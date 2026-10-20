@@ -46,4 +46,11 @@ class Parent::StickerCardGoalsTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to root_path
   end
+
+  test "goal form ends in an action row" do
+    sign_in_as @parent
+    get parent_child_path(@profile)
+
+    assert_select "form[action=?] > footer:last-child", parent_child_card_goal_path(@profile)
+  end
 end
