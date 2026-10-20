@@ -86,7 +86,18 @@ class NavigationTest < ActionDispatch::IntegrationTest
       get page
 
       assert_response :success
-      assert_select "nav ul li:first-child a[aria-current]", count: 0
+      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
+    end
+  end
+
+  test "Home is not marked on settings or preferences for a parent" do
+    sign_in_as users(:parent)
+
+    [ parent_settings_path, edit_preferences_path ].each do |page|
+      get page
+
+      assert_response :success
+      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
     end
   end
 
