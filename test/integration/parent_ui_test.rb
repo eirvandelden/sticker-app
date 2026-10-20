@@ -123,4 +123,13 @@ text: I18n.t("parent.dashboard.progress", current: 0, total: "1+1")
     assert_response :success
     assert_select "label[for='#{dom_id(@profile, :goal_field)}']", text: I18n.t("parent.child_profile.edit.goal_label")
   end
+
+  test "parent dashboard shows a plain push button and the green sticker and red penalty buttons" do
+    sign_in_as @parent
+    get parent_children_path
+
+    assert_select "[data-controller=push] button[type=button][data-action='push#subscribe']:not([class])"
+    assert_select "form[action=?] button.button-success", parent_child_sticker_path(child_id: @profile)
+    assert_select "form[action=?] button.button-danger", parent_child_penalty_path(child_id: @profile)
+  end
 end
