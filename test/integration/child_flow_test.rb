@@ -46,6 +46,28 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     assert_select "div[data-confetti-completed-card-ids-value=?]", [ @card.id ].to_json
   end
 
+  test "a child back the next day sees the stickers given since their last visit, oldest first" do
+    sign_in_as @child
+    get child_dashboard_path
+    travel 1.day
+    @card.stickers.create!(kind: :positive, emoji: "🌟", giver: users(:parent))
+    @card.stickers.create!(kind: :negative, giver: users(:parent), note: "Shouting")
+
+    get child_dashboard_path
+
+    assert_select "##{dom_id(@profile, :notifications)} article", count: 2
+    assert_select "##{dom_id(@profile, :notifications)} article:first-child[role=status]", text: /🌟/
+    assert_select "##{dom_id(@profile, :notifications)} article:last-child[role=alert]", text: /Shouting/
+  end
+
+  test "a child sees no sticker notifications on their first visit" do
+    sign_in_as @child
+
+    get child_dashboard_path
+
+    assert_select "##{dom_id(@profile, :notifications)} article", count: 0
+  end
+
   test "child dashboard shows card goal as read-only text" do
     sign_in_as @child
     get child_dashboard_path

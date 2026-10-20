@@ -12,6 +12,12 @@ class PwaTest < ActionDispatch::IntegrationTest
     assert manifest["icons"].any? { |icon| icon["sizes"] == "192x192" }
   end
 
+  test "service worker is served without authentication" do
+    get service_worker_path
+
+    assert_response :success
+  end
+
   test "application layout links the manifest" do
     sign_in_as(users(:parent))
 

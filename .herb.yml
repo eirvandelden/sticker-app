@@ -1,3 +1,5 @@
+framework: actionview
+
 linter:
   exclude:
     - "public/**/*"
