@@ -16,6 +16,8 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 - Step 9: a fresh `db:create db:migrate` dump on Rails 8.1.4 equals the committed `db/schema.rb` byte for byte, and a second dump changes nothing. Rails 8.1 sorts columns alphabetically, so the premise "dump is in migration order" was wrong. No schema commit is needed.
 
+- Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
+
 ## Open decision`).
 - **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "2be440b1225bb15870a2ec86ced19c4ecc7f7085"`. No gem is added or removed.
 - **Use the SHAs above.** If `git ls-remote` shows a newer `HEAD` for either gem at implementation time, take it only when its CHANGELOG adds no new "Upgrading" item. Otherwise stay on the SHAs above and report the newer commit.
