@@ -2,6 +2,8 @@
 
 From `intent.md` (2026-10-17). Status: accepted.
 
+Amended 2026-10-20: `update-dependencies` merged into `main` (PR #181), and `main` replaced yarn with npm (`package-lock.json`). This branch is rebased onto `origin/main`, and its pull request targets `main`. Read every yarn step and check below as its npm form: `yarn outdated` → `npm outdated`, `yarn why source-map-js` → `npm ls source-map-js`, `yarn.lock` → `package-lock.json`.
+
 ## Context
 
 This branch, `update-dependencies-followup`, stacks on `update-dependencies`. The plan was written on 2026-10-17 against this state, which the executor re-checks before step 1:
