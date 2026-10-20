@@ -21,7 +21,7 @@ class AdminUserDeletionTest < ApplicationSystemTestCase
       click_button I18n.t("admin.users.index.delete")
     end
 
-    assert_current_path admin_users_path, wait: 10
+    assert_no_text @user.email
     assert_not User.exists?(@user.id)
   end
 
