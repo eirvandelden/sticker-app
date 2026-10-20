@@ -28,7 +28,7 @@ FileUtils.chdir APP_ROOT do
   system! "bin/rails db:reset" if ARGV.include?("--reset")
 
   puts "\n== Generating type signatures =="
-  system! "bin/rbs collection install --frozen"
+  system! "bin/rbs --collection=rbs_collection.yml collection install --frozen"
   system! "bin/rails rbs_rails:all"
 
   puts "\n== Removing old logs and tempfiles =="

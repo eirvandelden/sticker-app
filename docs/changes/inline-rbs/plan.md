@@ -195,3 +195,8 @@ Domain skills applied: rails-architecture, ruby-style, rails-testing.
 - Cover each gap inline: `# @rbs skip` on the Appkit includes (verified in the probe), and `#: untyped` or `# @type var`/`# @type self` markers at each remaining call site. Keep every marker behaviour-free, and keep the list of marked sites in the implement report.
 - Do not push. The `review-report-fresh` hook needs Etienne's `/review` first. Commit locally and report. Include the unpushed CI commit `f27e40b` in that review.
 - The CI `steep` job runs the one documented generation command before `steep check`, and keeps the `GEM_PATH` line from `f27e40b`.
+
+## Decisions (Etienne, 2026-10-18)
+
+- Merge of PR #180 waits until the appkit gem ships its own `sig/`. Use `ship --no-merge` only.
+- The RBS collection files use the `.yml` extension: `rbs_collection.yml` and `rbs_collection.lock.yml`. Every `rbs collection` call passes `--collection=rbs_collection.yml`, and the `Steepfile` sets `collection_config "rbs_collection.yml"`.

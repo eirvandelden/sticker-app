@@ -47,6 +47,6 @@ jobs:
           ruby-version: current
           install-gems: true
       - run: gem install steep --no-document --force --version "~> 2.0"
-      - run: bin/rbs collection install --frozen
+      - run: bin/rbs --collection=rbs_collection.yml collection install --frozen
       - run: bin/rails db:prepare rbs_rails:all
       - run: GEM_PATH="$(bundle exec ruby -e 'puts Gem.path.join(":")')" steep check
