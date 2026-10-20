@@ -20,9 +20,9 @@ GIT
 
 GIT
   remote: https://github.com/eirvandelden/mvpa.css.git
-  revision: c17bfe8b7d278adf4a2e56323c4c194b8a3eafd5
+  revision: 2be440b1225bb15870a2ec86ced19c4ecc7f7085
   specs:
-    mvpa-css (0.1.0.pre.git.c17bfe8)
+    mvpa-css (0.1.0.pre.git.2be440b)
       railties (>= 6.0)
 
 GIT
@@ -609,7 +609,7 @@ CHECKSUMS
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   msgpack (1.8.5) sha256=97419eaa7b35dfe3e462c0e6c1a3dfdcbfc8756605c09e46e4c6daef127517ba
-  mvpa-css (0.1.0.pre.git.c17bfe8)
+  mvpa-css (0.1.0.pre.git.2be440b)
   net-imap (0.6.8) sha256=eb30bb62227b64a3af6b518b04b2375113d69f68f15de59b0193b07d98acf6d9
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.4.0) sha256=f9f90c8c6f64794a45160bf422177a336db12809de3beeeaa26b88fcd2e8c853
