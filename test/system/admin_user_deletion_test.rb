@@ -14,27 +14,40 @@ class AdminUserDeletionTest < ApplicationSystemTestCase
   test "admin deletes a user through the confirmation dialog" do
     visit admin_users_path
 
-    within_user_row(@user) { click_button I18n.t("admin.users.index.delete_ellipsis") }
+    within_user_row(@user) { click_button I18n.t("admin.users.index.delete") }
 
     within("dialog[open]") do
       assert_text I18n.t("admin.users.index.confirm_delete")
-      click_button I18n.t("admin.users.index.delete")
+      click_button I18n.t("shared.confirm_dialog.accept")
     end
 
     assert_no_text @user.email
     assert_not User.exists?(@user.id)
   end
 
-  test "cancel closes the confirmation dialog and keeps the user" do
+  test "cancel and escape keep the user, then a second confirm still deletes" do
     visit admin_users_path
 
-    within_user_row(@user) { click_button I18n.t("admin.users.index.delete_ellipsis") }
-
-    within("dialog[open]") { click_button I18n.t("admin.users.index.cancel") }
+    within_user_row(@user) { click_button I18n.t("admin.users.index.delete") }
+    within("dialog[open]") { click_button I18n.t("shared.confirm_dialog.cancel") }
 
     assert_no_selector "dialog[open]"
     assert_current_path admin_users_path
     assert User.exists?(@user.id)
+
+    within_user_row(@user) { click_button I18n.t("admin.users.index.delete") }
+
+    assert_selector "dialog[open]"
+    find("body").send_keys(:escape)
+
+    assert_no_selector "dialog[open]"
+    assert User.exists?(@user.id)
+
+    within_user_row(@user) { click_button I18n.t("admin.users.index.delete") }
+    within("dialog[open]") { click_button I18n.t("shared.confirm_dialog.accept") }
+
+    assert_no_text @user.email
+    assert_not User.exists?(@user.id)
   end
 
   private

@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "appkit/pwa"
+import "confirm_dialog"

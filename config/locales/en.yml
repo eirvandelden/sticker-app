@@ -37,11 +37,9 @@ en:
         role: Role
       index:
         actions: Actions
-        cancel: Cancel
         confirm_delete: Are you sure you want to delete this user?
         created_at: Created
         delete: Delete
-        delete_ellipsis: Delete…
         edit: Edit
         email: Email
         name: Name
@@ -184,6 +182,10 @@ en:
     settings:
       index:
         title: Settings
+  shared:
+    confirm_dialog:
+      accept: Delete
+      cancel: Cancel
   users:
     profiles:
       edit:
