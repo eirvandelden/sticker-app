@@ -127,6 +127,17 @@ Test setup: existing fixtures `users(:admin)`, `users(:parent)`, `users(:user)` 
 
 - okcomputer 1.19.2 to 1.20.0 is forced by appkit `d82b9c7`. Accept it as a transitive change, or keep appkit below `9391c4b` (not the latest).
 
+## Amendment 2026-10-21 (change request on PR #187)
+
+Etienne's request: the per-row dialog and Stimulus controller are wrong. Turbo can drive the confirm, and appkit and mvpa.css use the browser's native `<dialog>`. This section supersedes every bullet above about the `dialog` Stimulus controller, the `Delete…` opener and the per-row `<dialog>`, including the Invoker Commands rationale. The "Only the admin user delete gets a dialog" bullet now reads: every `turbo_confirm` in the app gets the one shared dialog.
+
+- Restore `button_to t(".delete"), admin_user_path(user), method: :delete, class: "button-danger", data: { turbo_confirm: t(".confirm_delete") }` in `app/views/admin/users/index.html.erb`, inside `unless user == Current.user`. Remove the opener, the per-row `<dialog>` and the `data-controller="dialog"` wrapper.
+- Delete `app/javascript/controllers/dialog_controller.js` and the `delete_ellipsis` and `cancel` keys under `admin.users.index` in en, nl and it. Keep `confirm_delete`.
+- Render one shared confirm dialog in `layouts/parent.html.erb` and in `layouts/child.html.erb`, next to the flashes, from a new app partial `app/views/shared/_confirm_dialog.html.erb`. It is a native `<dialog id="confirm-dialog" aria-labelledby="confirm-dialog-message">` with the message in `<p id="confirm-dialog-message">`, and a `<footer>` that holds a Cancel `<button type="button" id="confirm-dialog-cancel" autofocus>` and a red `<button type="button" id="confirm-dialog-accept" class="button-danger">`. It uses the same ids as appkit's `appkit/shared/_confirm_dialog`. The app does not render appkit's partial: it holds its buttons in an unnamed `<nav>`, mvpa.css styles `dialog > footer`, and the partial has no accessible name. Fixing appkit's partial is a follow-up for appkit, and the PR body says so.
+- Add `app/javascript/confirm_dialog.js` and import it from `application.js`. It sets `Turbo.config.forms.confirm = (message) => …`. The function fills `#confirm-dialog-message`, calls `showModal()`, and returns a promise that resolves true on accept and false on Cancel, Escape or the dialog's `close` event. Every path closes the dialog before it resolves, and each call registers its listeners once, with `{ once: true }` or `AbortController`, so none stay behind. Turbo 2.0.23 supports this hook; `Turbo.setConfirmMethod` is deprecated and is not used.
+- Tests, written first: the integration test asserts no `data-controller=dialog`, a `button_to` with `data-turbo-confirm` on each other user's row, none on the admin's own row, and one `dialog#confirm-dialog` in the parent and child layouts. The system test `admin deletes a user through the confirmation dialog` stays: it clicks `Delete`, sees the native dialog, accepts, and the row disappears. The cancel test stays: Cancel closes the dialog and keeps the user. Escape also keeps the user. The cancel test then deletes the same user in the same page session, which proves a second confirm works and no listener went stale.
+- Step 11 (visual check) now includes a screenshot of the open dialog at 1400px and 375px, taken through the system test, and read by the coordinator.
+
 ---
 Domain skills applied: rails-ui, rails-testing, dependencies, rails-architecture, hwc-stimulus-fundamentals.
 
@@ -142,3 +153,11 @@ Domain skills applied: rails-ui, rails-testing, dependencies, rails-architecture
 - `git diff --exit-code db/schema.rb` compares against Git, not the first dump → fixed (step 9 copies the first dump and compares with `cmp`)
 - The title-bar claim misses that `main > header nav` never matches app pages, whose headers sit inside a `div` or `section` → fixed (Design decisions now state the selector does not reach app pages and restructuring is out of scope)
 - `allow_browser versions: :modern` now runs on the PWA endpoints → dismissed: the whole app already refuses browsers below the modern floor, a browser that cannot run the app has no use for its manifest, and appkit's note names this inheritance as intended; the plan now says so.
+
+### Round 2 (codex exec -p terra, Amendment 2026-10-21)
+
+- The shared dialog has no accessible name or message association → fixed (own partial with `aria-labelledby` on the message)
+- The partial uses `<nav>` for the dialog buttons → fixed (own partial uses a `<footer>`, which mvpa.css styles)
+- The global hook always renders a red Delete action → dismissed: the only `turbo_confirm` in the app is the user delete; a label option is not needed until a second confirm exists
+- The accept path need not close the dialog, so a failed request could leave the modal blocking the page → fixed (every path closes the dialog before it resolves)
+- The tests never confirm twice in one page session → fixed (the cancel system test then deletes the same user)
