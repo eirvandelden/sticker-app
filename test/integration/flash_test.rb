@@ -19,4 +19,12 @@ class FlashTest < ActionDispatch::IntegrationTest
 
     assert_select %(section[data-mvpa-flashes][aria-label="#{I18n.t("appkit.flash.notifications")}"])
   end
+
+  test "sign-in page renders flashes outside main" do
+    post session_path, params: { email_address: users(:user).email, password: "wrong" }
+
+    assert_response :unauthorized
+    assert_select "body > section[data-mvpa-flashes]"
+    assert_select "main section[data-mvpa-flashes]", count: 0
+  end
 end

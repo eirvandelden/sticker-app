@@ -6,6 +6,15 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     @parent = users(:parent)
   end
 
+  test "preferences form ends in an action row" do
+    sign_in_as(@user)
+
+    get edit_preferences_path
+
+    assert_response :success
+    assert_select "form > footer:last-child input[type=submit], form > footer:last-child button[type=submit]"
+  end
+
   test "user can update locale to italian" do
     sign_in_as(@user)
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html data-controller="theme" <%= tag.attributes(theme_attributes) %>>
+  <head>
+    <title><%= Appkit.config.app_display_name %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="view-transition" content="same-origin">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= render "appkit/shared/pwa_meta" %>
+
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body data-appkit-login>
+    <%# Flashes sit directly under body, outside main, so they do not scroll with the content on
+        Safari before 18.4 (mvpa.css 2026-10-19). Drop this override once appkit's login layout does the same. %>
+    <%= render "appkit/shared/flashes" %>
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>

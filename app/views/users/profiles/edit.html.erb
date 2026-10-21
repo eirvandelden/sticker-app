@@ -39,10 +39,10 @@
         <% end %>
       </fieldset>
 
-      <nav>
+      <footer>
+        <%= link_to t(".cancel"), user_profile_path(@user), role: "button", class: "button-secondary" %>
         <%= form.submit t(".save") %>
-        <%= link_to t(".cancel"), user_profile_path(@user) %>
-      </nav>
+      </footer>
     <% end %>
   </article>
 </div>
