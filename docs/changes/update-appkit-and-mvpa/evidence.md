@@ -18,6 +18,13 @@ The same temporary system test, deleted afterwards, took screenshots at 1400px a
 - Parent, child settings: every form ends in a right-aligned `Save`. At 375px each `Save` is full width.
 - Child dashboard: the card, the sticker grid and the nav render normally. The push-enable button is not on this page.
 
+## Push button and Turn off (2026-10-22)
+
+A temporary system test scrolled to each control at 1400px and 375px. A person read the screenshots.
+
+- Push button ("Enable reminders") on the parent layout: it renders as a plain bordered button with a page-surface background, not a filled one. This is visible at 375px. At 1400px the fixed sidebar header covers it, and `elementFromPoint` at its centre returns the sidebar `HEADER`, so a parent cannot click it on desktop. The same probe on `origin/main` (old appkit and mvpa-css pins) returns the same, so the cover-up exists without this change. A follow-up can move the `<fieldset>` into `<main>`.
+- Child settings, "Turn off": the red button sits under each allowance form, below its right-aligned `Save`, at 1400px. At 375px it is a red button at the left, below the full-width `Save`.
+
 ## Automated checks
 
 `bin/rails test` and `bin/rails test:system` pass. The system tests cover confirm, Cancel, Escape and a second confirm in one page session, and the browser-confirm fallback on the sign-in page.
