@@ -12,13 +12,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 ## Design decisions
 
-- **okcomputer moves too.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. The lock holds `okcomputer 1.19.2`. A trial `bundle lock --update appkit mvpa-css --conservative` in a scratch copy changes exactly appkit, mvpa-css and okcomputer (1.19.2 to 1.20.0). No appkit commit on `main` after 2026-10-07 resolves without it. This contradicts the acceptance criterion "no other gem changes". The plan takes the okcomputer bump as a forced transitive change, not a new gem, and flags it for Etienne (see `## Departures
-
-- Step 9: a fresh `db:create db:migrate` dump on Rails 8.1.4 equals the committed `db/schema.rb` byte for byte, and a second dump changes nothing. Rails 8.1 sorts columns alphabetically, so the premise "dump is in migration order" was wrong. No schema commit is needed.
-
-- Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
-
-## Open decision`).
+- **okcomputer moves too.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. The lock holds `okcomputer 1.19.2`. A trial `bundle lock --update appkit mvpa-css --conservative` in a scratch copy changes exactly appkit, mvpa-css and okcomputer (1.19.2 to 1.20.0). No appkit commit on `main` after 2026-10-07 resolves without it. This contradicts the acceptance criterion "no other gem changes". The plan takes the okcomputer bump as a forced transitive change, not a new gem, and flags it for Etienne (see `## Open decision`).
 - **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "2be440b1225bb15870a2ec86ced19c4ecc7f7085"`. No gem is added or removed.
 - **Use the SHAs above.** If `git ls-remote` shows a newer `HEAD` for either gem at implementation time, take it only when its CHANGELOG adds no new "Upgrading" item. Otherwise stay on the SHAs above and report the newer commit.
 - **Keep the app's own Home link (override the appkit nav partial).** appkit `main` renders Home as `link_to t("appkit.navigation.home"), root_path` and ignores the `home_path` local. Here `root_path` is the sign-in page, so Home would point at `/` and lose `aria-current`, and the logout label would lose "🐿️". That breaks `test/controllers/navigation_test.rb` and `admin_flow_test.rb` "admin layout nav has no stale link back to the sign-in page". The intent requires that the app keeps all current behaviour. So the app adds `app/views/appkit/shared/_nav.html.erb`. It takes appkit's current partial and puts back the `home_path` local and the app's keys `navigation.home`, `navigation.preferences` and `common.logout`. The app already overrides `appkit/sessions/new` and `appkit/preferences/edit` the same way. Rejected: adopt `root_path` and rewrite the tests. That changes behaviour that the intent keeps.
@@ -122,6 +116,12 @@ Per changed file, the tests expected:
 - `test/integration/pwa_test.rb` also asserts `Cache-Control` contains `max-age=0`, `private` and `must-revalidate` on both endpoints, and that the service worker body contains `appkit-#{Appkit.revision}`.
 
 Test setup: existing fixtures `users(:admin)`, `users(:parent)`, `users(:user)` (the child user of `child_profiles(:one)`), `child_profiles(:one)`, and the allowance fixtures. Integration tests sign in with `sign_in_as` from `test/test_helper.rb`. The admin system test signs in through the sign-in form, as `test/system/realtime_sticker_test.rb`'s `sign_in_parent` does, with headless Chrome from `ApplicationSystemTestCase`. No boundary is faked.
+
+## Departures from the plan (recorded during implement)
+
+- Step 9: a fresh `db:create db:migrate` dump on Rails 8.1.4 equals the committed `db/schema.rb` byte for byte, and a second dump changes nothing. Rails 8.1 sorts columns alphabetically, so the premise "dump is in migration order" was wrong. No schema commit is needed.
+
+- Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
 
 ## Open decision
 
