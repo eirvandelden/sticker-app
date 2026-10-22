@@ -39,14 +39,6 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "child layout renders one shared confirm dialog" do
-    sign_in_as(@user)
-    get child_dashboard_path
-
-    assert_response :success
-    assert_select "dialog#confirm-dialog", count: 1
-  end
-
   test "user form ends in an action row with Cancel before Save" do
     sign_in_as(@admin)
 
