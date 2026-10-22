@@ -12,7 +12,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 ## Design decisions
 
-- **okcomputer moves too.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. The lock holds `okcomputer 1.19.2`. A trial `bundle lock --update appkit mvpa-css --conservative` in a scratch copy changes exactly appkit, mvpa-css and okcomputer (1.19.2 to 1.20.0). No appkit commit on `main` after 2026-10-07 resolves without it. This contradicts the acceptance criterion "no other gem changes". The plan takes the okcomputer bump as a forced transitive change, not a new gem, and flags it for Etienne (see `## Decided`).
+- **okcomputer.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. When this plan was written the lock held 1.19.2, and a trial lock moved okcomputer too. Etienne approved that forced bump on 2026-10-20. `main` has since moved okcomputer itself, so this branch's lock moves only appkit and mvpa-css (see `## Departures from the plan`).
 - **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "2be440b1225bb15870a2ec86ced19c4ecc7f7085"`. No gem is added or removed.
 - **Use the SHAs above.** If `git ls-remote` shows a newer `HEAD` for either gem at implementation time, take it only when its CHANGELOG adds no new "Upgrading" item. Otherwise stay on the SHAs above and report the newer commit.
 - **Only the admin user delete gets a dialog.** It is the only place with a confirm (`data: { turbo_confirm: … }`). "Turn off" on an allowance has no confirm today. It stays a direct `DELETE` `button_to` with `class: "button-danger"`, so it stays red.
@@ -33,16 +33,14 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 - `Gemfile`: appkit `ref:` to `d82b9c7…`; add `ref: "2be440b…"` to the mvpa-css line.
 - `Gemfile.lock`: appkit and mvpa-css only (`main` already carries okcomputer 1.20.0). Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`.
-- `db/schema.rb`: regenerated from migrations; column order only.
-- `app/views/layouts/parent.html.erb`: render the shared confirm dialog (see the Amendment). The push `<button type="button">` stays as it is; mvpa.css now renders it plain.
+- `db/schema.rb`: no change. A fresh dump equals the committed file (see `## Departures from the plan`).
 - `app/views/layouts/login.html.erb` (new): app override of appkit's login layout with `render "appkit/shared/flashes"` moved out of `<main>` to a direct child of `<body>`, just before `<main>`.
+- `app/views/layouts/parent.html.erb` and `app/views/layouts/child.html.erb`: render the shared confirm dialog. The push `<button type="button">` stays as it is; mvpa.css now renders it plain.
+- `app/views/shared/_confirm_dialog.html.erb` (new), `app/javascript/confirm_dialog.js` (new), `app/javascript/application.js` and `config/importmap.rb`: the shared confirm dialog and its Turbo hook (see the Amendment).
+- `app/views/admin/users/index.html.erb`: the delete stays a `button_to … method: :delete, class: "button-danger", data: { turbo_confirm: t(".confirm_delete") }`.
 - `app/views/appkit/preferences/edit.html.erb`: wrap `form.submit` in a `<footer>`, last child of the form.
-- `app/views/admin/users/index.html.erb`: the delete stays a `button_to … method: :delete, class: "button-danger", data: { turbo_confirm: t(".confirm_delete") }`. The shared dialog in the Amendment below answers the confirm.
-- `app/views/layouts/login.html.erb`: `test/integration/flash_test.rb` `test "sign-in page renders flashes outside main"` asserting `body > section[data-mvpa-flashes]` and no `main section[data-mvpa-flashes]` after a failed sign-in.
-- `app/views/appkit/preferences/edit.html.erb`: `test/integration/preferences_test.rb` `test "preferences form ends in an action row"`.
-- `app/views/admin/users/_form.html.erb`: `<nav>` becomes `<footer>`, order Cancel link (`role: "button", class: "button-secondary"`), then submit.
-- `app/views/users/profiles/edit.html.erb`: the same change.
-- `app/views/parent/children/edit.html.erb`: the four `<nav>` submit wrappers inside forms (name, avatar, profile, allowance update, allowance create) become `<footer>`, last child of their form. The page-level back `<nav>` at the end stays a `<nav>`.
+- `app/views/admin/users/_form.html.erb` and `app/views/users/profiles/edit.html.erb`: `<nav>` becomes `<footer>`, order Cancel link (`role: "button", class: "button-secondary"`), then submit.
+- `app/views/parent/children/edit.html.erb`: the five `<nav>` submit wrappers inside forms (name, avatar, profile, allowance update, allowance create) become `<footer>`, last child of their form. The page-level back `<nav>` at the end stays a `<nav>`.
 - `app/views/parent/children/_child_card.html.erb`: wrap the goal form's submit in a `<footer>`.
 - `config/locales/en.yml`, `nl.yml`, `it.yml`: add `shared.confirm_dialog.accept` and `cancel`. Then run `bundle exec i18n-tasks normalize`.
 - Tests listed under `## Proof`.
@@ -65,10 +63,9 @@ Each step is its own commit: PWA tests with gem bump; login layout; confirm dial
 
 ## Risks
 
-- **okcomputer 1.20.0** is a dependency change beyond the two named gems. It backs `/up`-style health checks only if the app mounts it; the app uses `rails/health#show`. Low runtime risk, but it breaks the letter of an acceptance criterion.
 - **Turbo and `method="dialog"`.** If Turbo intercepts the Cancel form, Cancel would make a request instead of closing the dialog. The system test clicks Cancel and asserts the dialog closes with no navigation.
-- **Logout button colour.** The logout `button_to` in the sidebar is a `DELETE` form, so mvpa.css keeps it red, as before. Step 10 checks it.
-- **Buttons are 2px larger** (new 1px border). `child_cards.css` sets `min-height: 2.75rem` on all buttons; step 10 checks the dashboard footer row.
+- **Logout button colour.** The logout `button_to` in the sidebar is a `DELETE` form, so mvpa.css keeps it red, as before. Step 11 checks it.
+- **Buttons are 2px larger** (new 1px border). `child_cards.css` sets `min-height: 2.75rem` on all buttons; step 11 checks the dashboard footer row.
 - **Schema regeneration.** It changes line order only. `bin/rails test` reloads the test database from the new file. Rejected: sort the dump by hand. The intent forbids hand edits.
 - **SHAs move.** A newer gem commit with new upgrading notes would widen the scope; the plan stops and reports in that case.
 
