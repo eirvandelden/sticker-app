@@ -1,8 +1,11 @@
 import { Turbo } from "@hotwired/turbo-rails"
 
-// Turbo asks this for every data-turbo-confirm; answer with the native dialog from shared/_confirm_dialog.
+// Turbo asks this for every data-turbo-confirm; answer with the native dialog from shared/_confirm_dialog,
+// or with the browser confirm on a page that renders none (the login layout).
 Turbo.config.forms.confirm = (message) => {
   const dialog = document.getElementById("confirm-dialog")
+  if (!dialog) return Promise.resolve(window.confirm(message))
+
   const abort = new AbortController()
   const { signal } = abort
 
