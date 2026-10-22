@@ -32,9 +32,9 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 ## Files that change
 
 - `Gemfile`: appkit `ref:` to `d82b9c7…`; add `ref: "2be440b…"` to the mvpa-css line.
-- `Gemfile.lock`: appkit, mvpa-css and okcomputer only. Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`.
+- `Gemfile.lock`: appkit and mvpa-css only (`main` already carries okcomputer 1.20.0). Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`.
 - `db/schema.rb`: regenerated from migrations; column order only.
-- `app/views/layouts/parent.html.erb`: update the comment above the nav render, because the app now owns the Home link. The push `<button type="button">` stays as it is; mvpa.css now renders it plain.
+- `app/views/layouts/parent.html.erb`: render the shared confirm dialog (see the Amendment). The push `<button type="button">` stays as it is; mvpa.css now renders it plain.
 - `app/views/layouts/login.html.erb` (new): app override of appkit's login layout with `render "appkit/shared/flashes"` moved out of `<main>` to a direct child of `<body>`, just before `<main>`.
 - `app/views/appkit/preferences/edit.html.erb`: wrap `form.submit` in a `<footer>`, last child of the form.
 - `app/views/admin/users/index.html.erb`: the delete stays a `button_to … method: :delete, class: "button-danger", data: { turbo_confirm: t(".confirm_delete") }`. The shared dialog in the Amendment below answers the confirm.
@@ -51,7 +51,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 1. Write the acceptance tests for the admin user delete: the integration test in `test/integration/admin/users_test.rb` and the system test `test/system/admin_user_deletion_test.rb`. Run them and watch them fail (no shared confirm dialog yet).
 2. Write the PWA tests in `test/integration/pwa_test.rb` (see `## Proof`). Run them against the old gem and watch the `Cache-Control` and revision assertions fail (appkit `e7abc8c` sends `no-cache` and names `Appkit::VERSION`).
-3. Bump the gems. Edit the two `Gemfile` lines. Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`. Run `git diff Gemfile.lock` and confirm only appkit, mvpa-css and okcomputer move. If anything else moves, stop and report.
+3. Bump the gems. Edit the two `Gemfile` lines. Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`. Run `git diff Gemfile.lock` and confirm only appkit and mvpa-css move. If anything else moves, stop and report.
 4. Run `bin/rails test`. The nav tests pass on the new appkit, because `main` already shadows appkit's nav partial. Run step 2's tests green.
 5. Write the login-layout flash test (see `## Proof`), watch it fail, add `app/views/layouts/login.html.erb`, run it green.
 6. Add the shared confirm dialog, `confirm_dialog.js` and the locale keys (see the Amendment). Run step 1's tests green.
@@ -59,7 +59,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 8. Write the parent dashboard and allowance tests (see `## Proof`). They describe behaviour that must hold, so they may pass at once. Run them.
 9. Regenerate `db/schema.rb`. Run `DATABASE_URL=sqlite3:<scratch>/schema.sqlite3 bin/rails db:create db:migrate`, which dumps into `db/schema.rb`. Copy it: `cp db/schema.rb <scratch>/first_dump.rb`. Then run `DATABASE_URL=sqlite3:<scratch>/schema.sqlite3 bin/rails db:schema:dump` and `cmp db/schema.rb <scratch>/first_dump.rb`. Confirm with `diff <(git show origin/main:db/schema.rb | sort) <(sort db/schema.rb)` that only order changed. Commit it alone.
 10. Run the full checks: `bin/rails test`, `bin/rails test:system`, `bin/rubocop`, `bin/brakeman`, `bin/importmap audit`, `bin/erb_lint --lint-all --allow-no-files`, `npx @herb-tools/linter`, `bundle exec ruby ./bin/check_i18n_normalized`, `bundle exec bundle-audit check --update`.
-11. Check by eye with `bin/dev` at 1400px and at 375px width. Signed out: sign-in page with a failed sign-in (flash at the viewport corner). As admin: user list (table width under `main` as a container, `Delete…` red, dialog centred, Cancel filled, Delete red), user edit (action row). As parent: dashboard ("Give sticker" green, "Give penalty" red, push button plain), child edit (action rows, "Turn off" red). As child: dashboard. Record what was seen in the change folder's review evidence.
+11. Check by eye with `bin/dev` at 1400px and at 375px width. Signed out: sign-in page with a failed sign-in (flash at the viewport corner). As admin: user list (table width under `main` as a container, `Delete` red, then the shared dialog centred with a plain Cancel and a red Delete), user edit (action row). As parent: dashboard ("Give sticker" green, "Give penalty" red, push button plain), child edit (action rows, "Turn off" red). As child: dashboard. Record what was seen in the change folder's review evidence.
 
 Each step is its own commit: PWA tests with gem bump; login layout; confirm dialog; action rows; dashboard/allowance tests.
 
@@ -67,7 +67,6 @@ Each step is its own commit: PWA tests with gem bump; login layout; confirm dial
 
 - **okcomputer 1.20.0** is a dependency change beyond the two named gems. It backs `/up`-style health checks only if the app mounts it; the app uses `rails/health#show`. Low runtime risk, but it breaks the letter of an acceptance criterion.
 - **Turbo and `method="dialog"`.** If Turbo intercepts the Cancel form, Cancel would make a request instead of closing the dialog. The system test clicks Cancel and asserts the dialog closes with no navigation.
-- **Upstream nav drift.** The override freezes appkit's nav partial in the app. A later appkit nav change will not reach this app until someone updates the override. Rejected alternative: change appkit to accept `home_path` again. That is an appkit change, out of scope here; it is a follow-up for appkit.
 - **Logout button colour.** The logout `button_to` in the sidebar is a `DELETE` form, so mvpa.css keeps it red, as before. Step 10 checks it.
 - **Buttons are 2px larger** (new 1px border). `child_cards.css` sets `min-height: 2.75rem` on all buttons; step 10 checks the dashboard footer row.
 - **Schema regeneration.** It changes line order only. `bin/rails test` reloads the test database from the new file. Rejected: sort the dump by hand. The intent forbids hand edits.
@@ -86,7 +85,7 @@ Each step is its own commit: PWA tests with gem bump; login layout; confirm dial
 ## Proof
 
 - `db/schema.rb` equals a fresh dump, and a second dump changes nothing → check: step 9 commands; `cmp db/schema.rb <scratch>/first_dump.rb` exits 0 after the second `db:schema:dump`.
-- The Gemfile and lock name the latest appkit and mvpa-css commits, and no other gem changes → check: `git diff origin/main -- Gemfile Gemfile.lock` shows only appkit, mvpa-css (both SHAs) and okcomputer (pending the open decision).
+- The Gemfile and lock name the latest appkit and mvpa-css commits, and no other gem changes → check: `git diff origin/main -- Gemfile Gemfile.lock` shows only appkit and mvpa-css (both SHAs). okcomputer is already 1.20.0 on `main`.
 - A parent sees the push-enable button as a plain button and "Give sticker" and "Give penalty" as before → `test/integration/parent_ui_test.rb` `test "parent dashboard shows a plain push button and the green sticker and red penalty buttons"`.
 - Deleting a user still works and keeps a red delete button → `test/system/admin_user_deletion_test.rb` `test "admin deletes a user through the confirmation dialog"` and `test "cancel and escape keep the user, then a second confirm still deletes"`; `test/system/confirm_dialog_test.rb` `test "a page without the shared dialog falls back to the browser confirm"`; `test/integration/admin/users_test.rb` `test "user list confirms Delete through Turbo on every other row"` and `test "parent layout renders one shared confirm dialog"`; `test/integration/child_flow_test.rb` `test "child layout renders one shared confirm dialog"`.
 - Turning off an allowance still works and keeps a red delete button → `test/integration/parent/allowance_form_test.rb` `test "turn off is a red DELETE button that removes the allowance"`.
