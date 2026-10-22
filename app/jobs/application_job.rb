@@ -1,3 +1,4 @@
+# Is the base class of the background jobs.
 class ApplicationJob < ActiveJob::Base
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked

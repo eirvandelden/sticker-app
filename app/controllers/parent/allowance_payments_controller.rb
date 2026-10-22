@@ -1,7 +1,11 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents mark an allowance as paid.
   class AllowancePaymentsController < ApplicationController
     before_action :ensure_parent
 
+    # Marks the oldest owed period of the child's allowance as given.
+    # @rbs () -> void
     def create
       child    = ChildProfile.find(params[:child_id])
       kind     = params[:kind]
