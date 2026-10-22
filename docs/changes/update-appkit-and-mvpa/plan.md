@@ -12,11 +12,9 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 ## Design decisions
 
-- **okcomputer moves too.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. The lock holds `okcomputer 1.19.2`. A trial `bundle lock --update appkit mvpa-css --conservative` in a scratch copy changes exactly appkit, mvpa-css and okcomputer (1.19.2 to 1.20.0). No appkit commit on `main` after 2026-10-07 resolves without it. This contradicts the acceptance criterion "no other gem changes". The plan takes the okcomputer bump as a forced transitive change, not a new gem, and flags it for Etienne (see `## Open decision`).
+- **okcomputer moves too.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. The lock holds `okcomputer 1.19.2`. A trial `bundle lock --update appkit mvpa-css --conservative` in a scratch copy changes exactly appkit, mvpa-css and okcomputer (1.19.2 to 1.20.0). No appkit commit on `main` after 2026-10-07 resolves without it. This contradicts the acceptance criterion "no other gem changes". The plan takes the okcomputer bump as a forced transitive change, not a new gem, and flags it for Etienne (see `## Decided`).
 - **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "2be440b1225bb15870a2ec86ced19c4ecc7f7085"`. No gem is added or removed.
 - **Use the SHAs above.** If `git ls-remote` shows a newer `HEAD` for either gem at implementation time, take it only when its CHANGELOG adds no new "Upgrading" item. Otherwise stay on the SHAs above and report the newer commit.
-- **Keep the app's own Home link (override the appkit nav partial).** appkit `main` renders Home as `link_to t("appkit.navigation.home"), root_path` and ignores the `home_path` local. Here `root_path` is the sign-in page, so Home would point at `/` and lose `aria-current`, and the logout label would lose "🐿️". That breaks `test/controllers/navigation_test.rb` and `admin_flow_test.rb` "admin layout nav has no stale link back to the sign-in page". The intent requires that the app keeps all current behaviour. So the app adds `app/views/appkit/shared/_nav.html.erb`. It takes appkit's current partial and puts back the `home_path` local and the app's keys `navigation.home`, `navigation.preferences` and `common.logout`. The app already overrides `appkit/sessions/new` and `appkit/preferences/edit` the same way. Rejected: adopt `root_path` and rewrite the tests. That changes behaviour that the intent keeps.
-- **Confirm with a Stimulus `dialog` controller, not Invoker Commands.** The mvpa.css demo opens a dialog with `command="show-modal" commandfor=…`. `allow_browser versions: :modern` admits Safari 17.2+, Chrome 120+ and Firefox 121+. Invoker Commands need Safari 26.2+, Chrome 135+ and Firefox 144+. A parent on an older admitted browser could not delete a user. A 5-line `dialog_controller.js` calls `showModal()`, and the app already uses Stimulus. This adds no dependency.
 - **Only the admin user delete gets a dialog.** It is the only place with a confirm (`data: { turbo_confirm: … }`). "Turn off" on an allowance has no confirm today. It stays a direct `DELETE` `button_to` with `class: "button-danger"`, so it stays red.
 - **Form footers.** Every app-owned form wraps its submit (and its Cancel, if any) in a `<footer>` that is the last child of the form. The order is Cancel, then Save. A Cancel link gets `role: "button", class: "button-secondary"` so it shows as a plain button, as mvpa.css's `Cancel` does.
 - **Preferences gets an action row; sign-in does not.** `app/views/appkit/preferences/edit.html.erb` is an app-owned form under `app/views`, so its submit moves into a `<footer>` like every other form. Its `data: { turbo: false }` stays. `app/views/appkit/sessions/new.html.erb` keeps its bare submit: it renders in appkit's login layout, and `appkit/login.css` sizes `body[data-appkit-login] article button` for a single full-row button.
@@ -36,36 +34,34 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 - `Gemfile`: appkit `ref:` to `d82b9c7…`; add `ref: "2be440b…"` to the mvpa-css line.
 - `Gemfile.lock`: appkit, mvpa-css and okcomputer only. Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`.
 - `db/schema.rb`: regenerated from migrations; column order only.
-- `app/views/appkit/shared/_nav.html.erb` (new): app override of appkit's nav partial with the `home_path` local and the app's translation keys.
 - `app/views/layouts/parent.html.erb`: update the comment above the nav render, because the app now owns the Home link. The push `<button type="button">` stays as it is; mvpa.css now renders it plain.
 - `app/views/layouts/login.html.erb` (new): app override of appkit's login layout with `render "appkit/shared/flashes"` moved out of `<main>` to a direct child of `<body>`, just before `<main>`.
 - `app/views/appkit/preferences/edit.html.erb`: wrap `form.submit` in a `<footer>`, last child of the form.
-- `app/views/admin/users/index.html.erb`: replace `button_to … turbo_confirm` with a `Delete…` opener (`type="button"`, `class="button-danger"`, `data-action="dialog#open"`) and a `<dialog>`. The dialog holds a heading with the existing `.confirm_delete` text and a `<footer>`. The footer holds `<form method="dialog"><button>Cancel</button></form>` and then `button_to t(".delete"), admin_user_path(user), method: :delete`. Wrap the opener and the dialog in one element with `data-controller="dialog"`, and give the `<dialog>` `data-dialog-target="dialog"`. Keep `unless user == Current.user` around that wrapper. Label the dialog with `aria-labelledby` on a `dom_id(user, :confirm_delete)` heading id.
-- `app/javascript/controllers/dialog_controller.js` (new): `static targets = [ "dialog" ]`; `open()` calls `this.dialogTarget.showModal()`. `eagerLoadControllersFrom` registers it.
+- `app/views/admin/users/index.html.erb`: the delete stays a `button_to … method: :delete, class: "button-danger", data: { turbo_confirm: t(".confirm_delete") }`. The shared dialog in the Amendment below answers the confirm.
 - `app/views/layouts/login.html.erb`: `test/integration/flash_test.rb` `test "sign-in page renders flashes outside main"` asserting `body > section[data-mvpa-flashes]` and no `main section[data-mvpa-flashes]` after a failed sign-in.
 - `app/views/appkit/preferences/edit.html.erb`: `test/integration/preferences_test.rb` `test "preferences form ends in an action row"`.
 - `app/views/admin/users/_form.html.erb`: `<nav>` becomes `<footer>`, order Cancel link (`role: "button", class: "button-secondary"`), then submit.
 - `app/views/users/profiles/edit.html.erb`: the same change.
 - `app/views/parent/children/edit.html.erb`: the four `<nav>` submit wrappers inside forms (name, avatar, profile, allowance update, allowance create) become `<footer>`, last child of their form. The page-level back `<nav>` at the end stays a `<nav>`.
 - `app/views/parent/children/_child_card.html.erb`: wrap the goal form's submit in a `<footer>`.
-- `config/locales/en.yml`, `nl.yml`, `it.yml`: add `admin.users.index.delete_ellipsis` (en "Delete…", nl "Verwijderen…", it "Elimina…") and `admin.users.index.cancel` (en "Cancel", nl "Annuleren", it "Annulla"). Match the wording of the existing `delete` key in each file. Then run `bundle exec i18n-tasks normalize`.
+- `config/locales/en.yml`, `nl.yml`, `it.yml`: add `shared.confirm_dialog.accept` and `cancel`. Then run `bundle exec i18n-tasks normalize`.
 - Tests listed under `## Proof`.
 
 ## Order of work
 
-1. Write the acceptance tests for the admin user delete: the integration test in `test/integration/admin/users_test.rb` and the system test `test/system/admin_user_deletion_test.rb`. Run them and watch them fail (no `<dialog>`, no `Delete…` opener).
+1. Write the acceptance tests for the admin user delete: the integration test in `test/integration/admin/users_test.rb` and the system test `test/system/admin_user_deletion_test.rb`. Run them and watch them fail (no shared confirm dialog yet).
 2. Write the PWA tests in `test/integration/pwa_test.rb` (see `## Proof`). Run them against the old gem and watch the `Cache-Control` and revision assertions fail (appkit `e7abc8c` sends `no-cache` and names `Appkit::VERSION`).
 3. Bump the gems. Edit the two `Gemfile` lines. Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`. Run `git diff Gemfile.lock` and confirm only appkit, mvpa-css and okcomputer move. If anything else moves, stop and report.
-4. Run `bin/rails test`. Expect `navigation_test.rb` and `admin_flow_test.rb` "no stale link" to fail on the new appkit nav. Add `app/views/appkit/shared/_nav.html.erb`. Update the comment in `parent.html.erb`. Run those tests and step 2's tests green.
+4. Run `bin/rails test`. The nav tests pass on the new appkit, because `main` already shadows appkit's nav partial. Run step 2's tests green.
 5. Write the login-layout flash test (see `## Proof`), watch it fail, add `app/views/layouts/login.html.erb`, run it green.
-6. Add `dialog_controller.js`, the locale keys and the dialog markup in `admin/users/index.html.erb`. Run step 1's tests green.
+6. Add the shared confirm dialog, `confirm_dialog.js` and the locale keys (see the Amendment). Run step 1's tests green.
 7. Write the action-row tests (one per page, see `## Proof`). Watch them fail. Convert the form footers in `_form`, `profiles/edit`, `children/edit`, `_child_card` and `appkit/preferences/edit`. Run them green.
 8. Write the parent dashboard and allowance tests (see `## Proof`). They describe behaviour that must hold, so they may pass at once. Run them.
 9. Regenerate `db/schema.rb`. Run `DATABASE_URL=sqlite3:<scratch>/schema.sqlite3 bin/rails db:create db:migrate`, which dumps into `db/schema.rb`. Copy it: `cp db/schema.rb <scratch>/first_dump.rb`. Then run `DATABASE_URL=sqlite3:<scratch>/schema.sqlite3 bin/rails db:schema:dump` and `cmp db/schema.rb <scratch>/first_dump.rb`. Confirm with `diff <(git show origin/main:db/schema.rb | sort) <(sort db/schema.rb)` that only order changed. Commit it alone.
 10. Run the full checks: `bin/rails test`, `bin/rails test:system`, `bin/rubocop`, `bin/brakeman`, `bin/importmap audit`, `bin/erb_lint --lint-all --allow-no-files`, `npx @herb-tools/linter`, `bundle exec ruby ./bin/check_i18n_normalized`, `bundle exec bundle-audit check --update`.
 11. Check by eye with `bin/dev` at 1400px and at 375px width. Signed out: sign-in page with a failed sign-in (flash at the viewport corner). As admin: user list (table width under `main` as a container, `Delete…` red, dialog centred, Cancel filled, Delete red), user edit (action row). As parent: dashboard ("Give sticker" green, "Give penalty" red, push button plain), child edit (action rows, "Turn off" red). As child: dashboard. Record what was seen in the change folder's review evidence.
 
-Each step is its own commit: PWA tests with gem bump; nav override; login layout; dialog; action rows; dashboard/allowance tests; schema.
+Each step is its own commit: PWA tests with gem bump; login layout; confirm dialog; action rows; dashboard/allowance tests.
 
 ## Risks
 
@@ -92,7 +88,7 @@ Each step is its own commit: PWA tests with gem bump; nav override; login layout
 - `db/schema.rb` equals a fresh dump, and a second dump changes nothing → check: step 9 commands; `cmp db/schema.rb <scratch>/first_dump.rb` exits 0 after the second `db:schema:dump`.
 - The Gemfile and lock name the latest appkit and mvpa-css commits, and no other gem changes → check: `git diff origin/main -- Gemfile Gemfile.lock` shows only appkit, mvpa-css (both SHAs) and okcomputer (pending the open decision).
 - A parent sees the push-enable button as a plain button and "Give sticker" and "Give penalty" as before → `test/integration/parent_ui_test.rb` `test "parent dashboard shows a plain push button and the green sticker and red penalty buttons"`.
-- Deleting a user still works and keeps a red delete button → `test/system/admin_user_deletion_test.rb` `test "admin deletes a user through the confirmation dialog"` and `test "cancel closes the confirmation dialog and keeps the user"`; `test/integration/admin/users_test.rb` `test "user list offers a red Delete… opener and a dialog with a DELETE form"`.
+- Deleting a user still works and keeps a red delete button → `test/system/admin_user_deletion_test.rb` `test "admin deletes a user through the confirmation dialog"` and `test "cancel and escape keep the user, then a second confirm still deletes"`; `test/system/confirm_dialog_test.rb` `test "a page without the shared dialog falls back to the browser confirm"`; `test/integration/admin/users_test.rb` `test "user list confirms Delete through Turbo on every other row"` and `test "parent layout renders one shared confirm dialog"`; `test/integration/child_flow_test.rb` `test "child layout renders one shared confirm dialog"`.
 - Turning off an allowance still works and keeps a red delete button → `test/integration/parent/allowance_form_test.rb` `test "turn off is a red DELETE button that removes the allowance"`.
 - The manifest and service worker still load for a signed-in and a signed-out visitor → `test/integration/pwa_test.rb` `test "manifest and service worker load for a signed-out visitor"` and `test "manifest and service worker load for a signed-in parent and child"`.
 - A child watching a card still sees a new sticker appear in real time → `test/system/realtime_sticker_test.rb` `test "child dashboard updates live when a parent gives a sticker"` (existing, unchanged).
@@ -104,9 +100,7 @@ Behaviour kept from before the bump (regression guards, existing tests, unchange
 - `test/integration/admin/users_test.rb`: `test "admin cannot delete themselves"`.
 
 Per changed file, the tests expected:
-- `app/views/admin/users/index.html.erb`: the opener and the dialog share one `[data-controller=dialog]` element; the dialog is `dialog[data-dialog-target=dialog]`; the opener is `button[type=button].button-danger[data-action="dialog#open"]`; the dialog footer holds a `form[method=dialog]` and then a form with `input[name=_method][value=delete]`; no opener or dialog in the current admin's own row; no `data-turbo-confirm` left.
-- `app/javascript/controllers/dialog_controller.js`: no JS unit-test runner exists in the app; the system tests above prove `open()`.
-- `app/views/appkit/shared/_nav.html.erb`: covered by the navigation regression guards; plus `test/controllers/navigation_test.rb` `test "logout keeps the app's own label"` asserting `I18n.t("common.logout")`.
+- `app/views/admin/users/index.html.erb`: a `button_to` with `data-turbo-confirm` on each other user's row, none on the current admin's own row, no `data-controller=dialog`.
 - `app/views/layouts/login.html.erb`: `test/integration/flash_test.rb` `test "sign-in page renders flashes outside main"` asserting `body > section[data-mvpa-flashes]` and no `main section[data-mvpa-flashes]` after a failed sign-in.
 - `app/views/appkit/preferences/edit.html.erb`: `test/integration/preferences_test.rb` `test "preferences form ends in an action row"`.
 - `app/views/admin/users/_form.html.erb`: `test/integration/admin/users_test.rb` `test "user form ends in an action row with Cancel before Save"` (new and edit pages).
@@ -123,9 +117,9 @@ Test setup: existing fixtures `users(:admin)`, `users(:parent)`, `users(:user)` 
 
 - Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
 
-## Open decision
+## Decided
 
-- okcomputer 1.19.2 to 1.20.0 is forced by appkit `d82b9c7`. Accept it as a transitive change, or keep appkit below `9391c4b` (not the latest).
+- okcomputer 1.19.2 to 1.20.0 is forced by appkit `d82b9c7`. Etienne approved it on 2026-10-20. `main` already carries it.
 
 ## Amendment 2026-10-21 (change request on PR #187)
 
