@@ -36,3 +36,17 @@ jobs:
       - run: npm ci
       - run: bin/erb_lint --lint-all --allow-no-files
       - run: npx @herb-tools/linter
+
+  steep:
+    name: steep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: spinel-coop/setup-rv@main
+        with:
+          ruby-version: current
+          install-gems: true
+      - run: gem install steep --no-document --force --version "~> 2.0"
+      - run: bin/rbs --collection=rbs_collection.yml collection install --frozen
+      - run: bin/rails db:prepare rbs_rails:all
+      - run: GEM_PATH="$(bundle exec ruby -e 'puts Gem.path.join(":")')" steep check

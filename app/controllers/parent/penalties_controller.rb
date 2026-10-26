@@ -1,9 +1,15 @@
+# Groups the controllers that parents use.
 module Parent
+  # Lets parents give a child a penalty.
   class PenaltiesController < ApplicationController
+    # @type const Current: untyped
     before_action :ensure_parent
 
+    # Adds a penalty to the child's newest card.
+    # @rbs () -> void
     def create
       child = ChildProfile.find(params[:child_id])
+      # @type var card: untyped
       card = child.sticker_cards.order(created_at: :desc).first
 
       card.stickers.create!(
