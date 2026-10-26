@@ -6,6 +6,8 @@ From `intent.md` (2026-10-20). Status: accepted.
 
 The app pins appkit at `e7abc8c` (2026-08-19) and resolves mvpa.css at `4c9c4ae` (2026-09-21). The latest commits on 2026-10-20 are appkit `d82b9c7601410e4daa42927cacaf646377090825` and mvpa.css `2be440b1225bb15870a2ec86ced19c4ecc7f7085`.
 
+Starting pins after the rebase onto `origin/main` (2026-10-20): `main` already locks appkit `d837929` and mvpa-css `77697d4`. The lines below that name `e7abc8c` and `4c9c4ae` describe the pins when this plan was written and stay as history. The branch diff moves appkit from `d837929` to `d82b9c7` and mvpa-css from `77697d4` to `2be440b`.
+
 `e7abc8c` sits on the appkit side branch `ai/review-workspace-changes`. It is not an ancestor of appkit `main`. The tree diff from `e7abc8c` to `d82b9c7` is therefore the full change set, and it includes appkit `839e8cb` ("drop the home_path local, nav links straight to root") and `02fa603` ("namespace nav translations under appkit").
 
 The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has two "Upgrading" notes since `4c9c4ae`: 2026-10-13 (button hierarchy, action rows, dialogs) and 2026-10-19 (pull-down menu, stacking tables, `main` as a size container, flashes outside `main`, title bar as a wrapping row).
@@ -112,6 +114,8 @@ Test setup: existing fixtures `users(:admin)`, `users(:parent)`, `users(:user)` 
 - Step 9: a fresh `db:create db:migrate` dump on Rails 8.1.4 equals the committed `db/schema.rb` byte for byte, and a second dump changes nothing. Rails 8.1 sorts columns alphabetically, so the premise "dump is in migration order" was wrong. No schema commit is needed.
 
 - Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
+
+- Starting pins: after the rebase, appkit moves from `d837929` (not `e7abc8c`) and mvpa-css from `77697d4` (not `4c9c4ae`). The 2026-10-13 mvpa.css note is therefore already in the old pin, and the appkit CHANGELOG adds only the `rails-ci.yml` `npm ci` line over `d837929`.
 
 ## Decided
 
