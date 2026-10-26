@@ -51,6 +51,7 @@ Production runs one Ruby process: Puma, with Solid Queue's dispatcher, scheduler
 
 - Queue pool as a formula in `database.yml` (`RAILS_MAX_THREADS` + 6), not a fixed number — it follows `RAILS_MAX_THREADS` and needs no env var; deploy.yml stays untouched.
 - Autonomous delivery, no Codex review — chosen at the intent interview; Codex round costs extra tokens.
+- Accept the primary pool risk: it stays at 5 although 3 job threads join 3 Puma threads — jobs are short with 2 to 5 users; revisit if timeouts appear.
 
 ## Open questions
 
