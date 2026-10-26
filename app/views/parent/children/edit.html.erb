@@ -20,9 +20,9 @@
         <%= form.text_field :name, required: true %>
       </fieldset>
 
-      <nav>
+      <footer>
         <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      </footer>
     <% end %>
   </article>
 
@@ -50,9 +50,9 @@
         <%= form.file_field :avatar, accept: "image/*", required: true %>
       </fieldset>
 
-      <nav>
+      <footer>
         <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      </footer>
     <% end %>
   </article>
 
@@ -83,9 +83,9 @@
         <%= form.date_field :birthdate %>
       </fieldset>
 
-      <nav>
+      <footer>
         <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      </footer>
     <% end %>
   </article>
 
@@ -124,9 +124,9 @@
               <small><%= t("parent.allowances.nibud_suggestion", amount: nibud) %></small>
             <% end %>
           </fieldset>
-          <nav>
+          <footer>
             <%= form.submit t("parent.allowances.save") %>
-          </nav>
+          </footer>
         <% end %>
         <%= button_to t("parent.allowances.turn_off"), parent_child_allowance_path(@child, allowance),
                       method: :delete, class: "button-danger" %>
@@ -157,9 +157,9 @@
             <%= form.number_field :due_day, min: 0, max: 31, required: true %>
           </fieldset>
           <%= form.hidden_field :kind %>
-          <nav>
+          <footer>
             <%= form.submit t("parent.allowances.save") %>
-          </nav>
+          </footer>
         <% end %>
       <% end %>
     </article>

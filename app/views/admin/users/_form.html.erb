@@ -37,8 +37,8 @@
     <%= form.file_field :avatar, accept: "image/*" %>
   </fieldset>
 
-  <nav>
+  <footer>
+    <%= link_to t(".cancel"), cancel_path, role: "button", class: "button-secondary" %>
     <%= form.submit submit_label %>
-    <%= link_to t(".cancel"), cancel_path %>
-  </nav>
+  </footer>
 <% end %>

@@ -45,6 +45,8 @@
           Appkit.config.user_class.call.dark_themes.keys.map { |key| [t("appkit.themes.#{key}"), key] } %>
     </fieldset>
 
-    <%= form.submit t(".submit") %>
+    <footer>
+      <%= form.submit t(".submit") %>
+    </footer>
   <% end %>
 </article>
