@@ -43,6 +43,8 @@ production:
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
+    # Async Solid Queue shares this pool: 3 job threads, dispatcher, scheduler and heartbeat, plus Puma threads.
+    pool: <%= Integer(ENV.fetch("RAILS_MAX_THREADS", 5)) + 6 %>
     database: storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
