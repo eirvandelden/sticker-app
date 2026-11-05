@@ -91,6 +91,34 @@ class PreferencesTest < ActionDispatch::IntegrationTest
       assert_redirected_to edit_preferences_path
       assert_equal "dark", @parent.reload.color_scheme
     end
+
+    test "preferences page offers log out" do
+      sign_in_as(@parent)
+
+      get edit_preferences_path
+
+      assert_response :success
+      assert_select "main form[action=?][method=post]", session_path do
+        assert_select "input[name=_method][value=delete]", count: 1
+        assert_select "button", text: I18n.t("appkit.navigation.logout")
+      end
+    end
+
+    test "logging out from preferences lands on the sign-in page" do
+      sign_in_as(@parent)
+      get edit_preferences_path
+      log_out_form = css_select("main form[action='#{session_path}']").first
+
+      assert_not_nil log_out_form, "Expected the preferences page to hold a log out form"
+
+      delete log_out_form["action"]
+
+      assert_redirected_to root_url
+      follow_redirect!
+
+      assert_response :success
+      assert_select "form[action=?] input[name=email_address]", session_path
+    end
   end
 
   class AdminPreferencesTest < ActionDispatch::IntegrationTest

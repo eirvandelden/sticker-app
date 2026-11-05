@@ -17,15 +17,16 @@ class Parent::ChildrenDashboardLayoutTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", parent_child_path(child)
   end
 
-  test "dashboard shows a gift badge when a child's sticker card is ready to reward, but no mark rewarded button" do
-    child = child_profiles(:two)
+  test "dashboard shows mark rewarded only in the row of a child with a card ready to reward" do
+    ready_child = child_profiles(:two)
+    child_without_ready_card = child_profiles(:one)
     sign_in_as @parent
 
     get parent_children_path
 
     assert_response :success
-    assert_select "##{dom_id(child, :reward_badge)}"
-    assert_select "form[action=?]", parent_child_reward_path(child), count: 0
+    assert_select "##{dom_id(ready_child, :dashboard_row)} form[action=?]", parent_child_reward_path(ready_child)
+    assert_select "form[action=?]", parent_child_reward_path(child_without_ready_card), count: 0
   end
 
   test "child page shows goal form, allowance status and history link" do

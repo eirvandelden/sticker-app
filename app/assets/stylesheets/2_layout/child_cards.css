@@ -1,20 +1,17 @@
-[data-controller="confetti"] > article > footer,
-article[data-controller="confetti"] > footer {
+[data-controller="confetti"] > article > footer {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
 }
 
-[data-controller="confetti"] > article,
-article[data-controller="confetti"] {
+[data-controller="confetti"] > article {
   padding-inline: clamp(0.75rem, 3vw, 1.25rem);
 }
 
 button,
 input[type="submit"],
-[data-controller="confetti"] > article > footer a,
-article[data-controller="confetti"] > footer a {
+[data-controller="confetti"] > article > footer a {
   min-height: 2.75rem;
 }
 

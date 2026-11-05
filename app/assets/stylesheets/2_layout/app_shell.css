@@ -1,0 +1,39 @@
+/*
+ * App shell at phone width
+ * With viewport-fit=cover the page reaches under the status bar and the home
+ * indicator, so the body and the tab bar take the safe-area insets themselves.
+ * The nav selectors are more specific than the mvpa rules they override. The
+ * :root and body rules match mvpa's specificity and win only because this file
+ * loads after mvpa (application.css imports mvpa first).
+ */
+
+@media (max-width: 768px) {
+  :root {
+    --tab-bar-height: 4rem;
+    --nav-height-mobile: calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0rem));
+  }
+
+  body {
+    padding-block-start: env(safe-area-inset-top, 0rem);
+  }
+
+  body > header {
+    padding-block-end: env(safe-area-inset-bottom, 0rem);
+  }
+
+  body > header nav {
+    block-size: var(--tab-bar-height);
+    min-block-size: 0;
+  }
+
+  body > header nav > ul > li {
+    min-inline-size: 0;
+  }
+
+  body > header nav > ul > li > a {
+    block-size: calc(var(--tab-bar-height) - var(--block-space));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

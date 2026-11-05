@@ -47,4 +47,6 @@
 
     <%= form.submit t(".submit") %>
   <% end %>
+
+  <%= button_to t("appkit.navigation.logout"), session_path, method: :delete %>
 </article>
