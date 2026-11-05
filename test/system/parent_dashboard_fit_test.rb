@@ -5,6 +5,11 @@ require "application_system_test_case"
 class ParentDashboardFitTest < ApplicationSystemTestCase
   IPHONE_12_MINI = { width: 375, height: 728, deviceScaleFactor: 3, mobile: true }.freeze
 
+  # The full iPhone 12 mini screen with its real safe areas: the status bar on top
+  # and the home indicator at the bottom.
+  IPHONE_12_MINI_FULL_SCREEN = { width: 375, height: 812, deviceScaleFactor: 3, mobile: true }.freeze
+  SAFE_AREA_INSETS = { top: 50, bottom: 34, left: 0, right: 0 }.freeze
+
   LONG_NAMES = {
     user: "Alexandra Wilhelmina van Dijke",
     user_two: "Bartholomeus Cornelis de Vries",
@@ -19,6 +24,7 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
     @emulated_sessions.uniq.each do |name|
       Capybara.using_session(name) do
         page.driver.browser.execute_cdp("Emulation.clearDeviceMetricsOverride")
+        page.driver.browser.execute_cdp("Emulation.setSafeAreaInsetsOverride", insets: {})
       end
     end
     Capybara.reset_sessions!
@@ -119,7 +125,36 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
     end
   end
 
+  test "tab bar clears the home indicator and three ready rows still fit on an iPhone 12 mini" do
+    children.each { |child| make_card_ready child }
+
+    sign_in users(:parent)
+    visit_on_iphone_12_mini_with_safe_areas parent_children_path
+
+    assert_tabs_above_home_indicator
+    assert_rows_fit_above_tab_bar
+  end
+
   private
+
+  def visit_on_iphone_12_mini_with_safe_areas(path)
+    page.driver.browser.execute_cdp("Emulation.setDeviceMetricsOverride", **IPHONE_12_MINI_FULL_SCREEN)
+    page.driver.browser.execute_cdp("Emulation.setSafeAreaInsetsOverride", insets: SAFE_AREA_INSETS)
+    @emulated_sessions << Capybara.session_name
+    visit path
+  end
+
+  def assert_tabs_above_home_indicator
+    home_indicator_top = IPHONE_12_MINI_FULL_SCREEN[:height] - SAFE_AREA_INSETS[:bottom]
+    bottoms = page.evaluate_script(<<~JS)
+      Array.from(document.querySelectorAll("body > header nav > ul > li > a"), (tab) => tab.getBoundingClientRect().bottom)
+    JS
+
+    assert_not_empty bottoms
+    bottoms.each do |bottom|
+      assert_operator bottom, :<=, home_indicator_top, "Expected every tab to end above the home indicator"
+    end
+  end
 
   def within_dashboard_row(child, &)
     within("##{dom_id(child, :dashboard_row)}", &)
@@ -162,7 +197,7 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
 
   def assert_dashboard_row(child, mark_rewarded:, locale: :en)
     within_dashboard_row(child) do
-      assert_selector "h2", text: child.user.reload.name
+      assert_selector "h2", text: User.find(child.user_id).name
       assert_selector "progress"
       assert_button I18n.t("parent.actions.give_sticker", locale: locale)
       assert_button I18n.t("parent.actions.give_penalty", locale: locale)
