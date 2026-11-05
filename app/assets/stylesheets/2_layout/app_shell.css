@@ -2,7 +2,9 @@
  * App shell at phone width
  * With viewport-fit=cover the page reaches under the status bar and the home
  * indicator, so the body and the tab bar take the safe-area insets themselves.
- * Every selector is more specific than the mvpa rule it overrides.
+ * The nav selectors are more specific than the mvpa rules they override. The
+ * :root and body rules match mvpa's specificity and win only because this file
+ * loads after mvpa (application.css imports mvpa first).
  */
 
 @media (max-width: 768px) {
