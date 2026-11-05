@@ -107,7 +107,7 @@ class NavigationTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "nav ul li:first-child a", text: "Home"
     assert_select "nav a[href=?]", edit_preferences_path, text: "Voorkeuren"
-    assert_select "nav button", text: "Uitloggen"
+    assert_select "nav button", count: 0
   end
 
   test "the nav is headed with the app name" do

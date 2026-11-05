@@ -207,3 +207,5 @@ Domain skills applied: software-design, rails-ui, diagrams, glossary (no file ye
 - The viewport-meta proof has no test file and cannot cover the child layout → fixed (new `test/integration/layout_meta_test.rb` with one test per layout, listed in Files that change and Proof)
 - `child_profile_test.rb` lacks the Turbo broadcast test helper → fixed (Files that change now adds the require and `include Turbo::Broadcastable::TestHelper`)
 - The Herb command is wrong and the RBS step points at an absent CLAUDE.md → fixed (command is now `npx @herb-tools/linter`; the RBS generation command is written out in step 10, though CLAUDE.md does exist in the worktree)
+
+Reproduction: committed

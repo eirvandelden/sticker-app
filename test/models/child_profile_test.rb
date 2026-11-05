@@ -1,6 +1,9 @@
 require "test_helper"
+require "turbo/broadcastable/test_helper"
 
 class ChildProfileTest < ActiveSupport::TestCase
+  include Turbo::Broadcastable::TestHelper
+
   test "creating a child profile auto-creates an initial sticker card" do
     # Use a parent user so the User after_create callback does NOT fire,
     # letting us test the ChildProfile callback in isolation.
@@ -122,5 +125,45 @@ role: :child)
 
     assert_not_equal completed_card, profile.active_sticker_card
     assert_equal profile.active_sticker_card, profile.display_sticker_card
+  end
+
+  test "broadcast_card_refresh sends the dashboard progress with mark rewarded when a card is ready" do
+    profile = child_profiles(:two)
+
+    streams = capture_turbo_stream_broadcasts(profile) { profile.broadcast_card_refresh }
+
+    assert_not_nil dashboard_progress_stream(streams, profile).at_css(reward_form_selector(profile)),
+                   "Expected the dashboard progress broadcast to hold the mark rewarded form"
+  end
+
+  test "broadcast_card_refresh sends the dashboard progress without mark rewarded when no card is ready" do
+    profile = child_profiles(:one)
+
+    streams = capture_turbo_stream_broadcasts(profile) { profile.broadcast_card_refresh }
+
+    assert_nil dashboard_progress_stream(streams, profile).at_css(reward_form_selector(profile)),
+               "Expected the dashboard progress broadcast to hold no mark rewarded form"
+  end
+
+  test "broadcast_card_refresh never replaces the dashboard row" do
+    profile = child_profiles(:two)
+
+    streams = capture_turbo_stream_broadcasts(profile) { profile.broadcast_card_refresh }
+
+    assert_not_includes streams.map { |stream| stream["target"] }, dom_id(profile, :dashboard_row)
+  end
+
+  private
+
+  def dashboard_progress_stream(streams, profile)
+    streams.find { |stream| stream["target"] == dom_id(profile, :dashboard_progress) }
+  end
+
+  def reward_form_selector(profile)
+    "form[action='#{Rails.application.routes.url_helpers.parent_child_reward_path(profile)}']"
+  end
+
+  def dom_id(...)
+    ActionView::RecordIdentifier.dom_id(...)
   end
 end
