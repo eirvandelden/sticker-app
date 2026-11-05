@@ -1,0 +1,94 @@
+/*
+ * Dashboard row
+ * One child's row on the parent dashboard, compact enough that three rows fit
+ * above the tab bar on a 375 CSS px wide phone. The article stays in block flow,
+ * so its non-visual children (the stream source, the completion flag) add no space.
+ * Every rule resets an mvpa default that would add height.
+ */
+
+main > section:has(> article[data-controller="confetti"]) > header h1 {
+  font-size: var(--text-large);
+  margin-block: 0 0.5rem;
+}
+
+main article[data-controller="confetti"] {
+  padding: 0.5rem 0.75rem;
+  margin-block-end: 0.5rem;
+}
+
+main article[data-controller="confetti"] > header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+main article[data-controller="confetti"] > header img {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+}
+
+main article[data-controller="confetti"] > header a {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+main article[data-controller="confetti"] > header h2 {
+  margin: 0;
+  font-size: var(--text-medium);
+  line-height: 1.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dashboard progress target: progress bar and text on one line, then the
+   badge and Mark card given on a second line when a card is ready. */
+main article[data-controller="confetti"] > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.375rem 0.5rem;
+  margin-block-start: 0.375rem;
+}
+
+main article[data-controller="confetti"] > div > progress {
+  block-size: 0.75rem;
+  margin: 0;
+}
+
+main article[data-controller="confetti"] > div > p {
+  margin: 0;
+  max-inline-size: none;
+  font-size: var(--text-small);
+  line-height: 1.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+main article[data-controller="confetti"] > footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem;
+  margin: 0.375rem 0 0;
+  padding: 0;
+  border: 0;
+  max-inline-size: none;
+  color: inherit;
+}
+
+main article[data-controller="confetti"] form {
+  margin: 0;
+  max-inline-size: none;
+}
+
+main article[data-controller="confetti"] button {
+  margin: 0;
+  padding-inline: 0.75rem;
+  white-space: nowrap;
+}
+
+main article[data-controller="confetti"] > footer button {
+  inline-size: 100%;
+}
