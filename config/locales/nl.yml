@@ -28,7 +28,6 @@ nl:
         title: Gebruiker bewerken
       form:
         avatar: Avatar
-        cancel: Annuleren
         current_avatar: Huidige avatar
         email: E-mail
         locale: Taal
@@ -86,6 +85,9 @@ nl:
       profile_link: Mijn profiel
       someone: Iemand
       title: Jouw sticker kaart
+  common:
+    cancel: Annuleren
+    save: Opslaan
   errors:
     admin_required: Admin toegang vereist
     child_required: Child toegang vereist
@@ -135,7 +137,6 @@ nl:
       frequency_monthly: Maandelijks
       frequency_weekly: Wekelijks
       nibud_suggestion: 'Nibud-advies: %{amount}'
-      save: Opslaan
       turn_off: Uitschakelen
     child_profile:
       edit:
@@ -143,8 +144,13 @@ nl:
         back: Terug naar dashboard
         current_avatar: Huidige avatar
         goal_label: Spaart voor
+        headings:
+          avatar: Avatar
+          goals: Doelen
+          kleedgeld: Kleedgeld
+          name: Naam
+          zakgeld: Zakgeld
         name_label: Naam
-        save: Opslaan
         sticker_goal_label: Stickerdoel
         title: Kind-instellingen
     children:
@@ -172,6 +178,7 @@ nl:
       title: Sticker Geschiedenis
     push:
       enable: Herinneringen inschakelen
+      heading: Herinneringen
     settings:
       index:
         title: Instellingen
@@ -179,12 +186,10 @@ nl:
     profiles:
       edit:
         avatar_label: Avatar
-        cancel: Annuleren
         current_avatar: Huidige avatar
         email_label: E-mail
         name_label: Naam
         password_label: Wachtwoord wijzigen
-        save: Opslaan
         title: Profiel bewerken
       show:
         edit: Profiel bewerken

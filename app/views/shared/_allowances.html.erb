@@ -1,0 +1,22 @@
+<%# locals: (child_profile:, payments_path: nil) %>
+<% allowances = [ child_profile.zakgeld, child_profile.kleedgeld ].compact %>
+<% if allowances.any? %>
+  <dl>
+    <% allowances.each do |allowance| %>
+      <% owed_count = allowance.owed_periods.count %>
+      <dt><%= t("child.dashboard.allowances.#{allowance.kind}") %></dt>
+      <dd>
+        <% if owed_count > 0 %>
+          <%= t("child.dashboard.allowances.owed", count: owed_count) %>
+          <% if payments_path %>
+            <%= button_to t("parent.actions.mark_allowance_given"), payments_path,
+                          params: { kind: allowance.kind },
+                          method: :post, class: "button-success" %>
+          <% end %>
+        <% else %>
+          <%= t("child.dashboard.allowances.none_owed") %>
+        <% end %>
+      </dd>
+    <% end %>
+  </dl>
+<% end %>

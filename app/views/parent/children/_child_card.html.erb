@@ -10,7 +10,7 @@
   <%= form_with url: parent_child_card_goal_path(child), method: :patch do |form| %>
     <label for="<%= dom_id(child, :goal_field) %>"><%= t("parent.child_profile.edit.goal_label") %></label>
     <%= form.text_field :goal, name: "sticker_card[goal]", value: card.goal, id: dom_id(child, :goal_field) %>
-    <%= form.submit t("parent.child_profile.edit.save") %>
+    <%= render "shared/action_row", form: form, cancel_path: parent_child_path(child) %>
   <% end %>
 
   <% if rewardable_card %>
@@ -19,19 +19,6 @@
                   method: :post, class: "button-success" %>
   <% end %>
 
-  <% [ child.zakgeld, child.kleedgeld ].compact.each do |allowance| %>
-    <% owed_count = allowance.owed_periods.count %>
-    <p>
-      <%= t("child.dashboard.allowances.#{allowance.kind}") %>:
-      <% if owed_count > 0 %>
-        <%= t("child.dashboard.allowances.owed", count: owed_count) %>
-        <%= button_to t("parent.actions.mark_allowance_given"),
-                      parent_child_allowance_payments_path(child),
-                      params: { kind: allowance.kind },
-                      method: :post, class: "button-success" %>
-      <% else %>
-        <%= t("child.dashboard.allowances.none_owed") %>
-      <% end %>
-    </p>
-  <% end %>
+  <%= render "shared/allowances", child_profile: child,
+                                  payments_path: parent_child_allowance_payments_path(child) %>
 </section>

@@ -28,7 +28,6 @@ it:
         title: Modifica Utente
       form:
         avatar: Avatar
-        cancel: Annulla
         current_avatar: Avatar attuale
         email: Email
         locale: Lingua
@@ -86,6 +85,9 @@ it:
       profile_link: Il mio profilo
       someone: Qualcuno
       title: La tua scheda adesivi
+  common:
+    cancel: Annulla
+    save: Salva
   errors:
     admin_required: Accesso admin richiesto
     child_required: Accesso bambino richiesto
@@ -135,7 +137,6 @@ it:
       frequency_monthly: Mensile
       frequency_weekly: Settimanale
       nibud_suggestion: 'Suggerimento Nibud: %{amount}'
-      save: Salva
       turn_off: Disattiva
     child_profile:
       edit:
@@ -143,8 +144,13 @@ it:
         back: Torna alla dashboard
         current_avatar: Avatar attuale
         goal_label: Risparmia per
+        headings:
+          avatar: Avatar
+          goals: Obiettivi
+          kleedgeld: Kleedgeld
+          name: Nome
+          zakgeld: Zakgeld
         name_label: Nome
-        save: Salva
         sticker_goal_label: Obiettivo adesivi
         title: Impostazioni bambino
     children:
@@ -172,6 +178,7 @@ it:
       title: Cronologia Adesivi
     push:
       enable: Attiva promemoria
+      heading: Promemoria
     settings:
       index:
         title: Impostazioni
@@ -179,12 +186,10 @@ it:
     profiles:
       edit:
         avatar_label: Avatar
-        cancel: Annulla
         current_avatar: Avatar attuale
         email_label: Email
         name_label: Nome
         password_label: Cambia password
-        save: Salva
         title: Modifica profilo
       show:
         edit: Modifica profilo

@@ -28,7 +28,6 @@ en:
         title: Edit User
       form:
         avatar: Avatar
-        cancel: Cancel
         current_avatar: Current avatar
         email: Email
         locale: Language
@@ -86,6 +85,9 @@ en:
       profile_link: My Profile
       someone: Someone
       title: Your Sticker Card
+  common:
+    cancel: Cancel
+    save: Save
   errors:
     admin_required: Admin access required
     child_required: Child access required
@@ -135,7 +137,6 @@ en:
       frequency_monthly: Monthly
       frequency_weekly: Weekly
       nibud_suggestion: 'Nibud suggestion: %{amount}'
-      save: Save
       turn_off: Turn off
     child_profile:
       edit:
@@ -143,8 +144,13 @@ en:
         back: Back to dashboard
         current_avatar: Current avatar
         goal_label: Saving for
+        headings:
+          avatar: Avatar
+          goals: Goals
+          kleedgeld: Kleedgeld
+          name: Name
+          zakgeld: Zakgeld
         name_label: Name
-        save: Save
         sticker_goal_label: Sticker goal
         title: Child Settings
     children:
@@ -172,6 +178,7 @@ en:
       title: Sticker History
     push:
       enable: Enable reminders
+      heading: Reminders
     settings:
       index:
         title: Settings
@@ -179,12 +186,10 @@ en:
     profiles:
       edit:
         avatar_label: Avatar
-        cancel: Cancel
         current_avatar: Current avatar
         email_label: Email
         name_label: Name
         password_label: Change password
-        save: Save
         title: Edit Profile
       show:
         edit: Edit profile

@@ -1,0 +1,8 @@
+<%# locals: (title:, heading_id: nil) %>
+<% controls = yield %>
+<header>
+  <%= tag.h1 title, id: heading_id %>
+  <% if controls.present? %>
+    <nav><%= controls %></nav>
+  <% end %>
+</header>

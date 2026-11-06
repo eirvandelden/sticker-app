@@ -1,37 +1,34 @@
-<div>
-  <header>
-    <h1><%= t(".title") %></h1>
-    <nav>
-      <%= link_to t(".new_user"), new_admin_user_path %>
-    </nav>
-  </header>
+<%= render layout: "shared/title_bar", locals: { title: t(".title"), heading_id: "admin_users_heading" } do %>
+  <%= link_to t(".new_user"), new_admin_user_path %>
+<% end %>
 
-  <article>
-    <table>
-      <thead>
-        <tr>
-          <th><%= t(".name") %></th>
-          <th><%= t(".email") %></th>
-          <th><%= t(".role") %></th>
-          <th><%= t(".created_at") %></th>
-          <th><%= t(".actions") %></th>
+<article>
+  <table data-stack="medium" role="table" aria-labelledby="admin_users_heading">
+    <thead role="rowgroup">
+      <tr role="row">
+        <th role="columnheader"><%= t(".name") %></th>
+        <th role="columnheader"><%= t(".email") %></th>
+        <th role="columnheader"><%= t(".role") %></th>
+        <th role="columnheader"><%= t(".created_at") %></th>
+        <th role="columnheader"><%= t(".actions") %></th>
+      </tr>
+    </thead>
+    <tbody role="rowgroup">
+      <% @users.each do |user| %>
+        <tr role="row">
+          <td role="cell" data-label="<%= t(".name") %>"><%= user.name %></td>
+          <td role="cell" data-label="<%= t(".email") %>"><%= user.email %></td>
+          <td role="cell" data-label="<%= t(".role") %>"><%= user.role %></td>
+          <td role="cell" data-label="<%= t(".created_at") %>">
+            <time datetime="<%= user.created_at.iso8601 %>"><%= l(user.created_at, format: :long) %></time>
+          </td>
+          <td role="cell" data-label="<%= t(".actions") %>">
+            <%= link_to t(".view"), admin_user_path(user) %>
+            <%= link_to t(".edit"), edit_admin_user_path(user) %>
+            <%= button_to t(".delete"), admin_user_path(user), method: :delete, data: { turbo_confirm: t(".confirm_delete") } unless user == Current.user %>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        <% @users.each do |user| %>
-          <tr>
-            <td><%= user.name %></td>
-            <td><%= user.email %></td>
-            <td><%= user.role %></td>
-            <td><%= l(user.created_at, format: :long) %></td>
-            <td>
-              <%= link_to t(".view"), admin_user_path(user) %>
-              <%= link_to t(".edit"), edit_admin_user_path(user) %>
-              <%= button_to t(".delete"), admin_user_path(user), method: :delete, data: { turbo_confirm: t(".confirm_delete") } unless user == Current.user %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </article>
-</div>
+      <% end %>
+    </tbody>
+  </table>
+</article>

@@ -1,11 +1,14 @@
-article.stickers {
+ul.stickers {
+  list-style: none;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
   margin: 1.5rem 0;
 }
 
-article.stickers section {
+ul.stickers > li {
+  margin: 0;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -16,11 +19,11 @@ article.stickers section {
   background: var(--color-bg-lighter);
 }
 
-article.stickers section.negative {
+ul.stickers > li.negative {
   border-color: var(--color-danger);
   background: color-mix(in oklch, var(--color-danger) 14%, var(--color-bg-lighter));
 }
 
-article.stickers section.empty {
+ul.stickers > li.empty {
   opacity: 0.3;
 }

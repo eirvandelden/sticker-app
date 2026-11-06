@@ -1,11 +1,9 @@
-<main>
-  <header>
-    <h1><%= t("parent.settings.index.title") %></h1>
-  </header>
+<%= render "shared/title_bar", title: t("parent.settings.index.title") %>
 
+<article>
   <nav>
     <% @children.each do |child| %>
       <%= link_to child.user.name, edit_parent_child_path(child) %>
     <% end %>
   </nav>
-</main>
+</article>

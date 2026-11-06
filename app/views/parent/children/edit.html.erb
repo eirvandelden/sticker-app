@@ -1,42 +1,30 @@
-<section>
-  <header>
-    <h1><%= t("parent.child_profile.edit.title") %></h1>
-  </header>
+<%= render layout: "shared/title_bar", locals: { title: t("parent.child_profile.edit.title") } do %>
+  <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
+<% end %>
 
-  <article>
+<article>
+  <% if @invalid_allowance && @invalid_allowance.kind.nil? %>
+    <%= render "shared/form_errors", record: @invalid_allowance %>
+  <% end %>
+
+  <section>
+    <h2><%= t("parent.child_profile.edit.headings.name") %></h2>
     <%= form_with model: @child.user, url: parent_child_path(@child), method: :patch do |form| %>
-      <% if @child.user.errors.any? %>
-        <aside role="alert">
-          <ul>
-            <% @child.user.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </aside>
-      <% end %>
+      <%= render "shared/form_errors", record: @child.user %>
 
       <fieldset>
         <label for="user_name"><%= t("parent.child_profile.edit.name_label") %></label>
         <%= form.text_field :name, required: true %>
       </fieldset>
 
-      <nav>
-        <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
     <% end %>
-  </article>
+  </section>
 
-  <article>
+  <section>
+    <h2><%= t("parent.child_profile.edit.headings.avatar") %></h2>
     <%= form_with model: @child.user, url: parent_child_avatar_path(@child), method: :patch, multipart: true do |form| %>
-      <% if @child.user.errors.any? %>
-        <aside role="alert">
-          <ul>
-            <% @child.user.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </aside>
-      <% end %>
+      <%= render "shared/form_errors", record: @child.user %>
 
       <% if @child.user.avatar_displayable? %>
         <figure>
@@ -50,23 +38,14 @@
         <%= form.file_field :avatar, accept: "image/*", required: true %>
       </fieldset>
 
-      <nav>
-        <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
     <% end %>
-  </article>
+  </section>
 
-  <article>
+  <section>
+    <h2><%= t("parent.child_profile.edit.headings.goals") %></h2>
     <%= form_with model: @child, url: parent_child_child_profile_path(@child), method: :patch do |form| %>
-      <% if @child.errors.any? %>
-        <aside role="alert">
-          <ul>
-            <% @child.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </aside>
-      <% end %>
+      <%= render "shared/form_errors", record: @child %>
 
       <fieldset>
         <label for="child_profile_sticker_goal"><%= t("parent.child_profile.edit.sticker_goal_label") %></label>
@@ -83,40 +62,20 @@
         <%= form.date_field :birthdate %>
       </fieldset>
 
-      <nav>
-        <%= form.submit t("parent.child_profile.edit.save") %>
-      </nav>
+      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
     <% end %>
-  </article>
-
-  <% if @invalid_allowance && @invalid_allowance.kind.nil? %>
-    <article>
-      <aside role="alert">
-        <ul>
-          <% @invalid_allowance.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </aside>
-    </article>
-  <% end %>
+  </section>
 
   <% [ :zakgeld, :kleedgeld ].each do |kind| %>
     <% allowance = @invalid_allowance&.kind&.to_sym == kind ? @invalid_allowance : @child.allowances.find_by(kind: kind) %>
-    <article>
-      <% if allowance&.errors&.any? %>
-        <aside role="alert">
-          <ul>
-            <% allowance.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </aside>
-      <% end %>
+    <section>
+      <h2><%= t("parent.child_profile.edit.headings.#{kind}") %></h2>
 
       <% if allowance&.persisted? %>
         <% nibud = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: allowance.frequency.to_sym) %>
         <%= form_with model: allowance, url: parent_child_allowance_path(@child, allowance), method: :patch do |form| %>
+          <%= render "shared/form_errors", record: allowance %>
+
           <fieldset>
             <label><%= t("parent.allowances.amount_label") %></label>
             <%= form.number_field :amount_cents, min: 1, required: true %>
@@ -124,17 +83,19 @@
               <small><%= t("parent.allowances.nibud_suggestion", amount: nibud) %></small>
             <% end %>
           </fieldset>
-          <nav>
-            <%= form.submit t("parent.allowances.save") %>
-          </nav>
+
+          <%= render "shared/action_row", form: form, cancel_path: parent_children_path,
+                                          delete_form_id: dom_id(allowance, :delete),
+                                          delete_label: t("parent.allowances.turn_off") %>
         <% end %>
-        <%= button_to t("parent.allowances.turn_off"), parent_child_allowance_path(@child, allowance),
-                      method: :delete, class: "button-danger" %>
+        <%= render "shared/delete_form", record: allowance, url: parent_child_allowance_path(@child, allowance) %>
       <% else %>
         <% nibud_weekly  = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :weekly) %>
         <% nibud_monthly = NibudAdvice.suggested_amount_cents(birthdate: @child.birthdate, kind: kind, frequency: :monthly) %>
         <%= form_with model: (allowance || @child.allowances.build(kind: kind)),
                       url: parent_child_allowances_path(@child), method: :post do |form| %>
+          <%= render "shared/form_errors", record: form.object %>
+
           <fieldset>
             <label><%= t("parent.allowances.frequency_label") %></label>
             <%= form.select :frequency,
@@ -157,15 +118,10 @@
             <%= form.number_field :due_day, min: 0, max: 31, required: true %>
           </fieldset>
           <%= form.hidden_field :kind %>
-          <nav>
-            <%= form.submit t("parent.allowances.save") %>
-          </nav>
+
+          <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
         <% end %>
       <% end %>
-    </article>
+    </section>
   <% end %>
-
-  <nav>
-    <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
-  </nav>
-</section>
+</article>
