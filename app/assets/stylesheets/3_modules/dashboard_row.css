@@ -6,7 +6,7 @@
  * Every rule resets an mvpa default that would add height.
  */
 
-main > section:has(> article[data-controller="confetti"]) > header h1 {
+main:has(> article[data-controller="confetti"]) > header h1 {
   font-size: var(--text-large);
   margin-block: 0 0.5rem;
 }

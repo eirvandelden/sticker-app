@@ -17,7 +17,7 @@
     <progress value="<%= earned %>" max="<%= required %>"
               aria-label="<%= t("child.dashboard.earned", current: earned, total: required) %>"></progress>
 
-    <article class="stickers">
+    <ul class="stickers">
       <% all_stickers = [] %>
       <% card.stickers.positive.each do |s| %>
         <% all_stickers << { emoji: s.emoji, type: "positive", created_at: s.created_at } %>
@@ -28,15 +28,15 @@
       <% all_stickers.sort_by! { |s| s[:created_at] } %>
 
       <% all_stickers.each do |sticker| %>
-        <section class="<%= sticker[:type] %>">
+        <li class="<%= sticker[:type] %>">
           <%= sticker[:emoji] %>
-        </section>
+        </li>
       <% end %>
 
       <% (required - all_stickers.length).times do %>
-        <section class="empty">⭐</section>
+        <li class="empty">⭐</li>
       <% end %>
-    </article>
+    </ul>
 
     <% if card.goal.present? %>
       <p><%= t("child.dashboard.goal", goal: card.goal) %></p>

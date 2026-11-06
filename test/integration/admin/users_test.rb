@@ -93,4 +93,17 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
   end
+
+  test "users table is a labelled stacking table" do
+    sign_in_as users(:admin)
+
+    get admin_users_path
+
+    assert_select "main > header > h1#admin_users_heading"
+    assert_select "table[data-stack][role=table][aria-labelledby=admin_users_heading]", count: 1
+    assert_select "table > thead[role=rowgroup] > tr[role=row] > th[role=columnheader]", count: 5
+    assert_select "table > tbody[role=rowgroup] > tr[role=row] > td[role=cell][data-label]", minimum: 5
+    assert_select "td[role=cell]:not([data-label])", count: 0
+    assert_select "td time[datetime]", minimum: 1
+  end
 end

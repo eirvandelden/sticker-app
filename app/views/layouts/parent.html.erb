@@ -37,10 +37,11 @@
     <%= render "appkit/shared/flashes" %>
     <main id="main">
       <%= yield %>
+      <section data-controller="push">
+        <h2><%= t("parent.push.heading") %></h2>
+        <button type="button" data-action="push#subscribe"><%= t("parent.push.enable") %></button>
+      </section>
     </main>
-    <fieldset data-controller="push">
-      <button type="button" data-action="push#subscribe"><%= t("parent.push.enable") %></button>
-    </fieldset>
     <footer>
       <p><%= t("footer.copyright", year: Date.current.year, app_name: t("app.title")) %></p>
     </footer>

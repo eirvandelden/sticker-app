@@ -23,8 +23,25 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     get child_dashboard_path
 
     assert_response :success
-    assert_select "article.stickers"
+    assert_select "ul.stickers"
     assert_select "progress[aria-label=?]", I18n.t("child.dashboard.earned", current: 0, total: 2)
+  end
+
+  test "child card lists stickers as list items with star slots" do
+    profile = child_profiles(:three)
+    card = profile.active_sticker_card
+    card.stickers.create!(kind: :negative)
+    sign_in_as users(:user_three)
+
+    get child_dashboard_path
+
+    empty_slots = card.reload.required_stickers - card.stickers.count
+
+    assert_operator empty_slots, :>, 0
+    assert_select "ul.stickers > li.positive", count: card.positive_count
+    assert_select "ul.stickers > li.negative", text: /❌/, count: 1
+    assert_select "ul.stickers > li.empty", text: "⭐", count: empty_slots
+    assert_select "ul.stickers > section, ul.stickers > article", count: 0
   end
 
   test "viewing the dashboard exposes completed card ids" do
@@ -114,7 +131,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "p", text: /Pocket money.*1 payment still owed/
+    assert_allowance_detail "Pocket money", /1 payment still owed/
   end
 
   # Scenario 15: child with an allowance up to date sees no owed count
@@ -122,7 +139,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "p", text: /Clothing allowance.*Up to date/
+    assert_allowance_detail "Clothing allowance", /Up to date/
   end
 
   # Scenario 16: child with no allowances sees no allowance section at all
@@ -132,8 +149,8 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_select "p", text: /Pocket money/, count: 0
-    assert_select "p", text: /Clothing allowance/, count: 0
+    assert_select "dt", text: /Pocket money/, count: 0
+    assert_select "dt", text: /Clothing allowance/, count: 0
   end
 
   # Scenario 17: zakgeld and kleedgeld owed counts are shown distinctly, not merged
@@ -141,7 +158,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "p", text: /Pocket money.*1 payment still owed/
-    assert_select "p", text: /Clothing allowance.*Up to date/
+    assert_allowance_detail "Pocket money", /1 payment still owed/
+    assert_allowance_detail "Clothing allowance", /Up to date/
   end
 end
