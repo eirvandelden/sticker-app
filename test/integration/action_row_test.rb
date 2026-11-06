@@ -73,12 +73,16 @@ class ActionRowTest < ActionDispatch::IntegrationTest
     assert_select "main > article > section > form > footer", count: 5
   end
 
-  test "turn off allowance still deletes through the delete form" do
+  test "turn off allowance deletes through the delete form that its button points at" do
     sign_in_as @parent
     allowance = allowances(:zakgeld_one)
+    get edit_parent_child_path(@child)
+    update_form_selector = "form[action='#{parent_child_allowance_path(@child, allowance)}']"
+    button = css_select("#{update_form_selector} > footer > button.button-danger").first
+    delete_form = css_select("form##{button['form']}").first
 
     assert_difference -> { Allowance.count }, -1 do
-      delete parent_child_allowance_path(@child, allowance)
+      delete delete_form["action"]
     end
     assert_redirected_to edit_parent_child_path(@child)
   end

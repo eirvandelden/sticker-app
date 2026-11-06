@@ -14,11 +14,11 @@ class AllowanceSummaryTest < ActionDispatch::IntegrationTest
 
     get parent_child_path(@child)
 
-    assert_select "section##{dom_id(@child, :parent_card)} dl > dt", text: "Pocket money"
-    assert_select "section##{dom_id(@child, :parent_card)} dl > dd", text: /1 payment still owed/
-    assert_select "dl > dt", text: "Clothing allowance"
-    assert_select "dl > dd", text: /Up to date/
-    assert_select "dl > dd form[action=?]", parent_child_allowance_payments_path(@child), count: 1
+    assert_select "section##{dom_id(@child, :parent_card)} dl"
+    assert_allowance_detail "Pocket money", /1 payment still owed/
+    assert_allowance_detail "Clothing allowance", /Up to date/
+    assert_select "dl > dt:first-of-type + dd form[action=?]", parent_child_allowance_payments_path(@child), count: 1
+    assert_select "dl > dt:last-of-type + dd form", count: 0
   end
 
   test "child dashboard lists allowances as dt and dd without mark given" do
@@ -26,10 +26,8 @@ class AllowanceSummaryTest < ActionDispatch::IntegrationTest
 
     get child_dashboard_path
 
-    assert_select "dl > dt", text: "Pocket money"
-    assert_select "dl > dd", text: /1 payment still owed/
-    assert_select "dl > dt", text: "Clothing allowance"
-    assert_select "dl > dd", text: /Up to date/
+    assert_allowance_detail "Pocket money", /1 payment still owed/
+    assert_allowance_detail "Clothing allowance", /Up to date/
     assert_select "dl form", count: 0
   end
 

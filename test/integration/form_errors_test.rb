@@ -19,7 +19,7 @@ class FormErrorsTest < ActionDispatch::IntegrationTest
     sign_in_as @parent
 
     patch parent_child_avatar_path(@child),
-params: { user: { avatar: fixture_file_upload("avatar.txt", "text/plain") } }
+          params: { user: { avatar: fixture_file_upload("avatar.txt", "text/plain") } }
 
     assert_counted_alert 1
     assert_select "form[action=?] aside[role=alert]", parent_child_avatar_path(@child), count: 1
@@ -63,7 +63,9 @@ params: { user: { avatar: fixture_file_upload("avatar.txt", "text/plain") } }
          params: { allowance: { amount_cents: 500, frequency: "weekly", due_day: 1 } }
 
     assert_select "main > article > aside[role=alert]", count: 1
-    assert_select "main > article > aside[role=alert] > h2", text: /error/
+    count = css_select("main > article > aside[role=alert] li").size
+
+    assert_select "main > article > aside[role=alert] > h2", text: I18n.t("errors.template.header", count: count)
   end
 
   test "admin user form shows one counted alert" do

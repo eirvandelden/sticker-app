@@ -21,6 +21,17 @@ module AuthenticationTestHelper
   end
 end
 
+module AllowanceSummaryAssertions
+  # Asserts that the allowance term `label` is followed by a detail that matches `detail`.
+  def assert_allowance_detail(label, detail)
+    term = css_select("dl > dt").find { |node| node.text.strip == label }
+
+    assert term, "no allowance term #{label.inspect} in the page"
+    assert_match detail, term.next_element.text
+  end
+end
+
 class ActionDispatch::IntegrationTest
   include AuthenticationTestHelper
+  include AllowanceSummaryAssertions
 end

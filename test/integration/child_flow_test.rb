@@ -131,7 +131,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "dd", text: /1 payment still owed/
+    assert_allowance_detail "Pocket money", /1 payment still owed/
   end
 
   # Scenario 15: child with an allowance up to date sees no owed count
@@ -139,7 +139,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "dd", text: /Up to date/
+    assert_allowance_detail "Clothing allowance", /Up to date/
   end
 
   # Scenario 16: child with no allowances sees no allowance section at all
@@ -158,7 +158,7 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @child
     get child_dashboard_path
 
-    assert_select "dd", text: /1 payment still owed/
-    assert_select "dd", text: /Up to date/
+    assert_allowance_detail "Pocket money", /1 payment still owed/
+    assert_allowance_detail "Clothing allowance", /Up to date/
   end
 end
