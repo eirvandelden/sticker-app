@@ -129,14 +129,14 @@ Not checked: the change adds no Ruby, so `steep check` has nothing new to check.
 - `app/views/parent/children/edit.html.erb` — title bar with the back link; one `<article>` with five `<section>`s, each `<h2>` first; form errors and action rows from the shared partials; turn-off through `shared/_delete_form`.
 - `app/views/parent/settings/index.html.erb` — drop the nested `<main>`; title bar; child links in an `<article>` `<nav>`.
 - `app/views/parent/stickers/index.html.erb` — drop the `<div>` wrapper; title bar with the back link.
-- `app/views/child/dashboard/show.html.erb` — title bar before the confetti `div`, which now wraps only the `<article>`; allowance block becomes `<section>` + `render "shared/allowances", child_profile: @child_profile`.
+- `app/views/child/dashboard/show.html.erb` — title bar before the confetti `div`, which now wraps only the `<article>`; allowance block becomes `render "shared/allowances", child_profile: @child_profile` straight in the `<article>` (no wrapping `<section>`: the partial renders nothing without allowances, so a wrapper would leave an empty section).
 - `app/views/child/dashboard/_card.html.erb` — `article.stickers > section.*` becomes `ul.stickers > li.*`.
 - `app/views/admin/dashboard/index.html.erb` — drop the `<div>` wrapper; title bar.
 - `app/views/admin/users/index.html.erb` — title bar with the New user link and `heading_id`; stacking table markup (`data-stack="medium"`, roles, `data-label`s, `aria-labelledby`, `<time datetime>`).
 - `app/views/admin/users/show.html.erb`, `new.html.erb`, `edit.html.erb` — drop the `<div>` wrapper; title bar.
 - `app/views/admin/users/_form.html.erb` — form errors and action row.
 - `app/views/users/profiles/show.html.erb` — title bar with the Edit link in its `<nav>`.
-- `app/views/users/profiles/edit.html.erb` — title bar; form errors and action row.
+- `app/views/users/profiles/edit.html.erb` — title bar; form errors and action row, with the default `common.save` label (so `users.profiles.edit.save` is removed with the other unused keys).
 - `app/views/layouts/parent.html.erb` — the push `<fieldset>` after `<main>` becomes `<section data-controller="push"><h2>…</h2><button type="button" …></section>` as the last child of `<main>`.
 - `app/assets/stylesheets/3_modules/dashboard_row.css` — retarget the title `<h1>` selector; fallback rules only if the fit test needs them.
 - `app/assets/stylesheets/3_modules/sticker_grid.css` — `article.stickers` → `ul.stickers` with `list-style: none; padding: 0`; `article.stickers section(.x)` → `ul.stickers > li(.x)` with `margin: 0` to cancel mvpa's `li` margin, so the grid looks as before.
