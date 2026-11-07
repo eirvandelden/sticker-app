@@ -48,7 +48,7 @@ Three causes:
 
 - On this branch, `bin/rubocop` prints "no offenses detected" and the 6 files still read `# @rbs module-self: X`.
 - On this branch, with a regenerated `sig/`, `steep check` prints "No type error detected".
-- Removing `ActionController::Base` from the `module-self` of `app/controllers/concerns/authorization.rb` makes `steep check` fail on `redirect_to`, which proves Steep still reads the self type.
+- Removing `ActionController::Base` from the `module-self` of both `app/controllers/concerns/authorization.rb` and `app/models/concerns/authorization.rb` makes `steep check` fail on `redirect_to`, which proves Steep still reads the self type.
 - In `rubocop-eirvandelden`, a file with `# @rbs module-self: Foo` gets no offense, and a file with a broken type such as `#: (Integer -> void` still gets `InvalidTypes`.
 - In `rubocop-eirvandelden`, a method without a signature in `db/queue_migrate/` gets no offense, and the same method in `app/models/` still gets `MissingTypeAnnotation`.
 - On this app's pull request, `ci / lint` and `ci / scan_js` pass.
@@ -58,6 +58,9 @@ Three causes:
 - Fix the cop-versus-Steep conflict and the `db/queue_migrate` exclusion in `rubocop-eirvandelden`, then bump the gem here — the conflict is not specific to this app, so every personal repository with Steep inline mode gets the fix.
 - Bundle the openssl CI failure into this change — one change turns lint green; neither fix alone does.
 - Deliver autonomously, with the Claude reviewer only — a lint and CI chore with a clear cause.
+- Prove criterion 3 by removing the self type from both `Authorization` files — both files declare `module Authorization` and Steep merges them, so removing it from one file leaves Steep green.
+- Skip the glossary terms "Colon form" and "Bare form" — two syntax variants hardly earn domain terms.
+- Leave `~/Developer/dotfiles/rubocop/.rubocop.yml` alone and note the gap in the delivery account — it cannot load the new cops, and keeping it out keeps this change in scope.
 
 ## Open questions
 
