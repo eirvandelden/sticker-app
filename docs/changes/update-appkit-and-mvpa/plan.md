@@ -6,7 +6,7 @@ From `intent.md` (2026-10-20). Status: accepted.
 
 The app pins appkit at `e7abc8c` (2026-08-19) and resolves mvpa.css at `4c9c4ae` (2026-09-21). The latest commits on 2026-10-20 are appkit `d82b9c7601410e4daa42927cacaf646377090825` and mvpa.css `2be440b1225bb15870a2ec86ced19c4ecc7f7085`.
 
-Starting pins after the rebase onto `origin/main` (2026-10-20): `main` already locks appkit `d837929` and mvpa-css `77697d4`. The lines below that name `e7abc8c` and `4c9c4ae` describe the pins when this plan was written and stay as history. The branch diff moves appkit from `d837929` to `d82b9c7` and mvpa-css from `77697d4` to `2be440b`.
+Starting pins after the rebase onto `origin/main` (2026-11-23): `main` already locks appkit `d837929` and mvpa-css `06778c8` (2026-11-06), which already holds every mvpa.css "Upgrading" note up to 2026-11-06. The lines below that name `e7abc8c` and `4c9c4ae` describe the pins when this plan was written and stay as history. The branch diff moves appkit from `d837929` to `d82b9c7` and does not move mvpa-css: it pins the `06778c8` that `main` locks, so the Gemfile names the SHA. Newer mvpa.css commits (2026-11-11 rail and hub column) are a separate change.
 
 `e7abc8c` sits on the appkit side branch `ai/review-workspace-changes`. It is not an ancestor of appkit `main`. The tree diff from `e7abc8c` to `d82b9c7` is therefore the full change set, and it includes appkit `839e8cb` ("drop the home_path local, nav links straight to root") and `02fa603` ("namespace nav translations under appkit").
 
@@ -15,7 +15,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 ## Design decisions
 
 - **okcomputer.** appkit `9391c4b` (2026-10-07) sets `okcomputer ~> 1.20`. When this plan was written the lock held 1.19.2, and a trial lock moved okcomputer too. Etienne approved that forced bump on 2026-10-20. `main` has since moved okcomputer itself, so this branch's lock moves only appkit and mvpa-css (see `## Departures from the plan`).
-- **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "2be440b1225bb15870a2ec86ced19c4ecc7f7085"`. No gem is added or removed.
+- **mvpa-css gets a `ref:` in the Gemfile.** The acceptance criterion says the Gemfile names the latest mvpa-css commit. Today the Gemfile line has no `ref:`. After the rebase the pin is `06778c8`, the commit `main` locks, not the `2be440b` that was latest on 2026-10-20. The mvpa.css CHANGELOG also tells hosts to pin a SHA. The line becomes `gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "06778c8ea22e0b9464e6af0884773dd25e4f1f55"`. No gem is added or removed.
 - **Use the SHAs above.** If `git ls-remote` shows a newer `HEAD` for either gem at implementation time, take it only when its CHANGELOG adds no new "Upgrading" item. Otherwise stay on the SHAs above and report the newer commit.
 - **Only the admin user delete gets a dialog.** It is the only place with a confirm (`data: { turbo_confirm: … }`). "Turn off" on an allowance has no confirm today. It stays a direct `DELETE` `button_to` with `class: "button-danger"`, so it stays red.
 - **Form footers.** Every app-owned form wraps its submit (and its Cancel, if any) in a `<footer>` that is the last child of the form. The order is Cancel, then Save. A Cancel link gets `role: "button", class: "button-secondary"` so it shows as a plain button, as mvpa.css's `Cancel` does.
@@ -33,7 +33,7 @@ The appkit CHANGELOG "Upgrading" note has four items. The mvpa.css CHANGELOG has
 
 ## Files that change
 
-- `Gemfile`: appkit `ref:` to `d82b9c7…`; add `ref: "2be440b…"` to the mvpa-css line.
+- `Gemfile`: appkit `ref:` to `d82b9c7…`; add `ref: "06778c8…"` to the mvpa-css line (the commit `main` already locks).
 - `Gemfile.lock`: appkit and mvpa-css only (`main` already carries okcomputer 1.20.0). Run `bundle lock --update appkit mvpa-css --conservative`, then `bi`.
 - `db/schema.rb`: no change. A fresh dump equals the committed file (see `## Departures from the plan`).
 - `app/views/layouts/login.html.erb` (new): app override of appkit's login layout with `render "appkit/shared/flashes"` moved out of `<main>` to a direct child of `<body>`, just before `<main>`.
@@ -115,7 +115,7 @@ Test setup: existing fixtures `users(:admin)`, `users(:parent)`, `users(:user)` 
 
 - Rebase onto `origin/main` (2026-10-20, PRs #181 and #182): main already shadows appkit's nav partial (`nav_section_tab`, appkit's own keys) and already moved okcomputer. The planned `app/views/appkit/shared/_nav.html.erb` override and the logout-label test were dropped; main's nav tests pass on appkit `d82b9c7` as they are. The lock now moves only appkit and mvpa-css.
 
-- Starting pins: after the rebase, appkit moves from `d837929` (not `e7abc8c`) and mvpa-css from `77697d4` (not `4c9c4ae`). The 2026-10-13 mvpa.css note is therefore already in the old pin, and the appkit CHANGELOG adds only the `rails-ci.yml` `npm ci` line over `d837929`.
+- Starting pins: after the rebase, appkit moves from `d837929` (not `e7abc8c`) and mvpa-css stays at `06778c8` (not `4c9c4ae`; `main` moved it). The 2026-10-13 mvpa.css note is therefore already in the old pin, and the appkit CHANGELOG adds only the `rails-ci.yml` `npm ci` line over `d837929`.
 
 ## Decided
 
