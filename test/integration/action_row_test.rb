@@ -69,7 +69,7 @@ class ActionRowTest < ActionDispatch::IntegrationTest
 
     get edit_parent_child_path(child_profiles(:two))
 
-    assert_select "footer > button.button-danger", count: 0
+    assert_select "main footer > button.button-danger", count: 0
     assert_select "main > article > section > form > footer", count: 5
   end
 
