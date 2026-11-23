@@ -82,5 +82,5 @@ group :test do
 end
 
 group :development, :test do
-  gem "i18n-tasks", "~> 1.1"
+  gem "i18n-tasks", "~> 1.2"
 end
