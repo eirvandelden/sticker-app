@@ -4,6 +4,8 @@
   <dl>
     <% allowances.each do |allowance| %>
       <% owed_count = allowance.owed_periods.count %>
+      <%# i18n-tasks-use t("child.dashboard.allowances.zakgeld") %>
+      <%# i18n-tasks-use t("child.dashboard.allowances.kleedgeld") %>
       <dt><%= t("child.dashboard.allowances.#{allowance.kind}") %></dt>
       <dd>
         <% if owed_count > 0 %>

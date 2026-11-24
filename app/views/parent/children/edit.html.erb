@@ -69,6 +69,8 @@
   <% [ :zakgeld, :kleedgeld ].each do |kind| %>
     <% allowance = @invalid_allowance&.kind&.to_sym == kind ? @invalid_allowance : @child.allowances.find_by(kind: kind) %>
     <section>
+      <%# i18n-tasks-use t("parent.child_profile.edit.headings.zakgeld") %>
+      <%# i18n-tasks-use t("parent.child_profile.edit.headings.kleedgeld") %>
       <h2><%= t("parent.child_profile.edit.headings.#{kind}") %></h2>
 
       <% if allowance&.persisted? %>
