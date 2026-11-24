@@ -155,3 +155,11 @@ Domain skills applied: rails-architecture (config-only, no domain logic), depend
 - The `ps` proof matches every Ruby process on the machine, never captures the Puma pid, and `pgrep -P` exits 1 with no children → fixed (step 5 captures `PUMA_PID=$!`; Proof checks that pid, handles an empty pgrep, and compares every `SolidQueue::Process` pid with it)
 - The linter proof runs `@herb-tools/herb-lint` instead of the locked `@herb-tools/linter`, and makes bundle-audit conditional → fixed (Proof runs `npm ci` then `npx @herb-tools/linter`, and `bin/bundle-audit check --update` unconditionally)
 - The pool proof prints only the queue pool but claims primary, cache and cable stay at 5 → fixed (Proof prints all four pools, with and without `RAILS_MAX_THREADS=10`)
+
+## Departures
+
+Found while verifying (details in `verification.md`). No change to the agreed behaviour.
+
+- Solid Queue 1.7.0 names the supervisor kind `Supervisor(async)`, not `Supervisor`. The `SolidQueue::Process` kind check expects `["Dispatcher", "Scheduler", "Supervisor(async)", "Worker"]`.
+- The job check polls inside `rails runner`, whose query cache returns a stale row. Wrap the poll in `SolidQueue::Job.uncached { ... }`.
+- The machine-wide `ps -axo command | grep -c '[s]olid-queue-'` counts other projects' fork-mode processes. The `pgrep -P "$PUMA_PID"` and pid checks are the proof.
