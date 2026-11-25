@@ -93,6 +93,30 @@ class NavigationTest < ActionDispatch::IntegrationTest
     assert_select "nav.rail a[aria-current]", count: 1
   end
 
+  test "the back link on a child opened from the Kinderen list returns to the list" do
+    sign_in_as users(:parent)
+    get parent_children_path
+    child_link = css_select("main a[href*='from=children.overview']").first["href"]
+
+    get child_link
+
+    assert_response :success
+    assert_select "main > header > nav > a:first-child[href=?]", "#{parent_children_path}?from=children.overview",
+      text: "‹ Overview"
+  end
+
+  test "a user opened from the user list links back to the list" do
+    sign_in_as users(:admin)
+    get admin_users_path
+    user_link = css_select("main a[href^='#{admin_user_path(users(:parent))}?']").first["href"]
+
+    get user_link
+
+    assert_response :success
+    assert_select "main > header > nav > a:first-child[href=?]", "#{admin_users_path}?from=admin.users",
+      text: "‹ Users"
+  end
+
   test "the header holds only the nav" do
     sign_in_as users(:parent)
 

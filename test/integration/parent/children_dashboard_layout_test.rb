@@ -14,7 +14,7 @@ class Parent::ChildrenDashboardLayoutTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "progress"
     assert_select "form[action=?]", parent_child_card_goal_path(child), count: 0
-    assert_select "a[href=?]", parent_child_path(child)
+    assert_select "main a[href=?]", "#{parent_child_path(child)}?from=children.overview"
   end
 
   test "dashboard shows mark rewarded only in the row of a child with a card ready to reward" do

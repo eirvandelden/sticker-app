@@ -45,6 +45,17 @@ class AccountTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "Profiel opened from the Account landing links back to Account" do
+    sign_in_as users(:parent)
+    get account_path
+    profile_link = css_select("main a[href*='profile']").first["href"]
+
+    get profile_link
+
+    assert_response :success
+    assert_select "main > header > nav > a:first-child[href=?]", account_path, text: "‹ Account"
+  end
+
   test "a signed-out visitor of the Account landing is sent to sign in" do
     get account_path
 

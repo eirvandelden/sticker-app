@@ -51,7 +51,6 @@ it:
         title: Nuovo Utente
       show:
         active_sessions: Sessioni Attive
-        back: Indietro
         created_at: Creato
         edit: Modifica
         email: Email
@@ -150,7 +149,6 @@ it:
     child_profile:
       edit:
         avatar_label: Scegli un nuovo avatar
-        back: Torna alla dashboard
         current_avatar: Avatar attuale
         goal_label: Risparmia per
         headings:

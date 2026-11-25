@@ -51,7 +51,6 @@ nl:
         title: Nieuwe gebruiker
       show:
         active_sessions: Actieve sessies
-        back: Terug
         created_at: Aangemaakt
         edit: Bewerken
         email: E-mail
@@ -150,7 +149,6 @@ nl:
     child_profile:
       edit:
         avatar_label: Kies een nieuwe avatar
-        back: Terug naar dashboard
         current_avatar: Huidige avatar
         goal_label: Spaart voor
         headings:

@@ -51,7 +51,6 @@ en:
         title: New User
       show:
         active_sessions: Active Sessions
-        back: Back
         created_at: Created
         edit: Edit
         email: Email
@@ -150,7 +149,6 @@ en:
     child_profile:
       edit:
         avatar_label: Choose a new avatar
-        back: Back to dashboard
         current_avatar: Current avatar
         goal_label: Saving for
         headings:

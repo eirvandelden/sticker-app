@@ -14,8 +14,8 @@ class Parent::SettingsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", text: I18n.t("parent.settings.index.title")
-    assert_select "a[href='#{edit_parent_child_path(@profile_one)}']"
-    assert_select "a[href='#{edit_parent_child_path(@profile_two)}']"
+    assert_select "main a[href=?]", "#{edit_parent_child_path(@profile_one)}?from=settings.child_settings"
+    assert_select "main a[href=?]", "#{edit_parent_child_path(@profile_two)}?from=settings.child_settings"
   end
 
   test "child is redirected away from settings index" do

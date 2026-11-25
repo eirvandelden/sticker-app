@@ -1,8 +1,8 @@
 <%= render layout: "shared/title_bar",
            locals: { title: safe_join([ (image_tag(@child.user.avatar, size: "40x40", alt: "") if @child.user.avatar.attached?),
-                                        @child.user.name ].compact, " ") } do %>
+                                        @child.user.name ].compact, " "),
+                     back: record_back_link(parent_children_path) } do %>
   <%= link_to t("parent.actions.view_history"), parent_child_history_path(@child) %>
-  <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
 <% end %>
 
 <%= turbo_stream_from @child %>

@@ -1,6 +1,4 @@
-<%= render layout: "shared/title_bar", locals: { title: t("parent.child_profile.edit.title") } do %>
-  <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
-<% end %>
+<%= render "shared/title_bar", title: t("parent.child_profile.edit.title"), back: record_back_link(parent_children_path) %>
 
 <article>
   <% if @invalid_allowance && @invalid_allowance.kind.nil? %>

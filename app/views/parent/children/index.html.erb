@@ -10,7 +10,7 @@
       <% if child.user.avatar.attached? %>
         <%= image_tag child.user.avatar, size: "40x40", alt: child.user.name %>
       <% end %>
-      <%= link_to parent_child_path(child) do %>
+      <%= link_to menu.carry_list(parent_child_path(child)) do %>
         <h2><%= child.user.name %></h2>
       <% end %>
     </header>
