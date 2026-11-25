@@ -30,7 +30,7 @@ class Parent::SettingsTest < ActionDispatch::IntegrationTest
     get parent_children_path
 
     assert_response :success
-    assert_select "a[href='#{parent_settings_path}']", count: 1
+    assert_select "main a[href='#{parent_settings_path}']", count: 1
     assert_select "a[href='#{edit_parent_child_path(@profile_one)}']", count: 0
     assert_select "a[href='#{edit_parent_child_path(@profile_two)}']", count: 0
   end

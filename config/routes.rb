@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   root "appkit/sessions#new"
 
+  resource :account, only: :show
+
   resources :users, only: [] do
     resource :profile, only: [ :show, :edit, :update ], controller: "users/profiles"
   end

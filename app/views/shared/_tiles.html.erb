@@ -1,0 +1,8 @@
+<%# locals: (hub:) %>
+<nav aria-label="<%= hub.label %>">
+  <ul>
+    <% hub.pages.each do |page| %>
+      <li><%= menu_entry_to menu.tile_path(page), page do %><%= page.label %><% end %></li>
+    <% end %>
+  </ul>
+</nav>

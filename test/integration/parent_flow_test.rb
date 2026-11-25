@@ -24,7 +24,7 @@ class ParentFlowTest < ActionDispatch::IntegrationTest
     get parent_children_path
 
     assert_response :success
-    assert_select "a[href='#{parent_settings_path}']", count: 1
+    assert_select "main a[href='#{parent_settings_path}']", count: 1
 
     [ @profile_one, @profile_two, @profile_three ].each do |profile|
       assert_select "a[href='#{edit_parent_child_path(profile)}']", count: 0
@@ -103,12 +103,12 @@ class AdminNavTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{admin_users_path}']", count: 0
   end
 
-  test "parent dashboard renders a link to preferences" do
+  test "parent dashboard renders a link to the Account hub" do
     sign_in_as @parent
     get parent_children_path
 
     assert_response :success
-    assert_select "a[href='#{edit_preferences_path}']"
+    assert_select "nav.rail a[href='#{account_path}']"
   end
 end
 

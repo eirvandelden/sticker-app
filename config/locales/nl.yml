@@ -15,7 +15,6 @@ nl:
         total_users: Totaal gebruikers
         view: Bekijken
     nav:
-      overview: Overzicht
       users: Gebruikers
     users:
       create:
@@ -82,7 +81,6 @@ nl:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
-      profile_link: Mijn profiel
       someone: Iemand
       title: Jouw sticker kaart
   common:
@@ -122,6 +120,17 @@ nl:
     en: Engels
     it: Italiaans
     nl: Nederlands
+  menu:
+    hubs:
+      account: Account
+      admin: Beheer
+      children: Kinderen
+      dashboard: Dashboard
+      settings: Instellingen
+    pages:
+      child_settings: Kind-instellingen
+      overview: Overzicht
+      profile: Profiel
   parent:
     actions:
       give_penalty: "❌ Geef Straf"

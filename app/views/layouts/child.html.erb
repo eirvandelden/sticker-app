@@ -24,9 +24,7 @@
   <body data-controller="theme" <%= tag.attributes(saved_theme_attributes) %>>
     <%= render "appkit/shared/skip_link" %>
     <header>
-      <%= render layout: "appkit/shared/nav", locals: { home_path: child_dashboard_path } do %>
-        <li><%= link_to t("child.dashboard.profile_link"), edit_user_profile_path(Current.user) %></li>
-      <% end %>
+      <%= render layout: "appkit/shared/nav", locals: { menu: menu } do %><% end %>
     </header>
     <%= render "appkit/shared/flashes" %>
     <%= render "shared/confirm_dialog" %>

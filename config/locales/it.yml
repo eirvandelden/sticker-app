@@ -15,7 +15,6 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
-      overview: Panoramica
       users: Utenti
     users:
       create:
@@ -82,7 +81,6 @@ it:
         one: "🎉 Hai ricevuto 1 nuovo adesivo dall'ultima volta!"
         other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
       no_card: Non hai ancora una scheda adesivi.
-      profile_link: Il mio profilo
       someone: Qualcuno
       title: La tua scheda adesivi
   common:
@@ -122,6 +120,17 @@ it:
     en: Inglese
     it: Italiano
     nl: Olandese
+  menu:
+    hubs:
+      account: Account
+      admin: Amministrazione
+      children: Bambini
+      dashboard: Dashboard
+      settings: Impostazioni
+    pages:
+      child_settings: Impostazioni dei bambini
+      overview: Panoramica
+      profile: Profilo
   parent:
     actions:
       give_penalty: "❌ Dai penalita"

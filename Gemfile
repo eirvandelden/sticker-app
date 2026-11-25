@@ -4,8 +4,8 @@ source "https://gem.coop"
 gem "rails", "~> 8.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-gem "mvpa-css", github: "eirvandelden/mvpa.css"
-gem "appkit", github: "eirvandelden/appkit", ref: "d82b9c7601410e4daa42927cacaf646377090825"
+gem "mvpa-css", github: "eirvandelden/mvpa.css", ref: "6e4fc6396731855f1058f4b45e882b9c135ac117"
+gem "appkit", github: "eirvandelden/appkit", ref: "42e22b3a3f3f2e9fec4026f829e498d84fe6f186"
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]

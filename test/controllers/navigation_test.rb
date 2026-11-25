@@ -1,73 +1,78 @@
 require "test_helper"
 
 class NavigationTest < ActionDispatch::IntegrationTest
-  test "parent sees a Home link as the first nav item leading to the children list" do
+  test "parent sees a rail with Kinderen, Instellingen and Account and the Kinderen hub column" do
     sign_in_as users(:parent)
 
     get parent_children_path
 
     assert_response :success
-    assert_select "nav ul li:first-child a[href=?]", parent_children_path, text: I18n.t("appkit.navigation.home")
+    assert_equal [ "Children", "Settings", "Account" ], rail_labels
+    assert_select "nav.rail a[href=?][aria-current=?]", parent_children_path, "true"
+    assert_select "nav.rail + nav a[href=?][aria-current=?]", parent_children_path, "page", text: "Overview"
   end
 
-  test "child sees a Home link as the first nav item leading to the dashboard" do
+  test "admin sees Beheer in the rail and its hub column on the user list" do
+    sign_in_as users(:admin)
+
+    get admin_users_path
+
+    assert_response :success
+    assert_equal [ "Children", "Settings", "Admin", "Account" ], rail_labels
+    assert_select "nav.rail a[href=?][aria-current=?]", admin_root_path, "true"
+    assert_select "nav.rail + nav a[href=?][aria-current=?]", admin_users_path, "page"
+  end
+
+  test "child sees a rail with Dashboard and Account and no hub column" do
     sign_in_as users(:user)
 
     get child_dashboard_path
 
     assert_response :success
-    assert_select "nav ul li:first-child a[href=?]", child_dashboard_path, text: I18n.t("appkit.navigation.home")
+    assert_equal [ "Dashboard", "Account" ], rail_labels
+    assert_select "nav.rail a[href=?][aria-current=?]", child_dashboard_path, "true"
+    assert_select "nav.rail + nav", count: 0
   end
 
-  test "admin sees a Home link as the first nav item leading to the children list" do
-    sign_in_as users(:admin)
+  test "every rail link opens its own hub as the current hub" do
+    { parent: parent_children_path, admin: admin_users_path, user: child_dashboard_path }.each do |role, start|
+      sign_in_as users(role)
+      get start
+      paths = css_select("nav.rail a").map { |link| link["href"] }
 
-    get parent_children_path
+      paths.each do |path|
+        get path
 
-    assert_response :success
-    assert_select "nav ul li:first-child a[href=?]", parent_children_path, text: I18n.t("appkit.navigation.home")
-  end
-
-  test "admin sees extra nav tabs for the admin overview and the user list on every page" do
-    sign_in_as users(:admin)
-
-    [ parent_children_path, admin_root_path, admin_users_path ].each do |page|
-      get page
-
-      assert_response :success
-      assert_select "nav ul li a[href=?]", admin_root_path, count: 1
-      assert_select "nav ul li a[href=?]", admin_users_path, count: 1
+        assert_response :success
+        assert_select "nav.rail a[href=?][aria-current=?]", path, "true", message: "#{role}: #{path}"
+        assert_select "nav.rail a[aria-current]", count: 1
+      end
+      delete session_path
     end
   end
 
-  test "only the admin overview tab is marked as the current page while on the admin overview" do
+  test "the rail holds only hub items" do
     sign_in_as users(:admin)
-
-    get admin_root_path
-
-    assert_select "nav ul li a[href=?][aria-current=?]", admin_root_path, "page"
-    assert_select "nav ul li a[aria-current]", count: 1
-  end
-
-  test "the user list tab stays marked as the current page while editing one user" do
-    sign_in_as users(:admin)
-
-    get edit_admin_user_path(users(:parent))
-
-    assert_select "nav ul li a[href=?][aria-current=?]", admin_users_path, "page"
-    assert_select "nav ul li a[aria-current]", count: 1
-  end
-
-  test "Home is marked as the current page on the children list" do
-    sign_in_as users(:parent)
 
     get parent_children_path
 
-    assert_response :success
-    assert_select "nav ul li:first-child a[href=?][aria-current=?]", parent_children_path, "page"
+    assert_select "nav.rail > ul > li", count: 4
+    assert_select "nav.rail > ul > li > a > span[aria-hidden=true]", count: 4
   end
 
-  test "Home stays marked on a child's page, edit page and history" do
+  test "Account is the current hub on Voorkeuren and Profiel" do
+    sign_in_as users(:parent)
+
+    [ edit_preferences_path, user_profile_path(users(:parent)) ].each do |page|
+      get page
+
+      assert_response :success
+      assert_select "nav.rail a[href=?][aria-current=?]", account_path, "true"
+      assert_select "nav.rail + nav a[href=?][aria-current=?]", page, "page"
+    end
+  end
+
+  test "Kinderen stays the current hub on a child's page, edit page and history" do
     sign_in_as users(:parent)
     child = child_profiles(:one)
 
@@ -75,59 +80,38 @@ class NavigationTest < ActionDispatch::IntegrationTest
       get page
 
       assert_response :success
-      assert_select "nav ul li:first-child a[href=?][aria-current=?]", parent_children_path, "page"
+      assert_select "nav.rail a[href=?][aria-current=?]", parent_children_path, "true"
     end
   end
 
-  test "Home is not marked on settings, the admin overview or preferences" do
-    sign_in_as users(:admin)
-
-    [ parent_settings_path, admin_root_path, edit_preferences_path ].each do |page|
-      get page
-
-      assert_response :success
-      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
-    end
-  end
-
-  test "Home is not marked on settings or preferences for a parent" do
+  test "Instellingen is the current hub on the settings page" do
     sign_in_as users(:parent)
 
-    [ parent_settings_path, edit_preferences_path ].each do |page|
-      get page
+    get parent_settings_path
 
-      assert_response :success
-      assert_select "nav ul li:first-child a[href=?]:not([aria-current])", parent_children_path
-    end
+    assert_select "nav.rail a[href=?][aria-current=?]", parent_settings_path, "true"
+    assert_select "nav.rail a[aria-current]", count: 1
   end
 
-  test "child sees Home marked as the current page on the dashboard" do
-    sign_in_as users(:user)
+  test "the header holds only the nav" do
+    sign_in_as users(:parent)
 
-    get child_dashboard_path
+    get parent_children_path
 
-    assert_response :success
-    assert_select "nav ul li:first-child a[href=?][aria-current=?]", child_dashboard_path, "page"
+    assert_select "body > header > nav.rail"
+    assert_select "nav.rail h2", count: 0
+    assert_select "body > header a", text: "Home", count: 0
   end
 
   test "the Dutch nav shows appkit's wording" do
     sign_in_as users(:dutch_admin)
 
-    get parent_children_path
+    get account_path
 
     assert_response :success
-    assert_select "nav ul li:first-child a", text: "Home"
-    assert_select "nav a[href=?]", edit_preferences_path, text: "Voorkeuren"
+    assert_select "main nav a[href^=?]", edit_preferences_path, text: "Voorkeuren"
+    assert_select "nav.rail a[href=?]", account_path, text: /Account/
     assert_select "nav button", count: 0
-  end
-
-  test "the nav is headed with the app name" do
-    sign_in_as users(:parent)
-
-    get parent_children_path
-
-    assert_response :success
-    assert_select "nav h2", text: I18n.t("app.title")
   end
 
   test "the login page is headed with the app name" do
@@ -135,5 +119,11 @@ class NavigationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", text: I18n.t("app.title")
+  end
+
+  private
+
+  def rail_labels
+    css_select("nav.rail > ul > li > a").map { |link| link.text.lines.map(&:strip).reject(&:empty?).last }
   end
 end
