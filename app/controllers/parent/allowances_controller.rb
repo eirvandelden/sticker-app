@@ -12,7 +12,7 @@ module Parent
       allowance.next_due_on = allowance.next_occurrence_of(allowance.due_day, after: Date.today - 1)
 
       if allowance.save
-        redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.created")
+        redirect_to menu.carry(edit_parent_child_path(@child)), notice: t("flash.parent.allowances.created")
       else
         @invalid_allowance = allowance
         render "parent/children/edit", status: :unprocessable_entity
@@ -29,7 +29,7 @@ module Parent
       allowance = @child.allowances.find(params[:id])
 
       if allowance.update(amount_params)
-        redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.updated")
+        redirect_to menu.carry(edit_parent_child_path(@child)), notice: t("flash.parent.allowances.updated")
       else
         @invalid_allowance = allowance
         render "parent/children/edit", status: :unprocessable_entity
@@ -40,7 +40,7 @@ module Parent
     # @rbs () -> void
     def destroy
       @child.allowances.find(params[:id]).destroy
-      redirect_to edit_parent_child_path(@child), notice: t("flash.parent.allowances.destroyed")
+      redirect_to menu.carry(edit_parent_child_path(@child)), notice: t("flash.parent.allowances.destroyed")
     end
 
     private

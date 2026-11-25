@@ -9,7 +9,7 @@ module Parent
     # @rbs () -> void
     def update
       if @child.user.update(avatar_params)
-        redirect_to edit_parent_child_path(@child), notice: t(".success")
+        redirect_to menu.carry(edit_parent_child_path(@child)), notice: t(".success")
       else
         render "parent/children/edit", status: :unprocessable_entity
       end

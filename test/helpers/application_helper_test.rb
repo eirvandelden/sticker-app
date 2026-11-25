@@ -19,6 +19,27 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal "/things", link.path
   end
 
+  test "origin_field carries the menu origin in a hidden field" do
+    @menu = menu_for("from" => "things.all")
+    Current.user = users(:parent)
+
+    assert_dom_equal %(<input type="hidden" name="from" value="things.all" autocomplete="off" />), origin_field
+  end
+
+  test "origin_field renders nothing without an origin" do
+    @menu = menu_for({})
+    Current.user = users(:parent)
+
+    assert_nil origin_field
+  end
+
+  test "origin_field renders nothing outside a signed-in request" do
+    @menu = menu_for("from" => "things.all")
+    Current.user = nil
+
+    assert_nil origin_field
+  end
+
   private
 
   attr_reader :menu

@@ -4,6 +4,7 @@
 module ApplicationHelper
   # @type const Appkit::QrCodeLink: untyped
   # @type const Appkit::Menu::Link: untyped
+  # @type const Current: untyped
 
   # Returns the path of a QR code that signs the user in on another device.
   # QrCodeController expects an already-signed payload, not a raw URL.
@@ -18,5 +19,15 @@ module ApplicationHelper
   # @rbs (String fallback) -> untyped
   def record_back_link(fallback)
     menu.back(fallback) || Appkit::Menu::Link.new(label: menu.current_hub.label, path: fallback)
+  end
+
+  # A hidden field that carries the menu origin through a form, so the back link survives a save.
+  # Nothing without an origin, and nothing outside a signed-in request, such as a broadcast render.
+  # @rbs () -> String?
+  def origin_field
+    return unless Current.user
+
+    key = menu.origin_key
+    hidden_field_tag(:from, key, id: nil) if key
   end
 end
