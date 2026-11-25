@@ -259,6 +259,14 @@ Prerequisite: the separate change `fix-red-main-ci` (puma >= 8.1.2, net-ssh >= 7
     - At 375px: the tab bar holds only the hubs, and three children still fit above it.
     - Record it with the `delivery-evidence` script, because the earlier evidence is stale.
 
+## Departures found while implementing
+
+- `ApplicationHelper#origin_field` renders the hidden `from` field, and `shared/_action_row` and `shared/_delete_form` call it. The partials also render in model broadcasts, which have no signed-in user, so a bare `menu` call there raised. `origin_field` renders nothing without `Current.user` or without an origin. Tests: three `origin_field` unit tests in `test/helpers/application_helper_test.rb`.
+- On the nested failed-save routes (`child_profiles#update`, `children_avatar#update`, `allowances#create`) with an origin, `menu.back` is not nil: those requests have no `id`, so appkit treats them as lists and links the origin hub's landing page. The back link and Cancel then go to Instellingen without `from`. Without an origin they go to `parent_children_path`, as planned.
+- `app_shell.css` keeps `body > header > nav.rail > ul > li > a { block-size: calc(var(--tab-bar-height) - var(--block-space)) }`. mvpa's `10_navigation.css` sizes a tab from `--nav-height-mobile`, which this file raises by the bottom inset, so without the rule each tab ends 11px below the home indicator. The `nowrap` and `ellipsis` rules are gone as planned.
+- The unused keys `admin.users.show.back` and `parent.child_profile.edit.back` are deleted with the hard-coded back links they labelled.
+- Italian labels for the `menu.*` keys are `Bambini`, `Impostazioni`, `Amministrazione`, `Panoramica`, `Impostazioni dei bambini` and `Profilo`.
+
 ## Risks
 
 - **System tests fail locally.** Every local system test fails with `* is not a valid URL` (Selenium, Chrome 158, Puma 8.0.2), while CI's system-test job is green. The system-test Proof lines are then proven by CI. Implement records the local failure and the CI result.
