@@ -53,6 +53,7 @@ class OriginFlowTest < ActionDispatch::IntegrationTest
     edit_link = css_select("main > header a[href*='/edit']").first["href"]
     get edit_link
 
+    assert_select "form input[name=from][value=?]", "admin.users"
     patch admin_user_path(user), params: { user: { name: "Renamed" }, from: "admin.users" }
 
     assert_redirected_to "#{admin_user_path(user)}?from=admin.users"
