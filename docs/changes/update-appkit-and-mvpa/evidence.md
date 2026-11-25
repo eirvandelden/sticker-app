@@ -15,3 +15,14 @@ A temporary headless Chrome system test signed in as the parent, the admin and t
 - `bin/rubocop`, `bin/erb_lint`, the i18n check and `npx @herb-tools/linter`: clean.
 - `bin/brakeman`, `bin/importmap audit` and `bundle-audit check --update`: no findings.
 - Local system tests error at teardown with `* is not a valid URL`. `steep check` is not installed locally. CI runs both.
+
+## Flows in the browser (2026-11-25)
+
+A second temporary headless Chrome test, deleted afterwards, walked the flows at 1400px and 375px with assertions on the back link and the URL. A person read the screenshots at both widths.
+
+- Instellingen, child, save: the child edit page shows "‹ Child settings". After Save the URL is still `…/edit?from=settings.child_settings` and the back link still returns to `/parent/settings`.
+- Account, Profile: the profile page opens with `from=account` and shows "‹ Account" and "Edit".
+- Admin dashboard: the Users tile opens the user list. At 375px the list shows "‹ Admin"; opened from the hub column at 1400px it shows no back link.
+- User list, Edit, Save: the user page shows "‹ Users", and that link returns to `/admin/users`. Every deletable row shows a red Delete.
+- Not seen in this run: the delete dialog and the child card's live update. `confirm_dialog_test` and `realtime_sticker_test` prove them in CI.
+- 375px admin dashboard: the Recent Signups table is cramped. It was before this change, and the plan defers stacking tables.

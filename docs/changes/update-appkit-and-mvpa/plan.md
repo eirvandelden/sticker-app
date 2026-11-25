@@ -292,7 +292,7 @@ Prerequisite: the separate change `fix-red-main-ci` (puma >= 8.1.2, net-ssh >= 7
 ## Proof
 
 - `db/schema.rb` equals a fresh dump, and a second dump changes nothing → check: step 9; `cmp db/schema.rb <scratch>/first_dump.rb` exits 0, and after the last dump `git diff --exit-code db/schema.rb` exits 0.
-- The Gemfile and lock name appkit `42e22b3` and mvpa-css `6e4fc63`, and only okcomputer moves besides them → check: `git diff origin/main -- Gemfile Gemfile.lock` shows only the appkit and mvpa-css lines. okcomputer 1.20.0 is already on `main`.
+- The Gemfile and lock name appkit `42e22b3` and mvpa-css `6e4fc63` → check: `git diff origin/main -- Gemfile Gemfile.lock` shows only the appkit and mvpa-css lines. okcomputer 1.20.0 is already on `main`.
 - A parent sees a rail with Kinderen, Instellingen and Account, and a hub column for the current hub → `test/controllers/navigation_test.rb` `test "parent sees a rail with Kinderen, Instellingen and Account and the Kinderen hub column"`.
 - An admin also sees Beheer → `test/controllers/navigation_test.rb` `test "admin sees Beheer in the rail and its hub column on the user list"`.
 - A child sees a rail with Dashboard and Account → `test/controllers/navigation_test.rb` `test "child sees a rail with Dashboard and Account and no hub column"`.
