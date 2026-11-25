@@ -26,3 +26,4 @@ A second temporary headless Chrome test, deleted afterwards, walked the flows at
 - User list, Edit, Save: the user page shows "‹ Users", and that link returns to `/admin/users`. Every deletable row shows a red Delete.
 - Not seen in this run: the delete dialog and the child card's live update. `confirm_dialog_test` and `realtime_sticker_test` prove them in CI.
 - 375px admin dashboard: the Recent Signups table is cramped. It was before this change, and the plan defers stacking tables.
+- 900px was not walked again for the flows. The server renders the back links and the `from` origin the same at every width, and mvpa.css only hides the hub column between 769px and 1023px, which the first section already shows at 900px. The flows run at 1400px and 375px therefore cover both link layouts.
