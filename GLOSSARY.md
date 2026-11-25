@@ -1,0 +1,11 @@
+- **Account hub** — the 👤 rail hub every role gets, holding Voorkeuren, Profiel and Uitloggen.
+- **Back link** — the title-bar link built from `menu.back(fallback)` that returns a record to the place it was opened from.
+- **Hub** — one task area: a rail item with an emoji, a landing page and pages (`Appkit::Menu::Hub`).
+- **Hub column** — the second `nav` that lists the pages of the current hub, shown only on wide screens.
+- **Landing page** — the request that is a hub's own page, with a tile for each page of the hub.
+- **Menu map** — the ordered hubs and pages of one role, built once per request for the signed-in user.
+- **Origin** — the `from` query value (`<hub>` or `<hub>.<page>`) that lets a record find its way back.
+- **Page** — one entry of a hub that opens with GET, or a submit page (`Appkit::Menu::Page`).
+- **Rail** — the `nav.rail` list of hubs; on a phone it is the tab bar.
+- **Submit page** — a page whose tile or hub-column item sends a non-GET request, such as Uitloggen (`verb: :delete`).
+- **Tile** — a landing-page link to one page of the hub.
