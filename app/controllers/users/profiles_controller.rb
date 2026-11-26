@@ -22,7 +22,7 @@ module Users
     # @rbs () -> void
     def update
       if @user.update(user_params)
-        redirect_to user_profile_path(@user), notice: t(".success")
+        redirect_to menu.carry(user_profile_path(@user)), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end

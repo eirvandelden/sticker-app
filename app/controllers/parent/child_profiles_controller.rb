@@ -9,7 +9,7 @@ module Parent
     # @rbs () -> void
     def update
       if @child_profile.update(child_profile_params)
-        redirect_to edit_parent_child_path(@child_profile), notice: t("flash.parent.child_profiles.updated")
+        redirect_to menu.carry(edit_parent_child_path(@child_profile)), notice: t("flash.parent.child_profiles.updated")
       else
         @child = @child_profile
         render "parent/children/edit", status: :unprocessable_entity

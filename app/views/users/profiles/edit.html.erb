@@ -28,6 +28,6 @@
       <% end %>
     </fieldset>
 
-    <%= render "shared/action_row", form: form, cancel_path: user_profile_path(@user) %>
+    <%= render "shared/action_row", form: form, cancel_path: menu.carry(user_profile_path(@user)) %>
   <% end %>
 </article>

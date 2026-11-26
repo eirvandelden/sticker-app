@@ -14,6 +14,45 @@ class Admin::UsersTest < ActionDispatch::IntegrationTest
     assert_select "td", text: @user.email
   end
 
+  test "user list confirms Delete through Turbo on every other row" do
+    sign_in_as(@admin)
+    get admin_users_path
+
+    assert_response :success
+    assert_select "[data-controller=dialog]", count: 0
+    assert_select "button[data-turbo-confirm]", count: User.where.not(id: @admin.id).count
+    assert_select "form[action=?]", admin_user_path(@user) do
+      assert_select "input[name=_method][value=delete]"
+      assert_select "button.button-danger[data-turbo-confirm]", text: I18n.t("admin.users.index.delete")
+    end
+    assert_select "form[action=?]", admin_user_path(@admin), count: 0
+  end
+
+  test "parent layout renders one shared confirm dialog" do
+    sign_in_as(@admin)
+    get admin_users_path
+
+    assert_select "dialog#confirm-dialog[aria-labelledby=confirm-dialog-message]", count: 1 do
+      assert_select "p#confirm-dialog-message"
+      assert_select "footer button#confirm-dialog-cancel[type=button]"
+      assert_select "footer button#confirm-dialog-accept.button-danger[type=button]"
+    end
+  end
+
+  test "user form ends in an action row with Cancel before Save" do
+    sign_in_as(@admin)
+
+    [ new_admin_user_path, edit_admin_user_path(@user) ].each do |path|
+      get path
+
+      assert_response :success
+      assert_select "form > footer:last-child" do
+        assert_select "a[role=button].button-secondary"
+        assert_select "a[role=button] ~ input[type=submit], a[role=button] ~ button[type=submit]"
+      end
+    end
+  end
+
   test "admin can view a user" do
     sign_in_as(@admin)
     get admin_user_path(@user)

@@ -15,7 +15,6 @@ it:
         total_users: Utenti Totali
         view: Visualizza
     nav:
-      overview: Panoramica
       users: Utenti
     users:
       create:
@@ -52,7 +51,6 @@ it:
         title: Nuovo Utente
       show:
         active_sessions: Sessioni Attive
-        back: Indietro
         created_at: Creato
         edit: Modifica
         email: Email
@@ -82,7 +80,6 @@ it:
         one: "🎉 Hai ricevuto 1 nuovo adesivo dall'ultima volta!"
         other: "🎉 Hai ricevuto %{count} nuovi adesivi dall'ultima volta!"
       no_card: Non hai ancora una scheda adesivi.
-      profile_link: Il mio profilo
       someone: Qualcuno
       title: La tua scheda adesivi
   common:
@@ -122,6 +119,17 @@ it:
     en: Inglese
     it: Italiano
     nl: Olandese
+  menu:
+    hubs:
+      account: Account
+      admin: Amministrazione
+      children: Bambini
+      dashboard: Dashboard
+      settings: Impostazioni
+    pages:
+      child_settings: Impostazioni dei bambini
+      overview: Panoramica
+      profile: Profilo
   parent:
     actions:
       give_penalty: "❌ Dai penalita"
@@ -141,7 +149,6 @@ it:
     child_profile:
       edit:
         avatar_label: Scegli un nuovo avatar
-        back: Torna alla dashboard
         current_avatar: Avatar attuale
         goal_label: Risparmia per
         headings:
@@ -182,6 +189,10 @@ it:
     settings:
       index:
         title: Impostazioni
+  shared:
+    confirm_dialog:
+      accept: Elimina
+      cancel: Annulla
   users:
     profiles:
       edit:

@@ -118,9 +118,23 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
       sign_in user
       visit_on_iphone_12_mini path
 
-      assert_admin_tabs if user.admin?
+      assert_beheer_hub if user.admin?
 
       assert_tabs_in_one_row_inside_viewport user
+      Capybara.reset_session!
+    end
+  end
+
+  test "the phone tab bar holds only the hubs for parent, admin and child" do
+    { users(:parent) => [ parent_children_path, 3 ],
+      users(:admin) => [ parent_children_path, 4 ],
+      users(:user) => [ child_dashboard_path, 2 ] }.each do |user, (path, hubs)|
+      sign_in user
+      visit_on_iphone_12_mini path
+
+      assert_selector "body > header > nav.rail > ul > li", count: hubs
+      assert_selector "body > header > nav.rail ul ul", count: 0
+      assert_no_selector "body > header > nav.rail + nav", visible: :visible
       Capybara.reset_session!
     end
   end
@@ -147,7 +161,7 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
   def assert_tabs_above_home_indicator
     home_indicator_top = IPHONE_12_MINI_FULL_SCREEN[:height] - SAFE_AREA_INSETS[:bottom]
     bottoms = page.evaluate_script(<<~JS)
-      Array.from(document.querySelectorAll("body > header nav > ul > li > a"), (tab) => tab.getBoundingClientRect().bottom)
+      Array.from(document.querySelectorAll("body > header > nav.rail > ul > li > a"), (tab) => tab.getBoundingClientRect().bottom)
     JS
 
     assert_not_empty bottoms
@@ -229,16 +243,13 @@ class ParentDashboardFitTest < ApplicationSystemTestCase
                     "Expected every row part to end above the tab bar at scroll position 0"
   end
 
-  def assert_admin_tabs
-    within("body > header nav") do
-      assert_link I18n.t("admin.nav.overview")
-      assert_link I18n.t("admin.nav.users")
-    end
+  def assert_beheer_hub
+    within("body > header > nav.rail") { assert_link I18n.t("menu.hubs.admin") }
   end
 
   def assert_tabs_in_one_row_inside_viewport(user)
     tabs = page.evaluate_script(<<~JS)
-      Array.from(document.querySelectorAll("body > header nav > ul > li"), (tab) => {
+      Array.from(document.querySelectorAll("body > header > nav.rail > ul > li"), (tab) => {
         const box = tab.querySelector("a, button").getBoundingClientRect();
         return { label: tab.textContent.trim(), top: box.top, bottom: box.bottom, left: box.left, right: box.right };
       })

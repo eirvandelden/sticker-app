@@ -3,6 +3,8 @@
 # @rbs module-self: _RbsRailsPathHelpers
 module ApplicationHelper
   # @type const Appkit::QrCodeLink: untyped
+  # @type const Appkit::Menu::Link: untyped
+  # @type const Current: untyped
 
   # Returns the path of a QR code that signs the user in on another device.
   # QrCodeController expects an already-signed payload, not a raw URL.
@@ -12,23 +14,20 @@ module ApplicationHelper
     qr_code_path(Appkit::QrCodeLink.new(session_transfer_url(user.transfer_id)).signed)
   end
 
-  # Renders a navigation link that is current on its exact page.
-  # @rbs (String label, String path) -> String
-  def nav_tab(label, path)
-    link_to label, path, "aria-current": ("page" if current_page?(path))
+  # The title-bar back link of a record page: the menu's back link, else a link to the fallback
+  # labelled with the current hub. Never nil, so a failed nested save still shows it.
+  # @rbs (String fallback) -> untyped
+  def record_back_link(fallback)
+    menu.back(fallback) || Appkit::Menu::Link.new(label: menu.current_hub.label, path: fallback)
   end
 
-  # Renders a navigation link that is current anywhere in its section.
-  # @rbs (String label, String path) -> String
-  def nav_section_tab(label, path)
-    link_to label, path, "aria-current": ("page" if within_section?(path))
-  end
+  # A hidden field that carries the menu origin through a form, so the back link survives a save.
+  # Nothing without an origin, and nothing outside a signed-in request, such as a broadcast render.
+  # @rbs () -> String?
+  def origin_field
+    return unless Current.user
 
-  private
-
-  # Tells whether the request path is the path or below it.
-  # @rbs (String path) -> bool
-  def within_section?(path)
-    request.path == path || request.path.start_with?("#{path}/")
+    key = menu.origin_key
+    hidden_field_tag(:from, key, id: nil) if key
   end
 end

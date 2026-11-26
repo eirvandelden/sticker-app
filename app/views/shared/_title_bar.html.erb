@@ -1,8 +1,11 @@
-<%# locals: (title:, heading_id: nil) %>
+<%# locals: (title:, heading_id: nil, back: nil) %>
 <% controls = yield %>
 <header>
   <%= tag.h1 title, id: heading_id %>
-  <% if controls.present? %>
-    <nav><%= controls %></nav>
+  <% if back || controls.present? %>
+    <nav>
+      <%= link_to "‹ #{back.label}", back.path if back %>
+      <%= controls %>
+    </nav>
   <% end %>
 </header>

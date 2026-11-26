@@ -1,6 +1,5 @@
-<%= render layout: "shared/title_bar", locals: { title: t("parent.child_profile.edit.title") } do %>
-  <%= link_to t("parent.child_profile.edit.back"), parent_children_path %>
-<% end %>
+<% back = record_back_link(parent_children_path) %>
+<%= render "shared/title_bar", title: t("parent.child_profile.edit.title"), back: back %>
 
 <article>
   <% if @invalid_allowance && @invalid_allowance.kind.nil? %>
@@ -17,7 +16,7 @@
         <%= form.text_field :name, required: true %>
       </fieldset>
 
-      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
+      <%= render "shared/action_row", form: form, cancel_path: back.path %>
     <% end %>
   </section>
 
@@ -38,7 +37,7 @@
         <%= form.file_field :avatar, accept: "image/*", required: true %>
       </fieldset>
 
-      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
+      <%= render "shared/action_row", form: form, cancel_path: back.path %>
     <% end %>
   </section>
 
@@ -62,7 +61,7 @@
         <%= form.date_field :birthdate %>
       </fieldset>
 
-      <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
+      <%= render "shared/action_row", form: form, cancel_path: back.path %>
     <% end %>
   </section>
 
@@ -86,7 +85,7 @@
             <% end %>
           </fieldset>
 
-          <%= render "shared/action_row", form: form, cancel_path: parent_children_path,
+          <%= render "shared/action_row", form: form, cancel_path: back.path,
                                           delete_form_id: dom_id(allowance, :delete),
                                           delete_label: t("parent.allowances.turn_off") %>
         <% end %>
@@ -121,7 +120,7 @@
           </fieldset>
           <%= form.hidden_field :kind %>
 
-          <%= render "shared/action_row", form: form, cancel_path: parent_children_path %>
+          <%= render "shared/action_row", form: form, cancel_path: back.path %>
         <% end %>
       <% end %>
     </section>

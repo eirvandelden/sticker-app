@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   # @type const Appkit::Authentication: untyped
   include VersionHeaders
   include Authorization
+  include MenuMap
   # @rbs skip
   include Appkit::Authentication
 

@@ -15,7 +15,6 @@ en:
         total_users: Total Users
         view: View
     nav:
-      overview: Overview
       users: Users
     users:
       create:
@@ -52,7 +51,6 @@ en:
         title: New User
       show:
         active_sessions: Active Sessions
-        back: Back
         created_at: Created
         edit: Edit
         email: Email
@@ -82,7 +80,6 @@ en:
         one: "🎉 You got 1 new sticker since last time!"
         other: "🎉 You got %{count} new stickers since last time!"
       no_card: You don't have a sticker card yet.
-      profile_link: My Profile
       someone: Someone
       title: Your Sticker Card
   common:
@@ -122,6 +119,17 @@ en:
     en: English
     it: Italian
     nl: Dutch
+  menu:
+    hubs:
+      account: Account
+      admin: Admin
+      children: Children
+      dashboard: Dashboard
+      settings: Settings
+    pages:
+      child_settings: Child settings
+      overview: Overview
+      profile: Profile
   parent:
     actions:
       give_penalty: "❌ Give Penalty"
@@ -141,7 +149,6 @@ en:
     child_profile:
       edit:
         avatar_label: Choose a new avatar
-        back: Back to dashboard
         current_avatar: Current avatar
         goal_label: Saving for
         headings:
@@ -182,6 +189,10 @@ en:
     settings:
       index:
         title: Settings
+  shared:
+    confirm_dialog:
+      accept: Delete
+      cancel: Cancel
   users:
     profiles:
       edit:

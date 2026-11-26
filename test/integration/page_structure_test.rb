@@ -25,6 +25,15 @@ class PageStructureTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "the back link is the first title bar link" do
+    sign_in_as @parent
+
+    get "#{parent_child_path(@child)}?from=children.overview"
+
+    assert_select "main > header > nav > a:first-child", text: "‹ Overview"
+    assert_select "main > header > nav > a:first-child[href=?]", "#{parent_children_path}?from=children.overview"
+  end
+
   test "page links sit in the title bar nav" do
     sign_in_as @parent
     get parent_children_path
@@ -48,7 +57,7 @@ class PageStructureTest < ActionDispatch::IntegrationTest
     sign_in_as @admin
     get admin_users_path
 
-    assert_select "main > header > nav a[href=?]", new_admin_user_path
+    assert_select "main > header > nav a[href^=?]", new_admin_user_path
 
     get user_profile_path(@admin)
 

@@ -3,7 +3,7 @@
 <article>
   <nav>
     <% @children.each do |child| %>
-      <%= link_to child.user.name, edit_parent_child_path(child) %>
+      <%= link_to child.user.name, menu.carry_list(edit_parent_child_path(child)) %>
     <% end %>
   </nav>
 </article>

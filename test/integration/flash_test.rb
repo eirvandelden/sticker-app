@@ -29,4 +29,12 @@ class FlashTest < ActionDispatch::IntegrationTest
     assert_select "main [data-mvpa-flashes]", count: 0
     assert_select "body > [data-mvpa-flashes]", count: 1
   end
+
+  test "sign-in page renders flashes outside main" do
+    post session_path, params: { email_address: users(:user).email, password: "wrong" }
+
+    assert_response :unauthorized
+    assert_select "body > section[data-mvpa-flashes]"
+    assert_select "main section[data-mvpa-flashes]", count: 0
+  end
 end

@@ -7,6 +7,14 @@ class ChildFlowTest < ActionDispatch::IntegrationTest
     @card    = sticker_cards(:one)
   end
 
+  test "child layout renders one shared confirm dialog" do
+    sign_in_as @child
+    get child_dashboard_path
+
+    assert_response :success
+    assert_select "dialog#confirm-dialog", count: 1
+  end
+
   test "a child whose sticker profile went missing still reaches their own page" do
     @profile.destroy!
     sign_in_as @child, follow_redirect: false

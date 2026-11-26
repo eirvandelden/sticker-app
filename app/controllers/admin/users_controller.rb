@@ -29,7 +29,7 @@ module Admin
       assign_role(@user)
 
       if @user.save
-        redirect_to admin_user_path(@user), notice: t(".success")
+        redirect_to menu.carry(admin_user_path(@user)), notice: t(".success")
       else
         render :new, status: :unprocessable_entity
       end
@@ -47,7 +47,7 @@ module Admin
       assign_role(@user)
 
       if @user.save
-        redirect_to admin_user_path(@user), notice: t(".success")
+        redirect_to menu.carry(admin_user_path(@user)), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end

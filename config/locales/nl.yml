@@ -15,7 +15,6 @@ nl:
         total_users: Totaal gebruikers
         view: Bekijken
     nav:
-      overview: Overzicht
       users: Gebruikers
     users:
       create:
@@ -52,7 +51,6 @@ nl:
         title: Nieuwe gebruiker
       show:
         active_sessions: Actieve sessies
-        back: Terug
         created_at: Aangemaakt
         edit: Bewerken
         email: E-mail
@@ -82,7 +80,6 @@ nl:
         one: "🎉 Je hebt 1 nieuwe sticker verdiend!"
         other: "🎉 Je hebt %{count} nieuwe stickers verdiend!"
       no_card: Je hebt nog geen sticker kaart.
-      profile_link: Mijn profiel
       someone: Iemand
       title: Jouw sticker kaart
   common:
@@ -122,6 +119,17 @@ nl:
     en: Engels
     it: Italiaans
     nl: Nederlands
+  menu:
+    hubs:
+      account: Account
+      admin: Beheer
+      children: Kinderen
+      dashboard: Dashboard
+      settings: Instellingen
+    pages:
+      child_settings: Kind-instellingen
+      overview: Overzicht
+      profile: Profiel
   parent:
     actions:
       give_penalty: "❌ Geef Straf"
@@ -141,7 +149,6 @@ nl:
     child_profile:
       edit:
         avatar_label: Kies een nieuwe avatar
-        back: Terug naar dashboard
         current_avatar: Huidige avatar
         goal_label: Spaart voor
         headings:
@@ -182,6 +189,10 @@ nl:
     settings:
       index:
         title: Instellingen
+  shared:
+    confirm_dialog:
+      accept: Verwijderen
+      cancel: Annuleren
   users:
     profiles:
       edit:
